@@ -1,3 +1,5 @@
+import {UserSuccessSignInParse} from "../types/user-settings-types";
+
 interface MainDataServiceStorageProps {
   storage: Storage | null;
   baseKey: string;
@@ -14,4 +16,16 @@ export default class MainDataServiceStorage {
     this._baseKey = props.baseKey;
     this._userDataKeyKey = `${this._baseKey}UserData`;
   }
+
+  getUserData = (): (UserSuccessSignInParse | null) => {
+    if (this._storage) {
+      try {
+        return JSON.parse(this._storage.getItem(this._userDataKeyKey) as string);
+      } catch (err) {
+        throw new Error(`Storage error: ${err}`);
+      }
+    }
+
+    return null;
+  };
 }
