@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Row, Col, Image, Radio, Select } from "antd";
-import {Title, Option, TIMEZONES} from "../../config"
+import {Title, Option, TIMEZONES, LOGO} from "../../config"
 
 
 const Header: React.FC = () => {
@@ -11,9 +11,9 @@ const Header: React.FC = () => {
         <Col span={8}>
           <div>
             <Image
-              width={83}
-              src="https://app.rs.school/static/images/logo-rsschool3.png"
-              alt="RSS logo"
+              width={LOGO.width}
+              src={LOGO.src}
+              alt={LOGO.alt}
             />
           </div>
           <div>
