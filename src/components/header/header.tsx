@@ -17,10 +17,10 @@ const Header: React.FC = () => {
             />
           </div>
           <div>
-            <Select size="large" defaultValue={'4'} style={{ width: 200, marginTop: 30 }}>
-              {TIMEZONES.map((item, index)=>{
+            <Select size="large" defaultValue="Europe/Minsk" style={{ width: 200, marginTop: 30 }}>
+              {TIMEZONES.map((item)=>{
                 return(
-                  <Option key={index}>{item}</Option>
+                  <Option value={item} key={item}>{item}</Option>
                 )
               })}
             </Select>
