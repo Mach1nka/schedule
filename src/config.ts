@@ -1,4 +1,4 @@
-import { Typography, Select, Image } from "antd";
+import { Typography, Select } from "antd";
 
 export const statusCodes = {
   OK: 200,
