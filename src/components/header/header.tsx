@@ -1,14 +1,9 @@
 import * as React from "react";
-import { Row, Col, Typography, Image, Radio, Select } from "antd";
-
+import { Row, Col, Image, Radio, Select } from "antd";
+import {Title, Option, TIMEZONES} from "../../config"
 
 
 const Header: React.FC = () => {
-  const { Title } = Typography;
-  const { Option } = Select;
-  const timezones = ['Europe/London', 'Europe/Warsaw', 'Europe/Kiev', 'Europe/Minsk', 'Europe/Moscow', 'Europe/Volgograd', 'Europe/Ekaterinburg', 'Asia/Tashkent', 'Asia/Tbilisi'];
-  
-
 
   return (
     <header>
@@ -23,7 +18,7 @@ const Header: React.FC = () => {
           </div>
           <div>
             <Select size="large" defaultValue={'4'} style={{ width: 200, marginTop: 30 }}>
-              {timezones.map((item, index)=>{
+              {TIMEZONES.map((item, index)=>{
                 return(
                   <Option key={index}>{item}</Option>
                 )
