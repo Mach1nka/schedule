@@ -1,13 +1,14 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ParsedResponse } from "../types/types";
-import { rtkSlices } from "./root-reducer";
-import { makeFirstUpper } from "../utils/make-frst-upper/make-frst-upper";
-import { isStatusOk } from "../utils/is-status-ok/is-status-ok";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {ParsedResponse} from "../types/types";
+import {rtkSlices} from "./root-reducer";
+import {makeFirstUpper} from "../utils/make-frst-upper/make-frst-upper";
+import {isStatusOk} from "../utils/is-status-ok/is-status-ok";
 
 export const asyncThunkTypePrefix = "fetch";
 
 export enum ReduxStateEntities {
   SYSTEM = "system",
+  SCHEDULE_EVENTS = "schedule-events",
 }
 
 export type CreateAsyncThunkProps = {
