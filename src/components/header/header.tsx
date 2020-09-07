@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Row, Col, Image, Radio, Select } from "antd";
+import { Row, Col, Image, Select } from "antd";
 import {Title, Option, TIMEZONES, LOGO} from "../../config"
 
 
