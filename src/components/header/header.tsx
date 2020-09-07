@@ -25,12 +25,10 @@ const Header: React.FC = () => {
               })}
             </Select>
           </div>
-          
-
         </Col>
-        <Col span={8}><Title>Schedule</Title></Col>
+        <Col span={8}><Title level={2}>Schedule</Title></Col>
         <Col span={8}>
-          <Select size="middle" defaultValue="Student" >
+          <Select size="large" defaultValue="Student" >
             <Option value="Student">Student</Option>
             <Option value="Mentor">Mentor</Option>
           </Select>
