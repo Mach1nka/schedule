@@ -30,10 +30,10 @@ const Header: React.FC = () => {
         </Col>
         <Col span={8}><Title>Schedule</Title></Col>
         <Col span={8}>
-          <Radio.Group defaultValue="student" size="large">
-            <Radio.Button value="student">Student</Radio.Button>
-            <Radio.Button value="mentor">Mentor</Radio.Button>
-          </Radio.Group>
+          <Select size="middle" defaultValue="Student" >
+            <Option value="Student">Student</Option>
+            <Option value="Mentor">Mentor</Option>
+          </Select>
         </Col>
       </Row>
     </header>
