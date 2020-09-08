@@ -10,5 +10,6 @@ export const calendarDayEventsSC = {
     color: ${cssColors.LIGHT()};
     text-align: center;
     font-size: 0.75rem;
+    white-space: nowrap;
   `,
 }

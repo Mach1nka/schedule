@@ -1,9 +1,9 @@
 import * as React from "react";
 import {Calendar} from "antd";
-import CalendarDayEvents from "../calendar-day-events/calendar-day-events";
-import {useSelector} from "react-redux";
-import {selectScheduleEventsData} from "../../selectors/selectors";
 import moment from "moment";
+import {useSelector} from "react-redux";
+import CalendarDayEvents from "../calendar-day-events/calendar-day-events";
+import {selectScheduleEventsData} from "../../selectors/selectors";
 import {calendarViewSC as SC} from "./sc";
 
 interface CalendarViewProps {
