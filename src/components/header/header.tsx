@@ -8,29 +8,30 @@ const Header: React.FC = () => {
   return (
     <header>
       <Row>
-        <Col span={8}>
-          <div>
-            <Image
-              width={LOGO.width}
-              src={LOGO.src}
-              alt={LOGO.alt}
-            />
-          </div>
-          <div>
-            <Select size="large" defaultValue="Europe/Minsk" style={{ width: 200, marginTop: 30 }}>
-              {TIMEZONES.map((item)=>{
-                return(
-                  <Option value={item} key={item}>{item}</Option>
-                )
-              })}
-            </Select>
-          </div>
+        <Col xs={12} lg={8}>
+          <Image
+            width={LOGO.width}
+            src={LOGO.src}
+            alt={LOGO.alt}
+          />
         </Col>
-        <Col span={8}><Title level={2}>Schedule</Title></Col>
-        <Col span={8}>
+
+        <Col xs={{ span: 24, order: 3, }} lg={{ span: 8, order: 2}}><Title className="header__title" level={2}>Schedule</Title></Col>
+
+        <Col className="header__role" xs={{ span: 12, order: 2 }} lg={{ span: 8, order: 3 }} >
           <Select size="large" defaultValue="Student" >
             <Option value="Student">Student</Option>
             <Option value="Mentor">Mentor</Option>
+          </Select>
+        </Col>
+
+        <Col xs={{ span: 24, order: 4 }} lg={{ span: 8, order: 4 }}>
+          <Select size="large" defaultValue="Europe/Minsk" style={{ width: 200 }}>
+            {TIMEZONES.map((item)=>{
+              return(
+                <Option value={item} key={item}>{item}</Option>
+              )
+            })}
           </Select>
         </Col>
       </Row>

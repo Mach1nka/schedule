@@ -17,7 +17,7 @@ export const { Option } = Select;
 export const TIMEZONES = ['Europe/London', 'Europe/Warsaw', 'Europe/Kiev', 'Europe/Minsk', 'Europe/Moscow', 'Europe/Volgograd', 'Europe/Ekaterinburg', 'Asia/Tashkent', 'Asia/Tbilisi'];
 
 export const LOGO: {width: number, src: string, alt: string} = {
-  width: 83,
+  width: 100,
   src: 'https://app.rs.school/static/images/logo-rsschool3.png',
   alt: 'Rolling Scopes School Logo'
 }
