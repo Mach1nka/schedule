@@ -1,13 +1,21 @@
-.header__title {
-  text-align: left; 
-}
+@import "antd/lib/style/themes/default";
 
-@media (min-width: 992px) {
-  .header__title {
-    text-align: center;
+
+.header__title {
+  text-align: left;
+
+  @media (min-width: @screen-lg) {
+    .header__title {
+      text-align: center;
+    }
   }
 }
 
+
 .header__role {
   text-align: right;
+}
+
+.header__logo-image {
+  width: 100px;
 }

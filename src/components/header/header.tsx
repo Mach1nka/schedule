@@ -10,7 +10,7 @@ const Header: React.FC = () => {
       <Row>
         <Col xs={12} lg={8}>
           <Image
-            width={LOGO.width}
+            className="header__logo-image"
             src={LOGO.src}
             alt={LOGO.alt}
           />
