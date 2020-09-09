@@ -6,7 +6,7 @@ type Props = {
 }
 
 type State = {
-  hasError: boolean;
+  error: Error | null;
   errorInfo: React.ErrorInfo | null;
 }
 
@@ -14,38 +14,32 @@ export default class ErrorBoundaryClass extends React.Component<Props, State> {
   constructor(props) {
     super(props);
     this.state = {
-      hasError: false,
+      error: null,
       errorInfo: null,
     };
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     this.setState({
-      hasError: true,
+      error,
       errorInfo,
     });
   }
 
   render() {
-    let content;
     const {
-      hasError,
+      error,
       errorInfo,
     } = this.state;
     const {
       children
     } = this.props;
 
-    if (hasError) {
-      content = <Error text={errorInfo}/>;
-    } else {
-      content = children;
-    }
-
-    return (
-      <>
-        {content}
-      </>
-    );
+    return error
+      ? <Error
+        error={error?.toString()}
+        componentStack={errorInfo?.componentStack}
+        />
+      : children;
   }
 }
