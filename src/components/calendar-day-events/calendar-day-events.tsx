@@ -22,9 +22,11 @@ const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
       <SC.ITEM
         style={{backgroundColor: color}}
         key={id}
+        onClick={()=>alert(`${name} --- there should be block with task`)}
       >
         {name}
-      </SC.ITEM>);
+      </SC.ITEM>
+      );
   }
 
   return (
