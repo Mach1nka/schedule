@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import { List, Button, Skeleton } from 'antd';
+import { List, Button, Skeleton, Collapse } from 'antd';
 import reqwest from 'reqwest';
 
 const count = 3;
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`;
 
 const LoadMoreList: React.FC = () => {
+  const { Panel } = Collapse;
+  const count:number = 3;
   const [initLoading, setInitLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -105,14 +107,18 @@ const LoadMoreList: React.FC = () => {
             <Skeleton loading={item.loading} active>
               <div>
                 <h4>Task Name</h4>
-                <h4>Type Task</h4>
-                <p>
-                  Task Description <br/>
-                  We supply a series of design principles, practical patterns and high quality design
-                  resources (Sketch and Axure), to help people create their product prototypes
-                  beautifully and efficiently.
-                </p>
                 <p>Deadline:00.00.0000</p>
+                <Collapse>
+                  <Panel header="More information">
+                  <h4>Type Task</h4>
+                  <p>
+                    Task Description <br/>
+                    We supply a series of design principles, practical patterns and high quality design
+                    resources (Sketch and Axure), to help people create their product prototypes
+                    beautifully and efficiently.
+                  </p>
+                  </Panel>
+              </Collapse>
             </div>
             </Skeleton>
           </List.Item>
