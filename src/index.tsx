@@ -4,4 +4,4 @@ import "antd/dist/antd.less";
 import "./styles.less";
 import App from "./components/app/app";
 
-ReactDOM.render(<App/>, document.querySelector(`#app`));
+ReactDOM.render(<App />, document.querySelector(`#app`));
