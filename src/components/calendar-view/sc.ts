@@ -7,21 +7,11 @@ export const calendarViewSC = {
     height: 90px;
     text-align: center;
     overflow-y: auto;
-    overflow-x: hidden;
 
     & > div {
       padding: 0;
     }
 
-    &:hover{
-      overflow-y: auto;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
-      -moz-overflow-scrolling: touch;
-      -ms-overflow-scrolling: touch;
-      -o-overflow-scrolling: touch;
-      overflow-scrolling: touch;
-    }
     &::-webkit-scrollbar {
       -webkit-appearance: none;
       width: 4px;
