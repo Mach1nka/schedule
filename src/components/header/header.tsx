@@ -1,6 +1,7 @@
 import * as React from "react";
-import { Row, Col, Image, Select } from "antd";
-import {Title, Option, TIMEZONES, LOGO} from "../../config"
+import {Row, Col, Select} from "antd";
+import {Option, TIMEZONES, LOGO} from "../../config"
+import {headerSC as SC} from "./sc";
 
 
 const Header: React.FC = () => {
@@ -9,21 +10,24 @@ const Header: React.FC = () => {
     <header>
       <Row>
         <Col xs={12} lg={8}>
-          <Image
-            className="header__logo-image"
+          <SC.LOGO
             src={LOGO.src}
             alt={LOGO.alt}
           />
         </Col>
 
-        <Col xs={{ span: 24, order: 3, }} lg={{ span: 8, order: 2}}><Title className="header__title" level={2}>Schedule</Title></Col>
+        <Col xs={{ span: 24, order: 3, }} lg={{ span: 8, order: 2}}>
+          <SC.TITLE level={2}>
+            Schedule
+          </SC.TITLE>
+        </Col>
 
-        <Col className="header__role" xs={{ span: 12, order: 2 }} lg={{ span: 8, order: 3 }} >
+        <SC.ROLE xs={{ span: 12, order: 2 }} lg={{ span: 8, order: 3 }} >
           <Select size="large" defaultValue="Student" >
             <Option value="Student">Student</Option>
             <Option value="Mentor">Mentor</Option>
           </Select>
-        </Col>
+        </SC.ROLE>
 
         <Col xs={{ span: 24, order: 4 }} lg={{ span: 8, order: 4 }}>
           <Select size="large" defaultValue="Europe/Minsk" style={{ width: 200 }}>
