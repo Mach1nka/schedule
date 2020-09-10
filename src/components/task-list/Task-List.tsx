@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import { List, Button, Skeleton, Collapse, Row, Col, } from 'antd';
 import reqwest from 'reqwest';
 
-const count = 3;
 const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat&noinfo`;
 
 const LoadMoreList: React.FC = () => {
