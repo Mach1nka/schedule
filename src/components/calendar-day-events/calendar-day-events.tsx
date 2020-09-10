@@ -18,9 +18,11 @@ const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
       color,
     } = data;
 
+    const colorMock = 'blue';
+
     return (
       <SC.ITEM
-        style={{backgroundColor: color}}
+        style={{backgroundColor: colorMock}}
         key={id}
         onClick={()=>alert(`${name} --- there should be block with task`)}
       >

@@ -15,14 +15,13 @@ const CalendarView: React.FC<CalendarViewProps> = (props) => {
 
   const getListData = (events, value): any[] => {
     return events?.filter((it) => {
-      return moment(value).isBetween(moment(Number(it.startDateTime)), moment(Number(it.endDateTime)));
+      return moment(value).isBetween(moment(Number(it.startDateTime)*1000), moment(Number(it.endDateTime)*1000));
     });
   };
 
   const getDateCellRender = (value) => {
     const currentDay = moment(value).format("D");
     const listData = scheduleEvents && getListData(scheduleEvents, value);
-
     return (
       <SC.DAY_CONTAINER>
         {currentDay}
