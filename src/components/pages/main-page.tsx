@@ -1,4 +1,5 @@
 import * as React from "react";
+import Header from "../header/header";
 import {MainDataContext} from "../../context/main-data-context";
 import useGettingEntity from "../../hooks/use-getting-entity/use-getting-entity";
 import {ReduxStateEntities} from "../../reducers/reducers-config";
@@ -19,7 +20,7 @@ const MainPage: React.FC = () => {
 
   return (
     <>
-      Hello!
+      <Header/>
     </>
   );
 };
