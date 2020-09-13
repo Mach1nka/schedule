@@ -3,6 +3,7 @@ import MainDataServiceStorage from "./main-data-service-storage";
 import {ParsedResponse} from "../types/types";
 import {apiScheduleBackPath} from "../data/paths";
 import MainDataAdapter from "./main-data-adapter";
+import {UserSettings} from "../types/user-settings-types";
 
 interface MainDataServicesProps {
   api: MainDataApi;
@@ -11,7 +12,7 @@ interface MainDataServicesProps {
 
 export default class MainDataService {
   private _api: MainDataApi;
-  private _storage: MainDataServiceStorage;
+  private readonly _storage: MainDataServiceStorage;
 
   constructor(props: MainDataServicesProps) {
     this._api = props.api;
@@ -20,8 +21,8 @@ export default class MainDataService {
 
   getToken = (): string => {
     let token = ``;
-    if (this._storage && this._storage.getUserData()) {
-      token = this._storage.getUserData()?.apiToken || ``;
+    if (this._storage && this._storage.getUserData({})) {
+      token = this._storage.getUserData({})?.apiToken || ``;
     }
 
     return token;
@@ -104,6 +105,17 @@ export default class MainDataService {
           errors: response.data.errors,
         };
       });
+  };
+
+  setUserSettings = (data): Promise<{}> => {
+    return Promise.resolve(this._storage.setUserData(data));
+  };
+
+  getUserSettings = (data): Promise<ParsedResponse<UserSettings | null>> => {
+    return Promise.resolve({
+      status: 200,
+      data: this._storage.getUserData(data)
+    });
   };
 
   getScheduleEvents = (): Promise<ParsedResponse<any[]>> => {

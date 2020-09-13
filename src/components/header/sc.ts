@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import {Col, Image} from "antd";
-import {Title} from "../../config"
+import {Col, Image, Select} from "antd";
 import {breakPoints} from "../../styled-components/variables";
+import Title from "antd/lib/typography/Title";
 
 export const headerSC = {
   TITLE: styled(Title)`
@@ -16,5 +16,8 @@ export const headerSC = {
 `,
   ROLE: styled(Col)`
     text-align: right;
+  `,
+  TIME_ZONE_SELECT: styled(Select)`
+    width: 200px;
   `,
 }
