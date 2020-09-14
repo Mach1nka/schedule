@@ -1,4 +1,4 @@
-import {UserSuccessSignInParse} from "../types/user-settings-types";
+import {UserSettings} from "../types/user-settings-types";
 
 interface MainDataServiceStorageProps {
   storage: Storage | null;
@@ -17,10 +17,34 @@ export default class MainDataServiceStorage {
     this._userDataKeyKey = `${this._baseKey}UserData`;
   }
 
-  getUserData = (): (UserSuccessSignInParse | null) => {
+  setUserData = (data) => {
     if (this._storage) {
       try {
-        return JSON.parse(this._storage.getItem(this._userDataKeyKey) as string);
+        const currentStorageData = JSON.parse(this._storage.getItem(this._userDataKeyKey) as string);
+        const newStorageData = {
+          ...currentStorageData,
+          ...data,
+        }
+
+        this._storage.setItem(this._userDataKeyKey, JSON.stringify(newStorageData));
+
+        return newStorageData;
+      } catch (err) {
+        throw new Error(`Storage error: ${err}`);
+      }
+    }
+  }
+
+  getUserData = (data): UserSettings | null => {
+    if (this._storage) {
+      try {
+        const currentStorageData = this._storage.getItem(this._userDataKeyKey);
+        return currentStorageData
+          ? {
+            ...data,
+            ...JSON.parse(currentStorageData),
+          }
+          : {...data};
       } catch (err) {
         throw new Error(`Storage error: ${err}`);
       }

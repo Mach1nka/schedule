@@ -9,12 +9,24 @@ const scheduleEventsReducerData = {
   } as ScheduleEventsState
 };
 
+export const userSettingsReducerData = {
+  name: ReduxStateEntities.USER_SETTINGS,
+  initialState: {
+    data: {
+      timeZone: "Europe/Minsk",
+      userRole: "student",
+    },
+  }
+};
+
 export const rtkSlices = {
   system: systemSlice,
-  scheduleEvents: getRtkSlice<ScheduleEventsState>(scheduleEventsReducerData),
+  userSettings: getRtkSlice(userSettingsReducerData),
+  scheduleEvents: getRtkSlice(scheduleEventsReducerData),
 };
 
 export const reducer = {
   systemState: rtkSlices.system.reducer,
+  userSettingsState: rtkSlices.userSettings.reducer,
   scheduleEventsState: rtkSlices.scheduleEvents.reducer,
 };

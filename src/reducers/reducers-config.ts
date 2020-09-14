@@ -8,7 +8,8 @@ export const asyncThunkTypePrefix = "fetch";
 
 export enum ReduxStateEntities {
   SYSTEM = "system",
-  SCHEDULE_EVENTS = "schedule-events",
+  USER_SETTINGS = "userSettings",
+  SCHEDULE_EVENTS = "scheduleEvents",
 }
 
 export type CreateAsyncThunkProps = {
@@ -80,7 +81,6 @@ export const getRtkSlice = <S extends DefaultInitialState>(getRtkSliceProps: Get
       },
       [`${fetchActionPrefix}/fulfilled`]: (stateRTK, action) => {
         if (isStatusOk(action)) {
-
           stateRTK.data = action.payload.data;
         }
         stateRTK.uploaded = true;
