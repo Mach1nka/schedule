@@ -3,8 +3,7 @@ import Header from "../header/header";
 import {MainDataContext} from "../../context/main-data-context";
 import useGettingEntity from "../../hooks/use-getting-entity/use-getting-entity";
 import {ReduxStateEntities} from "../../reducers/reducers-config";
-import {useSelector} from "react-redux";
-import {selectScheduleEventsData} from "../../selectors/selectors";
+import CalendarView from "../calendar-view/calendar-view";
 
 const MainPage: React.FC = () => {
 
@@ -14,13 +13,10 @@ const MainPage: React.FC = () => {
 
   useGettingEntity({currentEntity: ReduxStateEntities.SCHEDULE_EVENTS, fetchFn: getScheduleEvents});
 
-  const scheduleEvents = useSelector(selectScheduleEventsData);
-
-  console.log(scheduleEvents);
-
   return (
     <>
       <Header/>
+      <CalendarView/>
     </>
   );
 };
