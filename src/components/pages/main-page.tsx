@@ -4,7 +4,7 @@ import useGettingEntity from "../../hooks/use-getting-entity/use-getting-entity"
 import {ReduxStateEntities} from "../../reducers/reducers-config";
 import {useSelector} from "react-redux";
 import {selectScheduleEventsData} from "../../selectors/selectors";
-import LoadMoreList from "../task-list/task-list";
+import LoadMoreList from "../load-more-list/load-more-list";
 
 const MainPage: React.FC = () => {
 
