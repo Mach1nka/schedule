@@ -18,7 +18,9 @@ const MainPage: React.FC = () => {
   return (
     <>
       <Header/>
-      <CalendarView/>
+      <main>
+        <CalendarView/>
+      </main>
     </>
   );
 };
