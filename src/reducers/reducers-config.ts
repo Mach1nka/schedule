@@ -1,26 +1,15 @@
-<<<<<<< HEAD
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ParsedResponse } from "../types/types";
-import { rtkSlices } from "./root-reducer";
-import { makeFirstUpper } from "../utils/make-frst-upper/make-frst-upper";
-import { isStatusOk } from "../utils/is-status-ok/is-status-ok";
-=======
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {ParsedResponse} from "../types/types";
 import {rtkSlices} from "./root-reducer";
 import {makeFirstUpper} from "../utils/make-frst-upper/make-frst-upper";
 import {isStatusOk} from "../utils/is-status-ok/is-status-ok";
->>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
 
 export const asyncThunkTypePrefix = "fetch";
 
 export enum ReduxStateEntities {
   SYSTEM = "system",
-<<<<<<< HEAD
-=======
   USER_SETTINGS = "userSettings",
   SCHEDULE_EVENTS = "scheduleEvents",
->>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
 }
 
 export type CreateAsyncThunkProps = {
@@ -55,14 +44,6 @@ export const getAsyncThunk = (getAsyncThunkProps: GetAsyncThunkProps) => {
   )
 };
 
-<<<<<<< HEAD
-export interface GetRtkSliceProps {
-  name: ReduxStateEntities;
-  initialState: any;
-}
-
-export const getRtkSlice = (getRtkSliceProps: GetRtkSliceProps) => {
-=======
 interface DefaultInitialState {
   data?: any,
   uploaded?: boolean,
@@ -79,7 +60,6 @@ export interface GetRtkSliceProps<S> {
 }
 
 export const getRtkSlice = <S extends DefaultInitialState>(getRtkSliceProps: GetRtkSliceProps<S>) => {
->>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
   const {
     name,
     initialState,
@@ -89,11 +69,7 @@ export const getRtkSlice = <S extends DefaultInitialState>(getRtkSliceProps: Get
 
   return createSlice({
     name,
-<<<<<<< HEAD
-    initialState,
-=======
     initialState: {...defaultInitialState, ...initialState} as S,
->>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
     reducers: {
       cleaning: (stateRTK) => {
         stateRTK[name] = null;
@@ -105,10 +81,6 @@ export const getRtkSlice = <S extends DefaultInitialState>(getRtkSliceProps: Get
       },
       [`${fetchActionPrefix}/fulfilled`]: (stateRTK, action) => {
         if (isStatusOk(action)) {
-<<<<<<< HEAD
-
-=======
->>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
           stateRTK.data = action.payload.data;
         }
         stateRTK.uploaded = true;

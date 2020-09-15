@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 import {UserSettings} from "../types/user-settings-types";
 
->>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
 interface MainDataServiceStorageProps {
   storage: Storage | null;
   baseKey: string;
@@ -19,8 +16,6 @@ export default class MainDataServiceStorage {
     this._baseKey = props.baseKey;
     this._userDataKeyKey = `${this._baseKey}UserData`;
   }
-<<<<<<< HEAD
-=======
 
   setUserData = (data) => {
     if (this._storage) {
@@ -57,5 +52,4 @@ export default class MainDataServiceStorage {
 
     return null;
   };
->>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
 }

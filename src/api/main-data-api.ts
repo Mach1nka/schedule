@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-export default class MainDataApi {
-
-=======
 import axios, {AxiosPromise} from "axios";
 import {ResponseFromBack} from "../types/types";
 
@@ -52,5 +48,4 @@ export default class MainDataApi {
       .then((response) => response)
       .catch((error) => error.response);
   };
->>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
 }

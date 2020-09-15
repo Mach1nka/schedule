@@ -1,12 +1,9 @@
 import MainDataApi from "../api/main-data-api";
 import MainDataServiceStorage from "./main-data-service-storage";
 import {ParsedResponse} from "../types/types";
-<<<<<<< HEAD
-=======
 import {apiScheduleBackPath} from "../data/paths";
 import MainDataAdapter from "./main-data-adapter";
 import {UserSettings} from "../types/user-settings-types";
->>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
 
 interface MainDataServicesProps {
   api: MainDataApi;
@@ -15,18 +12,12 @@ interface MainDataServicesProps {
 
 export default class MainDataService {
   private _api: MainDataApi;
-<<<<<<< HEAD
-  private _storage: MainDataServiceStorage;
-=======
   private readonly _storage: MainDataServiceStorage;
->>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
 
   constructor(props: MainDataServicesProps) {
     this._api = props.api;
     this._storage = props.storage;
   }
-<<<<<<< HEAD
-=======
 
   getToken = (): string => {
     let token = ``;
@@ -133,5 +124,4 @@ export default class MainDataService {
 
     return this._getScheduleEntity({url, parseResponse});
   };
->>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
 }
