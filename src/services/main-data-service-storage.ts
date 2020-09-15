@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+import {UserSettings} from "../types/user-settings-types";
+
+>>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
 interface MainDataServiceStorageProps {
   storage: Storage | null;
   baseKey: string;
@@ -14,4 +19,43 @@ export default class MainDataServiceStorage {
     this._baseKey = props.baseKey;
     this._userDataKeyKey = `${this._baseKey}UserData`;
   }
+<<<<<<< HEAD
+=======
+
+  setUserData = (data) => {
+    if (this._storage) {
+      try {
+        const currentStorageData = JSON.parse(this._storage.getItem(this._userDataKeyKey) as string);
+        const newStorageData = {
+          ...currentStorageData,
+          ...data,
+        }
+
+        this._storage.setItem(this._userDataKeyKey, JSON.stringify(newStorageData));
+
+        return newStorageData;
+      } catch (err) {
+        throw new Error(`Storage error: ${err}`);
+      }
+    }
+  }
+
+  getUserData = (data): UserSettings | null => {
+    if (this._storage) {
+      try {
+        const currentStorageData = this._storage.getItem(this._userDataKeyKey);
+        return currentStorageData
+          ? {
+            ...data,
+            ...JSON.parse(currentStorageData),
+          }
+          : {...data};
+      } catch (err) {
+        throw new Error(`Storage error: ${err}`);
+      }
+    }
+
+    return null;
+  };
+>>>>>>> 765371784c8d9b9ce0bd8f91721dc61055499bbe
 }
