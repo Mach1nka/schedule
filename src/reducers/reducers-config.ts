@@ -8,7 +8,8 @@ export const asyncThunkTypePrefix = "fetch";
 
 export enum ReduxStateEntities {
   SYSTEM = "system",
-  SCHEDULE_EVENTS = "schedule-events",
+  USER_SETTINGS = "userSettings",
+  SCHEDULE_EVENTS = "scheduleEvents",
 }
 
 export type CreateAsyncThunkProps = {
@@ -43,12 +44,22 @@ export const getAsyncThunk = (getAsyncThunkProps: GetAsyncThunkProps) => {
   )
 };
 
-export interface GetRtkSliceProps {
-  name: ReduxStateEntities;
-  initialState: any;
+interface DefaultInitialState {
+  data?: any,
+  uploaded?: boolean,
 }
 
-export const getRtkSlice = (getRtkSliceProps: GetRtkSliceProps) => {
+const defaultInitialState = {
+  data: null,
+  uploaded: false,
+}
+
+export interface GetRtkSliceProps<S> {
+  name: ReduxStateEntities;
+  initialState: S;
+}
+
+export const getRtkSlice = <S extends DefaultInitialState>(getRtkSliceProps: GetRtkSliceProps<S>) => {
   const {
     name,
     initialState,
@@ -58,7 +69,7 @@ export const getRtkSlice = (getRtkSliceProps: GetRtkSliceProps) => {
 
   return createSlice({
     name,
-    initialState,
+    initialState: {...defaultInitialState, ...initialState} as S,
     reducers: {
       cleaning: (stateRTK) => {
         stateRTK[name] = null;
@@ -70,7 +81,6 @@ export const getRtkSlice = (getRtkSliceProps: GetRtkSliceProps) => {
       },
       [`${fetchActionPrefix}/fulfilled`]: (stateRTK, action) => {
         if (isStatusOk(action)) {
-
           stateRTK.data = action.payload.data;
         }
         stateRTK.uploaded = true;

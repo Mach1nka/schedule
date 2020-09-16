@@ -11,3 +11,8 @@ export interface ParsedResponse<D> {
   errors?: {[ket: string]: string[]};
   status?: number;
 }
+
+export interface TimeZone {
+  TITLE: string,
+  VALUE: number,
+}
