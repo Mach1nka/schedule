@@ -5,6 +5,7 @@ import useGettingEntity from "../../hooks/use-getting-entity/use-getting-entity"
 import {ReduxStateEntities} from "../../reducers/reducers-config";
 import CalendarView from "../calendar-view/calendar-view";
 import {userSettingsReducerData} from "../../reducers/root-reducer";
+import SavingSchedule from '../saving-schedule/saving-schedule';
 
 const MainPage: React.FC = () => {
   const {
@@ -20,6 +21,7 @@ const MainPage: React.FC = () => {
       <Header/>
       <main>
         <CalendarView/>
+        <SavingSchedule/>
       </main>
     </>
   );
