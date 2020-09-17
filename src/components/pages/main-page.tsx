@@ -3,7 +3,7 @@ import Header from "../header/header";
 import {MainDataContext} from "../../context/main-data-context";
 import useGettingEntity from "../../hooks/use-getting-entity/use-getting-entity";
 import {ReduxStateEntities} from "../../reducers/reducers-config";
-import LoadMoreList from "../load-more-list/load-more-list";
+import ScheduleList from "../schedule-list/schedule-list";
 import CalendarView from "../calendar-view/calendar-view";
 import {userSettingsReducerData} from "../../reducers/root-reducer";
 
@@ -19,7 +19,7 @@ const MainPage: React.FC = () => {
   return (
     <>
       <Header/>
-      <LoadMoreList/>
+      <ScheduleList/>
     </>
   );
 };

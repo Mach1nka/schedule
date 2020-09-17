@@ -3,29 +3,44 @@ import { List, Button, Skeleton, Collapse, Row, Col, } from 'antd';
 import {useSelector} from "react-redux";
 import {selectScheduleEventsData} from "../../selectors/selectors";
 
-const LoadMoreList: React.FC = () => {
+const ScheduleList: React.FC = () => {
   const { Panel } = Collapse;
   const defaultCountItemsInList = 2;
   const sum = 2;
   const scheduleEvents = useSelector(selectScheduleEventsData) || [];
   const [initLoading, setInitLoading] = useState<boolean>(true);
-  const [loading, setLoading] = useState<boolean>(false);
   const [countItemsInList, setCountItemsInList] = useState(defaultCountItemsInList);
-  
-  useEffect(() => {
-    setInitLoading(false);
-  }, []);
 
-  const onLoadMore = () => {
-    setCountItemsInList((prev) => prev + sum);
-    
+  const DateTimeFormat = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric"
   };
 
-  const getCurrentList = useCallback((array, num) => {
-    return array.slice(0, num);
-  }, []);
+  const formatDateFromUnix = (unixDate, settings) => {
+    return new Date(unixDate * 1000).toLocaleDateString('ru', settings);
+  };
 
-  const loadMore = !initLoading && !loading ? (
+  const getCurrentList = useCallback((data, amountElements:number) => {
+    return data.slice(0, amountElements);
+  }, []);
+  
+  const onLoadMore = () => {
+    setInitLoading(true);
+    setCountItemsInList((prev) => prev + sum);
+    setInitLoading(false);
+  };
+
+  useEffect(() => {
+    if (scheduleEvents.length) {
+      setInitLoading(false)
+    }
+  }, [scheduleEvents]);
+
+  const loadMore = !initLoading ? (
     <div
       style={{
         textAlign: 'center',
@@ -51,19 +66,20 @@ const LoadMoreList: React.FC = () => {
               <List.Item
                 actions={[<a key="list-loadmore-more">more</a>]}
               >
-                <Skeleton loading={loading} active>
+                <Skeleton loading={initLoading} active>
                   <div>
-                    <h4>Task Name</h4>
-                    <p>Deadline:00.00.0000</p>
+                    <h4>{item.name}</h4>
+                    <span>{`Start: ${formatDateFromUnix(item.startDateTime, DateTimeFormat)}`}</span>
+                    <span>{`Deadline: ${formatDateFromUnix(item.endDateTime, DateTimeFormat)}`}</span>
                     <Collapse>
                       <Panel header="More information" key={item.id}>
-                        <h4>Type Task</h4>
+                        <h4>{`Type: ${item.type}`}</h4>
                         <p>
-                          Task Description <br/>
-                          We supply a series of design principles, practical patterns and high quality design
-                          resources (Sketch and Axure), to help people create their product prototypes
-                          beautifully and efficiently.
+                          Description <br/>
+                          {item.description}
                         </p>
+                        <span><a href={item.descriptionUrl}>Ссылка на задание</a></span>
+                        <span>{`Place: ${item.place}`}</span>
                       </Panel>
                     </Collapse>
                   </div>
@@ -76,4 +92,4 @@ const LoadMoreList: React.FC = () => {
     );
 }
 
-export default LoadMoreList;
+export default ScheduleList;
