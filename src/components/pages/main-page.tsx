@@ -19,8 +19,10 @@ const MainPage: React.FC = () => {
   return (
     <>
       <Header/>
-      <CalendarView/>
-      <SavingSchedule/>
+      <main>
+        <CalendarView/>
+        <SavingSchedule/>
+      </main>
     </>
   );
 };
