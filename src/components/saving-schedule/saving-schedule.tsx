@@ -3,8 +3,8 @@ import { Modal, Button } from 'antd';
 import { jsPDF } from "jspdf";
 import html2canvas from 'html2canvas';
 
-function printDocument(type) {
-  const elem = document.querySelector('.ant-picker-calendar-full');
+function printDocument(type: string): void {
+  const elem= document.querySelector('.ant-picker-calendar-full');
   elem.style.padding = '0 20px 0 20px';
   html2canvas(elem)
     .then((canvas) => {
