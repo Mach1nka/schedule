@@ -2,26 +2,29 @@ import * as React from "react"
 import { Modal, Button } from 'antd';
 import { jsPDF } from "jspdf";
 import html2canvas from 'html2canvas';
-import CalendarView from '../calendar-view/calendar-view';
 
-
-
-function printDocument() {
+function printDocument(type) {
   const elem = document.querySelector('.ant-picker-calendar-full');
   elem.style.padding = '0 20px 0 20px';
   html2canvas(elem)
     .then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      elem.style.padding='0'
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
-      pdf.save("download.pdf");
+      if(type==="pdf") {
+        const imgData = canvas.toDataURL('image/png');
+        elem.style.padding='0'
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+        pdf.save("schedule.pdf");
+      } else if(type==='png') {
+        const link = document.createElement("a");
+        document.body.appendChild(link);
+        link.download = "schedule.png";
+        elem.style.padding='0'
+        link.href = canvas.toDataURL("image/png");
+        link.target = '_blank';
+        link.click();
+      }
     })
   ;
-}
-
-const savePDF = () => {
-  alert('download pdf..')
 }
 
 const SavingSchedule: React.FC = () => {
@@ -36,15 +39,26 @@ const SavingSchedule: React.FC = () => {
         visible={visible}
         onOk={()=>setVisible(false)}
         onCancel={(e)=> {
-          console.log(e.target)
           setVisible(false)
         }}
         footer={[
-          <Button key="back" onClick={()=>printDocument()}>
+          <Button
+            key="pdf"
+            onClick={()=> {
+              printDocument('pdf')
+              setVisible(false)
+            }}
+          >
             To PDF
           </Button>,
-          <Button key="submit" type="primary" onClick={(e)=>console.log(e.target)}>
-            To XXX
+          <Button
+            key="png"
+            onClick={()=>{
+              printDocument('png')
+              setVisible(false)
+            }}
+          >
+            To PNG
           </Button>,
         ]}
       >
