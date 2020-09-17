@@ -62,9 +62,8 @@ const SavingSchedule: React.FC = () => {
           </Button>,
         ]}
       >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        <p>You can download schedule</p>
+        <p>Choose best format for you...</p>
       </Modal>
     </>
   );
