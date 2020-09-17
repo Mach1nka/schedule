@@ -29,34 +29,45 @@ function printDocument(type: string): void {
 
 const SavingSchedule: React.FC = () => {
   const [visible, setVisible] = React.useState(false);
+
+  const handleModalBtnClick = ()=> {
+    setVisible(false);
+  }
+
+  const handleDownloadBtnClick = ()=> {
+    setVisible(true);
+  }
+
+  const handlePdfBtnClick = ()=> {
+    printDocument('pdf')
+    setVisible(false);
+  }
+
+  const handlePngBtnClick = ()=> {
+    printDocument('png')
+    setVisible(false);
+  }
+
   return (
     <>
-      <Button type="primary" onClick={()=>setVisible(true)}>
+      <Button type="primary" onClick={handleDownloadBtnClick}>
         Download
       </Button>
       <Modal
         title="Basic Modal"
         visible={visible}
-        onOk={()=>setVisible(false)}
-        onCancel={(e)=> {
-          setVisible(false)
-        }}
+        onOk={handleModalBtnClick}
+        onCancel={handleModalBtnClick}
         footer={[
           <Button
             key="pdf"
-            onClick={()=> {
-              printDocument('pdf')
-              setVisible(false)
-            }}
+            onClick={handlePdfBtnClick}
           >
             To PDF
           </Button>,
           <Button
             key="png"
-            onClick={()=>{
-              printDocument('png')
-              setVisible(false)
-            }}
+            onClick={handlePngBtnClick}
           >
             To PNG
           </Button>,
