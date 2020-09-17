@@ -8,13 +8,13 @@ import CalendarView from '../calendar-view/calendar-view';
 
 function printDocument() {
   const elem = document.querySelector('.ant-picker-calendar-full');
-  // elem.style.padding = '200px 100px 400px 100px';
+  elem.style.padding = '0 20px 0 20px';
   html2canvas(elem)
     .then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
+      elem.style.padding='0'
       const pdf = new jsPDF();
       pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
-      pdf.output('dataurlnewwindow');
       pdf.save("download.pdf");
     })
   ;
