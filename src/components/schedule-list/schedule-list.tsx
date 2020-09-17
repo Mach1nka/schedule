@@ -2,6 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import { List, Button, Skeleton, Collapse, Row, Col, } from 'antd';
 import {useSelector} from "react-redux";
 import {selectScheduleEventsData} from "../../selectors/selectors";
+import {loadMoreContainer as SC} from "./sc";
 
 const ScheduleList: React.FC = () => {
   const { Panel } = Collapse;
@@ -29,9 +30,7 @@ const ScheduleList: React.FC = () => {
   }, []);
   
   const onLoadMore = () => {
-    setInitLoading(true);
     setCountItemsInList((prev) => prev + sum);
-    setInitLoading(false);
   };
 
   useEffect(() => {
@@ -41,21 +40,14 @@ const ScheduleList: React.FC = () => {
   }, [scheduleEvents]);
 
   const loadMore = !initLoading ? (
-    <div
-      style={{
-        textAlign: 'center',
-        marginTop: 12,
-        height: 32,
-        lineHeight: '32px',
-      }}
-    >
+    <SC.CONTAINER>
       <Button onClick={() => onLoadMore()}>Loading More</Button>
-    </div>
+    </SC.CONTAINER>
     ) : null;
 
     return (
-      <Row>
-        <Col xs={24} lg={12} >
+      <Row style={{justifyContent: 'center'}}>
+        <Col xs={24} lg={14}>
           <List
             className="demo-loadmore-list"
             loading={initLoading}

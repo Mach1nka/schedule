@@ -19,7 +19,9 @@ const MainPage: React.FC = () => {
   return (
     <>
       <Header/>
-      <ScheduleList/>
+      <main>
+        <ScheduleList/>
+      </main>
     </>
   );
 };
