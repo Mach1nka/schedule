@@ -1,16 +1,16 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import { List, Button, Skeleton, Collapse, Row, Col, } from 'antd';
+import {List, Button, Skeleton, Collapse, Col, } from 'antd';
 import {useSelector} from "react-redux";
 import {selectScheduleEventsData} from "../../selectors/selectors";
-import {loadMoreContainer as SC} from "./sc";
+import {scheduleListSC as SC} from "./sc";
 
 const ScheduleList: React.FC = () => {
   const { Panel } = Collapse;
   const defaultCountItemsInList = 2;
-  const sum = 2;
+  const amountNewAdditionListItems = 2;
   const scheduleEvents = useSelector(selectScheduleEventsData) || [];
   const [initLoading, setInitLoading] = useState<boolean>(true);
-  const [countItemsInList, setCountItemsInList] = useState(defaultCountItemsInList);
+  const [amountItemsInList, setCountItemsInList] = useState(defaultCountItemsInList);
 
   const DateTimeFormat = {
     year: "numeric",
@@ -30,7 +30,7 @@ const ScheduleList: React.FC = () => {
   }, []);
   
   const onLoadMore = () => {
-    setCountItemsInList((prev) => prev + sum);
+    setCountItemsInList((prev) => prev + amountNewAdditionListItems);
   };
 
   useEffect(() => {
@@ -40,47 +40,46 @@ const ScheduleList: React.FC = () => {
   }, [scheduleEvents]);
 
   const loadMore = !initLoading ? (
-    <SC.CONTAINER>
+    <SC.BUTTON_CONTAINER>
       <Button onClick={() => onLoadMore()}>Loading More</Button>
-    </SC.CONTAINER>
+    </SC.BUTTON_CONTAINER>
     ) : null;
 
     return (
-      <Row style={{justifyContent: 'center'}}>
+      <SC.ROW>
         <Col xs={24} lg={14}>
           <List
-            className="demo-loadmore-list"
             loading={initLoading}
             itemLayout="horizontal"
             loadMore={loadMore}
-            dataSource={getCurrentList(scheduleEvents, countItemsInList)}
+            dataSource={getCurrentList(scheduleEvents, amountItemsInList)}
             renderItem={item => (
-              <List.Item
-                actions={[<a key="list-loadmore-more">more</a>]}
-              >
+              <SC.LIST_ITEM>
                 <Skeleton loading={initLoading} active>
-                  <div>
-                    <h4>{item.name}</h4>
-                    <span>{`Start: ${formatDateFromUnix(item.startDateTime, DateTimeFormat)}`}</span>
-                    <span>{`Deadline: ${formatDateFromUnix(item.endDateTime, DateTimeFormat)}`}</span>
+                  <SC.LIST_ITEM_CONTAINER>
+                    <h2>{item.name}</h2>
+                    <SC.DATE_TIME_CONTAINER>
+                      <span className="start">{`Start: ${formatDateFromUnix(item.startDateTime, DateTimeFormat)}`}</span>
+                      <span className="deadline">{`Deadline: ${formatDateFromUnix(item.endDateTime, DateTimeFormat)}`}</span>
+                    </SC.DATE_TIME_CONTAINER>
                     <Collapse>
                       <Panel header="More information" key={item.id}>
-                        <h4>{`Type: ${item.type}`}</h4>
-                        <p>
-                          Description <br/>
-                          {item.description}
-                        </p>
-                        <span><a href={item.descriptionUrl}>Ссылка на задание</a></span>
-                        <span>{`Place: ${item.place}`}</span>
+                        <h3>{`Type: ${item.type.toUpperCase()}`}</h3>
+                        <SC.COLLAPSE_CONTENT>
+                          <span className="collapse-content__event-place">{`Place: ${item.place.toUpperCase()}`}</span>
+                          <span className="collapse-content__description-title">Description</span>
+                          <p>{item.description}</p>
+                          <a className="link-to-description-page" href={item.descriptionUrl}>Link</a>
+                        </SC.COLLAPSE_CONTENT>
                       </Panel>
                     </Collapse>
-                  </div>
+                  </SC.LIST_ITEM_CONTAINER>
                 </Skeleton>
-              </List.Item>
+              </SC.LIST_ITEM>
             )}
           />
         </Col>
-      </Row>
+      </SC.ROW>
     );
 }
 
