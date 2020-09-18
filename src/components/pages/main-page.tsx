@@ -7,6 +7,7 @@ import { SwitchScheduleView } from '../switch-schedule-view/switch-schedule-view
 import CalendarView from "../calendar-view/calendar-view";
 import {userSettingsReducerData} from "../../reducers/root-reducer";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import SavingSchedule from '../saving-schedule/saving-schedule';
 
 const MainPage: React.FC = () => {
   const {
