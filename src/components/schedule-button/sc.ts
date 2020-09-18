@@ -1,7 +1,6 @@
 import styled from 'styled-components'
-// import {Radio} from "antd";
 
-export const ScheduleButton = {
+export const ScheduleButtonSC = {
   INPUT: styled.input`
     display: none;
 
@@ -26,7 +25,7 @@ export const ScheduleButton = {
     -webkit-transition: color 0.3s, background 0.3s, border-color 0.3s;
     transition: color 0.3s, background 0.3s, border-color 0.3s;
 
-    &: hover{
+    &:hover {
       color: #1890ff;
     }
 

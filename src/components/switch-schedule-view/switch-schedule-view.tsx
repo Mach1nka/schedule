@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScheduleButton } from '../schedule-button/schedule-button'
 
-import { SwitchScheduleView as SC} from "./sc";
+import { SwitchScheduleViewSC as SC} from "./sc";
 
 export const SwitchScheduleView: React.FC = () => {
   const buttons = [

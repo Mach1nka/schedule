@@ -1,13 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom'
 
-import {ScheduleButton as SC} from './sc'
+import {ScheduleButtonSC as SC} from './sc'
 
-interface Button {
+interface ScheduleButtonProps {
   name: string
 }
 
-export const ScheduleButton: React.FC<Button> = (props) => {
+export const ScheduleButton: React.FC<ScheduleButtonProps> = (props) => {
   const { name } = props;
   const history = useHistory();
 

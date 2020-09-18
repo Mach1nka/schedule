@@ -18,17 +18,15 @@ const MainPage: React.FC = () => {
   useGettingEntity({currentEntity: ReduxStateEntities.SCHEDULE_EVENTS, fetchFn: getScheduleEvents});
 
   return (
-    <>
-      <Router>
-        <Route path='/'>
-          <Header/>
-          <main>
-            <SwitchScheduleView />
-            <CalendarView/>
-          </main>
-        </Route>
-      </Router>
-    </>
+    <Router>
+      <Route path='/'>
+        <Header/>
+        <main>
+          <SwitchScheduleView />
+          <CalendarView/>
+        </main>
+      </Route>
+    </Router>
   );
 };
 

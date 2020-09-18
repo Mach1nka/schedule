@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const SwitchScheduleView = {
+export const SwitchScheduleViewSC = {
   UL: styled.ul`
     display: flex;
     justify-content: flex-end;
