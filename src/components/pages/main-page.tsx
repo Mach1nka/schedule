@@ -9,6 +9,8 @@ import {userSettingsReducerData} from "../../reducers/root-reducer";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import SavingSchedule from '../saving-schedule/saving-schedule';
 
+import TableView from '../table-view/table-view';
+
 const MainPage: React.FC = () => {
   const {
     getUserSettings,
@@ -24,6 +26,7 @@ const MainPage: React.FC = () => {
         <Header/>
         <main>
           <SwitchScheduleView />
+          <TableView />
           <CalendarView/>
         </main>
       </Route>
