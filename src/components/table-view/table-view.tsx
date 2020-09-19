@@ -3,6 +3,11 @@ import 'antd/dist/antd.css';
 import { Table, Tag, Space } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 
+import {useSelector} from "react-redux";
+import {selectScheduleEventsData} from "../../selectors/selectors";
+
+
+
 interface Columns {
   title: string;
   key: string;
@@ -13,6 +18,22 @@ interface Columns {
 }
 
 const TableView: React.FC = () => {
+
+  const scheduleEvents = useSelector(selectScheduleEventsData) || [];
+  console.log(scheduleEvents);
+
+
+  const DateTimeFormat = {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  };
+
+  const formatDateFromUnix = (unixDate, settings) => {
+    return new Date(unixDate * 1000).toLocaleDateString('ru', settings);
+  };
+
+ 
   const dataSource: Columns[] = [
     {
       key: '1',
@@ -38,7 +59,6 @@ const TableView: React.FC = () => {
       status: ['cool', 'teacher'],
       organizer: '',
     },
-
   ];
 
   const columns: ColumnsType<Columns> = [
