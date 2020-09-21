@@ -34,32 +34,7 @@ const TableView: React.FC = () => {
   };
 
  
-  const dataSource: Columns[] = [
-    {
-      key: '1',
-      date: '11.01.1991',
-      time: '9:01',
-      title: 'New York No. 1 Lake Park',
-      status: ['nice', 'developer'],
-      organizer: '',
-    },
-    {
-      key: '2',
-      date: '11.01.1992',
-      time: '9:02',
-      title: 'London No. 1 Lake Park',
-      status: ['loser'],
-      organizer: '',
-    },
-    {
-      key: '3',
-      date: '11.01.1993',
-      time: '9:03',
-      title: 'Sidney No. 1 Lake Park',
-      status: ['cool', 'teacher'],
-      organizer: '',
-    },
-  ];
+  
 
   const columns: ColumnsType<Columns> = [
     {
@@ -130,9 +105,38 @@ const TableView: React.FC = () => {
     // },
   ];
 
+  if (scheduleEvents.length > 0) {
+    const dataSource = [];
+
+    for (let i = 0; i < scheduleEvents.length; i+=1) {
+      const temp = {
+        key: String(i),
+        date: String(formatDateFromUnix(scheduleEvents[i].startDateTime, DateTimeFormat)),
+        time: '9:00',
+        title: String(scheduleEvents[i].description),
+        status: [String(scheduleEvents[i].type)],
+        organizer: '',
+        
+      }
+
+      dataSource.push(temp)
+    }
+    
+    console.log('дата')
+    console.log(dataSource);
+
+    return (
+      <>
+        <Table dataSource={dataSource} columns={columns}/>
+      </>
+    );
+
+    
+  }
+
   return (
     <>
-      <Table dataSource={dataSource} columns={columns}/>
+      <h1>загружается таблица</h1>
     </>
   );
 }
