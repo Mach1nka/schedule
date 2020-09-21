@@ -7,7 +7,7 @@ import { SwitchScheduleView } from '../switch-schedule-view/switch-schedule-view
 import CalendarView from "../calendar-view/calendar-view";
 import {userSettingsReducerData} from "../../reducers/root-reducer";
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import SavingSchedule from '../saving-schedule/saving-schedule';
+// import SavingSchedule from '../saving-schedule/saving-schedule';
 
 const MainPage: React.FC = () => {
   const {
@@ -23,8 +23,13 @@ const MainPage: React.FC = () => {
       <Route path='/'>
         <Header/>
         <main>
-          <SwitchScheduleView />
-          <CalendarView/>
+          <SwitchScheduleView/>
+          <Route path='/Calendar'>
+            <CalendarView/>
+          </Route>
+          <Route path='/List'>
+            {/* <ScheduleList/> */}
+          </Route>
         </main>
       </Route>
     </Router>

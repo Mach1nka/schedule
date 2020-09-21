@@ -8,7 +8,7 @@ export const ScheduleButtonSC = {
       z-index: 1;
       color: #1890ff;
       background: #fff;
-      border-color: #1890ff;
+      border-bottom: 1.5px solid #1890ff;
     }
   `,
 
@@ -19,7 +19,6 @@ export const ScheduleButtonSC = {
     color: rgba(0, 0, 0, 0.65);
     line-height: 30px;
     background: #fff;
-    border: 1px solid #d9d9d9;
     border-top-width: 1.02px;
     cursor: pointer;
     -webkit-transition: color 0.3s, background 0.3s, border-color 0.3s;
