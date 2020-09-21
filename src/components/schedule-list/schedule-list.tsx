@@ -41,7 +41,7 @@ const ScheduleList: React.FC = () => {
 
   const loadMore = !initLoading ? (
     <SC.BUTTON_CONTAINER>
-      <Button onClick={() => onLoadMore()}>Loading More</Button>
+      <Button onClick={onLoadMore()}>Loading More</Button>
     </SC.BUTTON_CONTAINER>
     ) : null;
 
