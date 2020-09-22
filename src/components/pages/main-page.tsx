@@ -27,12 +27,13 @@ const MainPage: React.FC = () => {
           <SwitchScheduleView/>
           <Route path='/Calendar'>
             <CalendarView/>
+            <SavingSchedule name='.ant-picker-calendar-full'/>
           </Route>
           <Route path='/List'>
-            <ScheduleList/>
+            <ScheduleList name=''/>
           </Route>
         </main>
-      </Route> 
+      </Route>
     </Router>
   );
 };

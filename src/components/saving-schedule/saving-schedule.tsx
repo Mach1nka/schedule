@@ -3,8 +3,8 @@ import { Modal, Button } from 'antd';
 import { jsPDF } from "jspdf";
 import html2canvas from 'html2canvas';
 
-function printDocument(type: string): void {
-  const elem= document.querySelector('.ant-picker-calendar-full');
+function printDocument(type: string, name: string): void {
+  const elem= document.querySelector(name);
   elem.style.padding = '0 20px 0 20px';
   html2canvas(elem)
     .then((canvas) => {
@@ -27,8 +27,16 @@ function printDocument(type: string): void {
   ;
 }
 
-const SavingSchedule: React.FC = () => {
+interface SavingScheduleProps {
+  name: string;
+}
+
+const SavingSchedule: React.FC<SavingScheduleProps> = (props) => {
   const [visible, setVisible] = React.useState(false);
+
+  const {
+    name,
+  } = props;
 
   const handleModalBtnClick = ()=> {
     setVisible(false);
@@ -39,12 +47,12 @@ const SavingSchedule: React.FC = () => {
   }
 
   const handlePdfBtnClick = ()=> {
-    printDocument('pdf')
+    printDocument('pdf', name)
     setVisible(false);
   }
 
   const handlePngBtnClick = ()=> {
-    printDocument('png')
+    printDocument('png', name)
     setVisible(false);
   }
 
