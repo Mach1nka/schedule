@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useHistory } from 'react-router-dom';
 import {calendarDayEventsSC as SC} from "./sc";
 import {ScheduleMockEvents} from "../../data/schedule";
 
@@ -7,6 +8,7 @@ interface CalendarDayEventsProps {
 }
 
 const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
+  const history = useHistory();
   const {
     events,
   } = props;
@@ -24,7 +26,10 @@ const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
       <SC.ITEM
         style={{backgroundColor: colorMock}}
         key={id}
-        onClick={()=>alert(`${name} --- there should be block with task`)}
+        onClick={()=>history.push({
+          pathname: "/Event",
+          search: `?id=${id}`,
+        })}
       >
         {name}
       </SC.ITEM>

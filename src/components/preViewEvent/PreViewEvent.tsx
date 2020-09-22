@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, PageHeader, Button, Descriptions, Tag, Space, Avatar, Typography } from 'antd';
 import moment from 'moment';
+import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import screenUrl from '../formForMentor/utils/screenUrl';
-import { ScheduleMockEvents } from '../../data/schedule';
-import { selectUserTimeZone } from '../../selectors/selectors';
+// import { ScheduleMockEvents } from '../../data/schedule';
+import { selectUserTimeZone, selectScheduleEventsData } from '../../selectors/selectors';
 import zone from '../formForMentor/utils/zone';
 import Feedback from './Feedback/Feedback';
 import SC from './sc';
 
-interface IdEvent {
-  event: ScheduleMockEvents;
-}
+// interface IdEvent {
+//   event: ScheduleMockEvents;
+// }
 
-const PreViewEvent = ({ event }: IdEvent): React.ReactElement => {
+const PreViewEvent = (): React.ReactElement => {
   const [description, setDescription] = useState('');
   const currentTimeZone = useSelector(selectUserTimeZone);
+  const id = new URLSearchParams(useLocation().search);
   const [visible, setVisible] = useState(false);
+  console.log(id.get("id"));
+  const event = useSelector(selectScheduleEventsData)?.find((e) => e.id === id.get("id"));
   const { Link } = Typography;
   const { Content } = Layout;
   const markDown = async (url: string) => {
@@ -42,6 +46,7 @@ const PreViewEvent = ({ event }: IdEvent): React.ReactElement => {
   }, [event]);
   return (
     <>
+      
       {event && (
         <>
           <PageHeader

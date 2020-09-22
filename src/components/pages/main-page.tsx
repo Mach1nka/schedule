@@ -9,6 +9,7 @@ import Header from "../header/header";
 import ScheduleList from "../schedule-list/schedule-list";
 import CalendarView from "../calendar-view/calendar-view";
 import SavingSchedule from '../saving-schedule/saving-schedule';
+import PreViewEvent from '../preViewEvent/PreViewEvent';
 
 const MainPage: React.FC = () => {
   const {
@@ -30,6 +31,9 @@ const MainPage: React.FC = () => {
           </Route>
           <Route path='/List'>
             <ScheduleList/>
+          </Route>
+          <Route path='/Event'>
+            <PreViewEvent/>
           </Route>
         </main>
       </Route> 
