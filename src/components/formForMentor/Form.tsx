@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Button, Row, Col } from 'antd';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
+import { useLocation, useHistory } from 'react-router-dom';
 import DateMy from './Date/Date';
 import Organizer from './Organizer/Organizer';
 import InputMy from './Input/Input';
@@ -11,18 +12,20 @@ import typeEvents from '../../data/typeEvents';
 import zone from './utils/zone';
 import { selectUserTimeZone, selectScheduleEventsData } from '../../selectors/selectors';
 
-interface IdEvent {
-  id?: string;
-  type?: string;
-  setForm: (val: boolean) => void;
-  setEvent: (val: any) => void;
-}
+// interface IdEvent {
+//   id?: string;
+//   type?: string;
+//   setForm: (val: boolean) => void;
+//   setEvent: (val: any) => void;
+// }
 
-const FormMy = ({ id, type, setForm, setEvent }: IdEvent): React.ReactElement => {
+const FormMy = (): React.ReactElement => {
   const [form] = Form.useForm();
+  const history = useHistory();
+  const search = new URLSearchParams(useLocation().search);
   const currentTimeZone = useSelector(selectUserTimeZone);
-  const event = useSelector(selectScheduleEventsData)?.find((e) => e.id === id);
-  const typeEvent = typeEvents.find((e) => e.name === (event ? event?.type : type));
+  const event = useSelector(selectScheduleEventsData)?.find((e) => e.id === search.get("id"));
+  const typeEvent = typeEvents.find((e) => e.name === (event ? event?.type : 'New'));
   const initialValues = {
     type: typeEvent?.name,
     name: event?.name,
@@ -82,8 +85,10 @@ const FormMy = ({ id, type, setForm, setEvent }: IdEvent): React.ReactElement =>
       color: values.color,
     };
     console.log('eventNew', eventNew);
-    setForm(false);
-    setEvent(eventNew);
+    history.push({
+      pathname: "/Event",
+      search: `?id=${event?.id}`,
+    })
   };
 
   return (
@@ -108,7 +113,7 @@ const FormMy = ({ id, type, setForm, setEvent }: IdEvent): React.ReactElement =>
           <InputMy type={typeEvent} />
           <Form.Item name="submit">
             <Button type="primary" htmlType="submit">
-              Submit
+              PreView
             </Button>
           </Form.Item>
         </Form>
@@ -118,7 +123,7 @@ const FormMy = ({ id, type, setForm, setEvent }: IdEvent): React.ReactElement =>
 };
 export default FormMy;
 
-FormMy.defaultProps = {
-  id: '',
-  type: 'New',
-};
+// FormMy.defaultProps = {
+//   id: '',
+//   type: 'New',
+// };

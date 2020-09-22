@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Layout, PageHeader, Button, Descriptions, Tag, Space, Avatar, Typography } from 'antd';
 import moment from 'moment';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import screenUrl from '../formForMentor/utils/screenUrl';
 // import { ScheduleMockEvents } from '../../data/schedule';
@@ -17,10 +17,11 @@ import SC from './sc';
 const PreViewEvent = (): React.ReactElement => {
   const [description, setDescription] = useState('');
   const currentTimeZone = useSelector(selectUserTimeZone);
-  const id = new URLSearchParams(useLocation().search);
+  const search = new URLSearchParams(useLocation().search);
   const [visible, setVisible] = useState(false);
-  console.log(id.get("id"));
-  const event = useSelector(selectScheduleEventsData)?.find((e) => e.id === id.get("id"));
+  const history = useHistory();
+  console.log(search.get("id"));
+  const event = useSelector(selectScheduleEventsData)?.find((e) => e.id === search.get("id"));
   const { Link } = Typography;
   const { Content } = Layout;
   const markDown = async (url: string) => {
@@ -61,7 +62,14 @@ const PreViewEvent = (): React.ReactElement => {
             ]}
             extra={[
               <Button key="3">Save</Button>,
-              <Button key="2">Edit</Button>,
+              <Button
+                key="2"
+                onClick={()=>history.push({
+                pathname: "/formForMentor",
+                search: `?id=${event.id}`,
+              })}
+              >Edit
+              </Button>,
               <Button key="1" type="primary">
                 Save New Event
               </Button>,
@@ -76,7 +84,7 @@ const PreViewEvent = (): React.ReactElement => {
                   return (
                     <Descriptions.Item label="Organizer" key={Math.random()}>
                       <Space>
-                        <Avatar size="small" src={`https://github.com/${e}.png`} />
+                        <Avatar size="small" src={`https://github.com/${e}.png`}/>
                         <Link href={`https://github.com/${e}`} target="_blank" rel="noreferrer">
                           {e}
                         </Link>
@@ -92,11 +100,11 @@ const PreViewEvent = (): React.ReactElement => {
                   .format('YYYY-MM-DD HH:mm')}
               </Descriptions.Item>
               <Descriptions.Item
-                label={
+                label={(
                   <Tag color={event.type === 'Task' ? 'red' : 'blue'}>
                     {event.type === 'Task' ? 'Deadline' : 'End Event'}
                   </Tag>
-                }
+                )}
               >
                 {moment(event.endDateTime, 'X')
                   .utcOffset(zone(currentTimeZone), false)
@@ -120,10 +128,10 @@ const PreViewEvent = (): React.ReactElement => {
           </PageHeader>
           <Layout className="layout">
             <Content style={{ padding: '0 50px' }}>
-              <SC.TITLE source={description} escapeHtml={false} />
+              <SC.TITLE source={description} escapeHtml={false}/>
             </Content>
           </Layout>
-          <Feedback visible={visible} setVisible={setVisible} />
+          <Feedback visible={visible} setVisible={setVisible}/>
         </>
       )}
     </>

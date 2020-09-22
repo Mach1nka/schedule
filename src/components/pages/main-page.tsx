@@ -10,6 +10,7 @@ import ScheduleList from "../schedule-list/schedule-list";
 import CalendarView from "../calendar-view/calendar-view";
 import SavingSchedule from '../saving-schedule/saving-schedule';
 import PreViewEvent from '../preViewEvent/PreViewEvent';
+import Form from '../formForMentor/Form';
 
 const MainPage: React.FC = () => {
   const {
@@ -34,6 +35,9 @@ const MainPage: React.FC = () => {
           </Route>
           <Route path='/Event'>
             <PreViewEvent/>
+          </Route>
+          <Route path='/formForMentor'>
+            <Form/>
           </Route>
         </main>
       </Route> 
