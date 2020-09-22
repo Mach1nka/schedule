@@ -27,6 +27,8 @@ const TableView: React.FC = () => {
     year: "numeric",
     month: "numeric",
     day: "numeric",
+    hour: "numeric",
+    minute: "numeric"
   };
 
   const formatDateFromUnix = (unixDate, settings) => {
@@ -43,31 +45,35 @@ const TableView: React.FC = () => {
       key: 'settings',
     },
     {
-      title: 'Date',
-      dataIndex: 'date',
-      key: 'date',
-      render: text => <a>{text}</a>,
+      title: 'Start date',
+      dataIndex: 'startdate',
+      key: 'startdate',
+      
     },
     {
-      title: 'Time',
-      dataIndex: 'time',
-      key: 'time',
+      title: 'Due date',
+      dataIndex: 'duedate',
+      key: 'duedate',
     },
+    
     {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
+      // вот здесь нужна помощь,
+      // не могу айдишник передать в ссылку
+      render: (name, id)=> <a href={String(id)}>{name}</a>
     },
     {
-      title: 'Status',
+      title: 'Type',
       key: 'status',
       dataIndex: 'status',
       render: tags => (
         <>
           {tags.map(tag => {
             let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
+            if (tag === 'Task') {
+              color = 'tomato';
             }
             return (
               <Tag color={color} key={tag}>
@@ -82,11 +88,6 @@ const TableView: React.FC = () => {
       title: 'Organizer',
       dataIndex: 'organizer',
       key: 'organizer',
-    },
-    {
-      title: 'URL',
-      dataIndex: 'url',
-      key: 'url',
     },
     {
       title: 'Comment',
@@ -110,12 +111,13 @@ const TableView: React.FC = () => {
 
     for (let i = 0; i < scheduleEvents.length; i+=1) {
       const temp = {
+        settings: String(i + 1),
         key: String(i),
-        date: String(formatDateFromUnix(scheduleEvents[i].startDateTime, DateTimeFormat)),
-        time: '9:00',
-        title: String(scheduleEvents[i].description),
+        startdate: String(formatDateFromUnix(scheduleEvents[i].startDateTime, DateTimeFormat)),
+        duedate: String(formatDateFromUnix(scheduleEvents[i].endDateTime, DateTimeFormat)),
+        title: String(scheduleEvents[i].name),
         status: [String(scheduleEvents[i].type)],
-        organizer: '',
+        
         
       }
 
