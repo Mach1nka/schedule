@@ -1,17 +1,91 @@
 import React from 'react';
 import { Form, Button, Row, Col } from 'antd';
+import { useSelector } from 'react-redux';
 import moment from 'moment';
-import Date from './Date/Date';
+import DateMy from './Date/Date';
 import Organizer from './Organizer/Organizer';
 import InputMy from './Input/Input';
 import FormHeader from './FormHeader/FormHeader';
+import TimeZone from './TimeZone/TimeZone';
+import typeEvents from '../../data/typeEvents';
+import zone from './utils/zone';
+import { selectUserTimeZone, selectScheduleEventsData } from '../../selectors/selectors';
 
-const FormMy = (): React.ReactElement => {
-  const dateFormat = 'YYYY-MM-DD HH:mm';
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
-  };
+interface IdEvent {
+  id?: string;
+  type?: string;
+  setForm: (val: boolean) => void;
+  setEvent: (val: any) => void;
+}
+
+const FormMy = ({ id, type, setForm, setEvent }: IdEvent): React.ReactElement => {
   const [form] = Form.useForm();
+  const currentTimeZone = useSelector(selectUserTimeZone);
+  const event = useSelector(selectScheduleEventsData)?.find((e) => e.id === id);
+  const typeEvent = typeEvents.find((e) => e.name === (event ? event?.type : type));
+  const initialValues = {
+    type: typeEvent?.name,
+    name: event?.name,
+    organizers: event?.organizers ? [''].push(JSON.parse(event?.organizers)) : [''],
+    date: event?.startDateTime && [
+      moment(event?.startDateTime, 'X').utcOffset(zone(currentTimeZone), false),
+      moment(event?.endDateTime, 'X').utcOffset(zone(currentTimeZone), false),
+    ],
+    crossCheck: event?.startDateCrossCheck
+      ? [
+          [
+            moment(event?.startDateCrossCheck, 'X').utcOffset(zone(currentTimeZone), false),
+            moment(event?.endDateCrossCheck, 'X').utcOffset(zone(currentTimeZone), false),
+          ],
+        ]
+      : [],
+    place: event?.place,
+    comment: event?.comment,
+    color: event?.color,
+    descriptionUrl: event?.descriptionUrl,
+    link: event?.link,
+    description: event?.description,
+    timeZone: currentTimeZone,
+  };
+  const onFinish = (values) => {
+    const eventNew = {
+      id: event?.id,
+      name: values.name,
+      description: values.description,
+      descriptionUrl: values.descriptionUrl,
+      type: values.type,
+      timeZone: values.timeZone,
+      startDateTime: values.date[0]
+        .utcOffset(zone(values.timeZone), true)
+        .utcOffset(0, false)
+        .format('X'),
+      endDateTime: values.date[1]
+        .utcOffset(zone(values.timeZone), true)
+        .utcOffset(0, false)
+        .format('X'),
+      place: values.place,
+      comment: values.comment,
+      startDateCrossCheck:
+        values.crossCheck[0] &&
+        values.crossCheck[0][0]
+          .utcOffset(zone(values.timeZone), true)
+          .utcOffset(0, false)
+          .format('X'),
+      endDateCrossCheck:
+        values.crossCheck[0] &&
+        values.crossCheck[0][1]
+          .utcOffset(zone(values.timeZone), true)
+          .utcOffset(0, false)
+          .format('X'),
+      organizers: JSON.stringify(values.organizers.filter((e) => e !== '')),
+      link: values.link,
+      color: values.color,
+    };
+    console.log('eventNew', eventNew);
+    setForm(false);
+    setEvent(eventNew);
+  };
+
   return (
     <Row justify="center">
       <Col span={20}>
@@ -25,21 +99,14 @@ const FormMy = (): React.ReactElement => {
             sm: { span: 20, offset: 2 },
           }}
           onFinish={onFinish}
-          initialValues={{
-            date: [moment('2015-06-06 00:34', dateFormat), moment('2015-07-06 00:45', dateFormat)],
-            organizers: [''],
-            crossCheck: [
-              [moment('2015-06-06 00:34', dateFormat), moment('2015-07-06 00:45', dateFormat)],
-            ],
-            type: 'task',
-            span: `## Цели задания\n**Практические**\n- собрать идеи для улучшения расписания RS School\n- создать удобное, функциональное расписание\n- интегрировать лучшее решение в rs app`,
-          }}
+          initialValues={initialValues}
         >
-          <FormHeader />
+          <FormHeader form={form} />
           <Organizer form={form} />
-          <Date />
-          <InputMy form={form} />
-          <Form.Item wrapperCol={{ span: 12, offset: 6 }} name="submit">
+          <DateMy type={typeEvent} />
+          <TimeZone />
+          <InputMy type={typeEvent} />
+          <Form.Item name="submit">
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
@@ -50,3 +117,8 @@ const FormMy = (): React.ReactElement => {
   );
 };
 export default FormMy;
+
+FormMy.defaultProps = {
+  id: '',
+  type: 'New',
+};
