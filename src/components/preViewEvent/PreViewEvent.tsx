@@ -5,10 +5,11 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import screenUrl from '../formForMentor/utils/screenUrl';
 // import { ScheduleMockEvents } from '../../data/schedule';
-import { selectUserTimeZone, selectScheduleEventsData } from '../../selectors/selectors';
+import { selectUserTimeZone, selectScheduleEventById, selectScheduleEventDraftData } from '../../selectors/selectors';
 import zone from '../formForMentor/utils/zone';
 import Feedback from './Feedback/Feedback';
 import SC from './sc';
+import { RootState } from '../../store';
 
 // interface IdEvent {
 //   event: ScheduleMockEvents;
@@ -20,8 +21,11 @@ const PreViewEvent = (): React.ReactElement => {
   const search = new URLSearchParams(useLocation().search);
   const [visible, setVisible] = useState(false);
   const history = useHistory();
-  console.log(search.get("id"));
-  const event = useSelector(selectScheduleEventsData)?.find((e) => e.id === search.get("id"));
+  const id = search.get("id") || '';
+  // const isDraft = search.get("draft");
+  const eventState = useSelector((state: RootState) => selectScheduleEventById(state, id));
+  const eventDraft = useSelector(selectScheduleEventDraftData);
+  const event = eventDraft || eventState;
   const { Link } = Typography;
   const { Content } = Layout;
   const markDown = async (url: string) => {

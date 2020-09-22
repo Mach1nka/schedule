@@ -10,6 +10,7 @@ export enum ReduxStateEntities {
   SYSTEM = "system",
   USER_SETTINGS = "userSettings",
   SCHEDULE_EVENTS = "scheduleEvents",
+  SCHEDULE_EVENT_DRAFT = "scheduleEventDraft",
 }
 
 export type CreateAsyncThunkProps = {

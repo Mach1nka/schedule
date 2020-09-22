@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Button, Row, Col } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { useLocation, useHistory } from 'react-router-dom';
 import DateMy from './Date/Date';
@@ -11,6 +11,7 @@ import TimeZone from './TimeZone/TimeZone';
 import typeEvents from '../../data/typeEvents';
 import zone from './utils/zone';
 import { selectUserTimeZone, selectScheduleEventsData } from '../../selectors/selectors';
+import {scheduleEventDraftSlice} from "../../slices/schedule-event-draft-slice/schedule-event-draft-slice";
 
 // interface IdEvent {
 //   id?: string;
@@ -22,6 +23,7 @@ import { selectUserTimeZone, selectScheduleEventsData } from '../../selectors/se
 const FormMy = (): React.ReactElement => {
   const [form] = Form.useForm();
   const history = useHistory();
+  const dispatch = useDispatch();
   const search = new URLSearchParams(useLocation().search);
   const currentTimeZone = useSelector(selectUserTimeZone);
   const event = useSelector(selectScheduleEventsData)?.find((e) => e.id === search.get("id"));
@@ -85,9 +87,10 @@ const FormMy = (): React.ReactElement => {
       color: values.color,
     };
     console.log('eventNew', eventNew);
+    dispatch(scheduleEventDraftSlice.actions.draftAdd(eventNew));
     history.push({
       pathname: "/Event",
-      search: `?id=${event?.id}`,
+      search: `?id=${event?.id}&draft=true`,
     })
   };
 
