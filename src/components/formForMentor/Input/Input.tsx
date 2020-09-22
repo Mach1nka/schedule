@@ -3,47 +3,58 @@ import { Form, Input, Button, Modal, Layout } from 'antd';
 import ReactMarkdown from 'react-markdown/with-html';
 import screenUrl from '../utils/screenUrl';
 
-const InputMy = ({ form }): React.ReactElement => {
-  const [visible, setVisible] = useState(false);
-  const [visibleMd, setVisibleMd] = useState(false);
-  const [visibleMdLoading, setVisibleMdLoading] = useState(false);
-  const [description, setDescription] = useState(form.getFieldValue('span'));
-  const { Content } = Layout;
-  useEffect(() => {
-    form.setFieldsValue({ span: `${description}` });
-  }, [description, form]);
+const InputMy = ({ type }): React.ReactElement => {
+  // const [visible, setVisible] = useState(false);
+  // const [visibleMd, setVisibleMd] = useState(false);
+  // const [visibleMdLoading, setVisibleMdLoading] = useState(false);
+  // const [description, setDescription] = useState(form.getFieldValue('span'));
+  // const { Content } = Layout;
+  // useEffect(() => {
+  //   form.setFieldsValue({ span: `${description}` });
+  // }, [description, form]);
 
-  const markDown = async (url: string) => {
-    if (form.getFieldValue('markDownUrl')) {
-      try {
-        setVisibleMdLoading(true);
-        const response = await fetch(url);
-        const text = await response.text();
-        setDescription(screenUrl(text, url));
-        setVisibleMdLoading(false);
-        setVisibleMd(false);
-        form.setFieldsValue({ markDownUrl: '' });
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      setVisibleMd(false);
-    }
-  };
+  // const markDown = async (url: string) => {
+  //   if (form.getFieldValue('markDownUrl')) {
+  //     try {
+  //       setVisibleMdLoading(true);
+  //       const response = await fetch(url);
+  //       const text = await response.text();
+  //       setDescription(screenUrl(text, url));
+  //       setVisibleMdLoading(false);
+  //       setVisibleMd(false);
+  //       form.setFieldsValue({ markDownUrl: '' });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   } else {
+  //     setVisibleMd(false);
+  //   }
+  // };
 
   return (
     <>
-      <Form.Item name="span">
+      <Form.Item label="Description" name="description" rules={[{ required: true }]}>
+        <Input.TextArea autoSize={{ minRows: 3, maxRows: 8 }} allowClear />
+      </Form.Item>
+      {type.descriptionUrl ? (
+        <Form.Item label="Description Url" name="descriptionUrl" rules={[{ required: true }]}>
+          <Input allowClear />
+        </Form.Item>
+      ) : (
+        <Form.Item label="Event link" name="link">
+          <Input allowClear />
+        </Form.Item>
+      )}
+
+      {/* <Form.Item name="span">
         <Layout className="layout">
           <Content style={{ padding: '0 50px' }}>
             <ReactMarkdown source={description} escapeHtml={false} />
           </Content>
         </Layout>
-      </Form.Item>
-      <Form.Item label="Input" name="Input">
-        <Input.TextArea />
-      </Form.Item>
-      <Form.Item label="Button">
+      </Form.Item> */}
+
+      {/* <Form.Item label="Button">
         <Button
           onClick={() => {
             console.log(form.getFieldValue('Input'));
@@ -95,7 +106,7 @@ const InputMy = ({ form }): React.ReactElement => {
             <Input />
           </Form.Item>
         </Modal>
-      </Form.Item>
+      </Form.Item> */}
     </>
   );
 };
