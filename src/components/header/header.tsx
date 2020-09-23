@@ -1,13 +1,13 @@
 import * as React from "react";
 import {Row, Col, Select} from "antd";
+import {useDispatch, useSelector} from "react-redux";
+import {SelectValue} from "antd/lib/select";
 import {LOGO, timeZones} from "../../config"
 import {headerSC as SC} from "./sc";
-import {SelectValue} from "antd/lib/select";
 import {TimeZone} from "../../types/types";
 import {MainDataContext} from "../../context/main-data-context";
 import {ReduxStateEntities} from "../../reducers/reducers-config";
 import {dispatchEntityHelper} from "../../helpers/dispatch-entity-helper/dispatch-entity-helper";
-import {useDispatch, useSelector} from "react-redux";
 import {selectUserRole, selectUserTimeZone} from "../../selectors/selectors";
 import {userSettingsReducerData} from "../../reducers/root-reducer";
 
@@ -37,7 +37,8 @@ const Header: React.FC = () => {
       return (
         <Select.Option
           value={timeZone.TITLE}
-          key={timeZone.TITLE}>
+          key={timeZone.TITLE}
+        >
           {timeZone.TITLE}
         </Select.Option>
       );
@@ -80,7 +81,8 @@ const Header: React.FC = () => {
           xs={12}
           lg={8}
         >
-          <SC.LOGO
+          <SC.LOGO 
+            preview={false}
             src={LOGO.src}
             alt={LOGO.alt}
           />
