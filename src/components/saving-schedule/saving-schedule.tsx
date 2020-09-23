@@ -2,6 +2,8 @@ import * as React from "react"
 import { Modal, Button } from 'antd';
 import { jsPDF } from "jspdf";
 import html2canvas from 'html2canvas';
+import { DownloadOutlined } from '@ant-design/icons';
+import { textAlign } from "html2canvas/dist/types/css/property-descriptors/text-align";
 
 function printDocument(type: string, name: string): void {
   const elem= document.querySelector(name);
@@ -58,11 +60,11 @@ const SavingSchedule: React.FC<SavingScheduleProps> = (props) => {
 
   return (
     <>
-      <Button type="primary" onClick={handleDownloadBtnClick}>
+      <Button type="default" onClick={handleDownloadBtnClick} icon={<DownloadOutlined/>} style={{margin: '10px 0 15px 0'}}>
         Download
       </Button>
       <Modal
-        title="Basic Modal"
+        title="Save as..."
         visible={visible}
         onOk={handleModalBtnClick}
         onCancel={handleModalBtnClick}
@@ -82,7 +84,7 @@ const SavingSchedule: React.FC<SavingScheduleProps> = (props) => {
         ]}
       >
         <p>You can download schedule</p>
-        <p>Choose best format for you...</p>
+        <p>Choose best format for you</p>
       </Modal>
     </>
   );
