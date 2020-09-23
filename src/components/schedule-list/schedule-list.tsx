@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {List, Button, Skeleton, Collapse, Col, } from 'antd';
 import {useSelector} from "react-redux";
+import {ScheduleMockEvents} from '../../data/schedule';
 import {selectScheduleEventsData} from "../../selectors/selectors";
 import {scheduleListSC as SC} from "./sc";
 
@@ -53,7 +54,7 @@ const ScheduleList: React.FC = () => {
             itemLayout="horizontal"
             loadMore={loadMore}
             dataSource={getCurrentList(scheduleEvents, amountItemsInList)}
-            renderItem={item => (
+            renderItem={(item:ScheduleMockEvents) => (
               <SC.LIST_ITEM>
                 <Skeleton loading={initLoading} active>
                   <SC.LIST_ITEM_CONTAINER>
@@ -66,7 +67,7 @@ const ScheduleList: React.FC = () => {
                       <Panel header="More information" key={item.id}>
                         <h3>{`Type: ${item.type.toUpperCase()}`}</h3>
                         <SC.COLLAPSE_CONTENT>
-                          <span className="collapse-content__event-place">{`Place: ${item.place.toUpperCase()}`}</span>
+                          {item.place && <span className="collapse-content__event-place">{`Place: ${item?.place.toUpperCase()}`}</span>}
                           <span className="collapse-content__description-title">Description</span>
                           <p>{item.description}</p>
                           <a className="link-to-description-page" href={item.descriptionUrl}>Link</a>
