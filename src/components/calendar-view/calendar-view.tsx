@@ -43,9 +43,10 @@ const CalendarView: React.FC<CalendarViewProps> = (props) => {
     <Calendar
       dateFullCellRender={getDateCellRender}
       mode={typeOfDate}
-      onPanelChange={(e)=>{
-        console.log(e)
-        typeOfDate === 'month' ? setTypeOfDay('year') : setTypeOfDay('month')
+      onPanelChange={(e, type)=>{
+        if(typeOfDate !== type) {
+          typeOfDate === 'month' ? setTypeOfDay('year') : setTypeOfDay('month')
+        }
       }}
       monthCellRender={monthCellRender}
     />
