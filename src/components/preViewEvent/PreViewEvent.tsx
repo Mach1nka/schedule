@@ -1,33 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import { Layout, PageHeader, Button, Descriptions, Tag, Space, Avatar, Typography } from 'antd';
+import React, { useEffect, useState, useContext } from 'react';
+import { Layout, PageHeader, Button, Descriptions, Tag, Space, Avatar, Typography} from 'antd';
 import moment from 'moment';
 import { useLocation, useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import screenUrl from '../formForMentor/utils/screenUrl';
-// import { ScheduleMockEvents } from '../../data/schedule';
+import {MainDataContext} from "../../context/main-data-context";
+import {dispatchEntityHelper} from "../../helpers/dispatch-entity-helper/dispatch-entity-helper";
 import { selectUserTimeZone, selectScheduleEventById, selectScheduleEventDraftData } from '../../selectors/selectors';
 import zone from '../formForMentor/utils/zone';
 import Feedback from './Feedback/Feedback';
 import SC from './sc';
+import colorSC from '../formForMentor/Color/sc';
 import { RootState } from '../../store';
+import {ReduxStateEntities} from "../../reducers/reducers-config";
 
 // interface IdEvent {
 //   event: ScheduleMockEvents;
 // }
 
 const PreViewEvent = (): React.ReactElement => {
-  const [description, setDescription] = useState('');
-  const currentTimeZone = useSelector(selectUserTimeZone);
-  const search = new URLSearchParams(useLocation().search);
-  const [visible, setVisible] = useState(false);
-  const history = useHistory();
-  const id = search.get("id") || '';
-  // const isDraft = search.get("draft");
-  const eventState = useSelector((state: RootState) => selectScheduleEventById(state, id));
-  const eventDraft = useSelector(selectScheduleEventDraftData);
-  const event = eventDraft || eventState;
   const { Link } = Typography;
   const { Content } = Layout;
+
+  const [description, setDescription] = useState('');
+  const [visible, setVisible] = useState(false);
+  const { putScheduleEvent, postScheduleEvent, removeScheduleEvent } = useContext(MainDataContext);
+
+  const history = useHistory();
+  const search = new URLSearchParams(useLocation().search);
+  const id = search.get("id") || '';
+  const isDraft = JSON.parse(search.get("draft"));
+ 
+  const dispatch = useDispatch();
+  const currentTimeZone = useSelector(selectUserTimeZone);
+  const eventDraft = useSelector(selectScheduleEventDraftData);
+  const eventState = useSelector((state: RootState) => selectScheduleEventById(state, id));
+
+  const event = isDraft ? eventDraft : eventState;
+
   const markDown = async (url: string) => {
     try {
       const response = await fetch(
@@ -44,11 +54,18 @@ const PreViewEvent = (): React.ReactElement => {
       console.log(error);
     }
   };
-  useEffect(() => {
-    if (event) {
+  const postAndPutEvent = (idEvent, data) => idEvent ?
+    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: putScheduleEvent(idEvent), data , dispatch}) :
+    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: postScheduleEvent, data , dispatch});
+  const removeEvent = (idEvent) => 
+    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: removeScheduleEvent(idEvent), dispatch});
+  
+    useEffect(() => {
+    if (event?.descriptionUrl) {
       markDown(event.descriptionUrl);
-    }
+    } 
   }, [event]);
+
   return (
     <>
       
@@ -56,26 +73,40 @@ const PreViewEvent = (): React.ReactElement => {
         <>
           <PageHeader
             ghost={false}
-            onBack={() => window.history.back()}
+            onBack={() => history.push({
+              pathname: "/formForMentor",
+              search: `?id=${event.id}&draft=${!!isDraft}`,
+            })}
             title={event.name}
             subTitle={<Tag color="blue">{event.type}</Tag>}
             tags={[
+              event?.feedback && JSON.parse(event.feedback) && (
               <Button key="1" type="ghost" onClick={() => setVisible(true)}>
                 Feedback
-              </Button>,
+              </Button>
+              )
             ]}
             extra={[
-              <Button key="3">Save</Button>,
+              <Button
+                type="primary"
+                key="3"
+                onClick={()=> postAndPutEvent(event.id, event)}
+              >Save
+              </Button>,
               <Button
                 key="2"
                 onClick={()=>history.push({
                 pathname: "/formForMentor",
-                search: `?id=${event.id}`,
+                search: `?id=${event.id}&draft=${!!isDraft}`,
               })}
               >Edit
               </Button>,
-              <Button key="1" type="primary">
-                Save New Event
+              <Button 
+                key="1" 
+                type="primary" 
+                onClick={()=> removeEvent(event.id)}
+                danger
+              >Delete
               </Button>,
             ]}
           >
@@ -96,6 +127,18 @@ const PreViewEvent = (): React.ReactElement => {
                     </Descriptions.Item>
                   );
                 })}
+            </Descriptions>
+            <Descriptions size="small" column={2}>
+              { event.place && (
+              <Descriptions.Item label="Place">
+                <Tag color="blue">{event.place}</Tag>
+              </Descriptions.Item>
+              )}
+              <Descriptions.Item label="Color">
+                <colorSC.DIV>
+                  <colorSC.COLOR colorSet={event.color}/>
+                </colorSC.DIV>
+              </Descriptions.Item>
             </Descriptions>
             <Descriptions size="small" column={1}>
               <Descriptions.Item label={<Tag color="blue">Start Event</Tag>}>
@@ -128,13 +171,25 @@ const PreViewEvent = (): React.ReactElement => {
                   </Descriptions.Item>
                 </>
               )}
+              {!event.descriptionUrl && (
+                <>
+                  <Descriptions.Item label="Commit">
+                    {event.linkComment}
+                  </Descriptions.Item>
+                  <Descriptions.Item label="Link">
+                    <Link href={event.link} target="_blank" rel="noreferrer">{event.link}</Link>
+                  </Descriptions.Item>
+                </>
+              )}
             </Descriptions>
           </PageHeader>
-          <Layout className="layout">
-            <Content style={{ padding: '0 50px' }}>
-              <SC.TITLE source={description} escapeHtml={false}/>
-            </Content>
-          </Layout>
+          {event.descriptionUrl && (
+            <Layout className="layout">
+              <Content style={{ padding: '0 50px' }}>
+                <SC.TITLE source={description} escapeHtml={false}/> 
+              </Content>
+            </Layout>
+          )}
           <Feedback visible={visible} setVisible={setVisible}/>
         </>
       )}

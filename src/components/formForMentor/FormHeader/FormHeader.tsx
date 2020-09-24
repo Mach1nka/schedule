@@ -1,9 +1,6 @@
 import React from 'react';
 import { Form, Input } from 'antd';
 
-// import { UploadOutlined, InboxOutlined } from '@ant-design/icons';
-// import Input from './Input/Input';
-
 const FormHeader = ({ form }): React.ReactElement => {
   return (
     <>

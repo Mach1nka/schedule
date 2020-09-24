@@ -39,6 +39,7 @@ export default class MainDataService {
 
     return this._api.getScheduleEntity({url, token, data: dataToBack})
       .then((response) => {
+        console.log(response);
         return {
           status: response.status,
           message: response.data.message,
@@ -62,7 +63,7 @@ export default class MainDataService {
         return {
           status: response.status,
           message: response.data.message,
-          data: response.data.data && (typeof parseResponse === `function` ? parseResponse(response.data.data) : response.data.data),
+          data: (response.data.data || response.data) && (typeof parseResponse === `function` ? parseResponse(response.data.data || response.data) : (response.data.data || response.data)),
           errors: response.data.errors,
         };
       });
@@ -82,7 +83,7 @@ export default class MainDataService {
         return {
           status: response.status,
           message: response.data.message,
-          data: response.data.data && (typeof parseResponse === `function` ? parseResponse(response.data.data) : response.data.data),
+          data: (response.data.data || response.data) && (typeof parseResponse === `function` ? parseResponse(response.data.data || response.data) : (response.data.data || response.data)),
           errors: response.data.errors,
         };
       });
@@ -101,7 +102,7 @@ export default class MainDataService {
         return {
           status: response.status,
           message: response.data.message,
-          data: response.data.data && (typeof parseResponse === `function` ? parseResponse(response.data.data) : response.data.data),
+          data: (response.data.data || response.data) && (typeof parseResponse === `function` ? parseResponse(response.data.data || response.data) : (response.data.data || response.data)),
           errors: response.data.errors,
         };
       });
@@ -123,5 +124,20 @@ export default class MainDataService {
     const parseResponse = MainDataAdapter.getScheduleEvents;
 
     return this._getScheduleEntity({url, parseResponse});
+  };
+
+  postScheduleEvent = (dataToBack): Promise<ParsedResponse<any[]>> => {
+    const url = `${apiScheduleBackPath.HOST}/${apiScheduleBackPath.EVENT}/`;
+    return this._postScheduleEntity({dataToBack, url});
+  };
+
+  putScheduleEvent = (id: string)=>(dataToBack): Promise<ParsedResponse<any[]>> => {
+    const url = `${apiScheduleBackPath.HOST}/${apiScheduleBackPath.EVENT}/${id}`;
+    return this._putScheduleEntity({dataToBack, url});
+  };
+
+  removeScheduleEvent = (id: string)=>(): Promise<ParsedResponse<any[]>> => {
+    const url = `${apiScheduleBackPath.HOST}/${apiScheduleBackPath.EVENT}/${id}`;
+    return this._removeScheduleEntity({url});
   };
 }

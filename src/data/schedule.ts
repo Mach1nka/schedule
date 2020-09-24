@@ -14,6 +14,8 @@ export interface ScheduleMockEvents {
   organizers?: string;
   link?: string;
   color?: string;
+  feedback?: string;
+  linkComment?: string
 }
 
 interface ScheduleMock {
