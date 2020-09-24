@@ -28,7 +28,7 @@ const ScheduleList: React.FC = () => {
   const getCurrentList = useCallback((data, amountElements:number) => {
     return data.slice(0, amountElements);
   }, []);
-  
+
   const onLoadMore = () => {
     setCountItemsInList((prev) => prev + amountNewAdditionListItems);
   };

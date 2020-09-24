@@ -7,6 +7,7 @@ import {ReduxStateEntities} from "../../reducers/reducers-config";
 import { SwitchScheduleView } from '../switch-schedule-view/switch-schedule-view';
 import Header from "../header/header";
 import ScheduleList from "../schedule-list/schedule-list";
+import TableView from '../table-view/table-view';
 import CalendarView from "../calendar-view/calendar-view";
 import SavingSchedule from '../saving-schedule/saving-schedule';
 
@@ -25,12 +26,17 @@ const MainPage: React.FC = () => {
         <Header/>
         <main>
           <SwitchScheduleView/>
+          <Route path='/List'>
+            <ScheduleList/>
+            <SavingSchedule name='.sc__ROW-gBRphs'/>
+          </Route>
+          <Route path='/Table'>
+            <TableView />
+            <SavingSchedule name='.ant-table'/>
+          </Route>
           <Route path='/Calendar'>
             <CalendarView/>
-            <SavingSchedule name='.ant-picker-calendar-full'/>
-          </Route>
-          <Route path='/List'>
-            <ScheduleList name=''/>
+            <SavingSchedule name='.ant-picker-calendar'/>
           </Route>
         </main>
       </Route>
