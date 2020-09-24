@@ -2,6 +2,8 @@ import { TimeZone } from "./types/types";
 
 export const teamId = "B7s4L3y6E0w5Z9e4";
 
+export const teamIdForTypesEvent = "B7s4L3y6E0w5Z9e5";
+
 export const statusCodes = {
   OK: 200,
 };

@@ -55,7 +55,7 @@ const Organizer = ({ form }): React.ReactElement => {
                       ]}
                       noStyle
                     >
-                      <Input placeholder="passenger name" style={{ width: '60%' }} />
+                      <Input placeholder="passenger name" style={{ width: '60%' }}/>
                     </Form.Item>
                     <PlusCircleOutlined
                       className="dynamic-delete-button"
@@ -64,8 +64,7 @@ const Organizer = ({ form }): React.ReactElement => {
                         form.getFieldValue('organizers')[0].length > 0 &&
                         form.setFieldsValue({
                           organizers: ['', ...form.getFieldValue('organizers')],
-                        })
-                      }
+                        })}
                     />
                   </Form.Item>
                 ),

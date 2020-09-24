@@ -1,7 +1,7 @@
 import MainDataApi from "../api/main-data-api";
 import MainDataServiceStorage from "./main-data-service-storage";
 import {ParsedResponse} from "../types/types";
-import {apiScheduleBackPath} from "../data/paths";
+import {apiScheduleBackPath, apiScheduleTypeEventsBackPath} from "../data/paths";
 import MainDataAdapter from "./main-data-adapter";
 import {UserSettings} from "../types/user-settings-types";
 
@@ -39,7 +39,6 @@ export default class MainDataService {
 
     return this._api.getScheduleEntity({url, token, data: dataToBack})
       .then((response) => {
-        console.log(response);
         return {
           status: response.status,
           message: response.data.message,
@@ -122,7 +121,6 @@ export default class MainDataService {
   getScheduleEvents = (): Promise<ParsedResponse<any[]>> => {
     const url = `${apiScheduleBackPath.HOST}/${apiScheduleBackPath.EVENTS}`;
     const parseResponse = MainDataAdapter.getScheduleEvents;
-
     return this._getScheduleEntity({url, parseResponse});
   };
 
@@ -139,5 +137,22 @@ export default class MainDataService {
   removeScheduleEvent = (id: string)=>(): Promise<ParsedResponse<any[]>> => {
     const url = `${apiScheduleBackPath.HOST}/${apiScheduleBackPath.EVENT}/${id}`;
     return this._removeScheduleEntity({url});
+  };
+
+
+  getScheduleTypesEvents = (): Promise<ParsedResponse<any[]>> => {
+    const url = `${apiScheduleTypeEventsBackPath.HOST}/${apiScheduleTypeEventsBackPath.TYPES_EVENTS}`;
+    const parseResponse = MainDataAdapter.getScheduleEvents;
+    return this._getScheduleEntity({url, parseResponse});
+  };
+
+  postScheduleTypeEvent = (dataToBack): Promise<ParsedResponse<any[]>> => {
+    const url = `${apiScheduleTypeEventsBackPath.HOST}/${apiScheduleTypeEventsBackPath.TYPE_EVENT}/`;
+    return this._postScheduleEntity({dataToBack, url});
+  };
+
+  putScheduleTypeEvent = (id: string)=>(dataToBack): Promise<ParsedResponse<any[]>> => {
+    const url = `${apiScheduleTypeEventsBackPath.HOST}/${apiScheduleTypeEventsBackPath.TYPE_EVENT}/${id}`;
+    return this._putScheduleEntity({dataToBack, url});
   };
 }

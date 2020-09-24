@@ -13,7 +13,7 @@ export interface ScheduleMockEvents {
   endDateCrossCheck?: string;
   organizers?: string;
   link?: string;
-  color?: string;
+  color: string;
   feedback?: string;
   linkComment?: string
 }

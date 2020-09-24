@@ -9,7 +9,7 @@ const DateMy = ({ type }): React.ReactElement => {
       <Form.Item label="Date Task" name="date" rules={[{ required: true }]}>
         <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" />
       </Form.Item>
-      {type.crossCheck && (
+      {JSON.parse(type.crossCheck) && (
         <Form.List name="crossCheck">
           {(fields, { add, remove }) => {
             return (

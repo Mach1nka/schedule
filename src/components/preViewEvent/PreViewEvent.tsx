@@ -6,17 +6,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import screenUrl from '../formForMentor/utils/screenUrl';
 import {MainDataContext} from "../../context/main-data-context";
 import {dispatchEntityHelper} from "../../helpers/dispatch-entity-helper/dispatch-entity-helper";
-import { selectUserTimeZone, selectScheduleEventById, selectScheduleEventDraftData } from '../../selectors/selectors';
+import { selectUserTimeZone, selectScheduleEventById, selectScheduleEventDraftData, selectScheduleTypeEventByName } from '../../selectors/selectors';
 import zone from '../formForMentor/utils/zone';
 import Feedback from './Feedback/Feedback';
 import SC from './sc';
 import colorSC from '../formForMentor/Color/sc';
 import { RootState } from '../../store';
 import {ReduxStateEntities} from "../../reducers/reducers-config";
-
-// interface IdEvent {
-//   event: ScheduleMockEvents;
-// }
+import {ScheduleMockTypesEvents} from "../../data/typeEvents";
 
 const PreViewEvent = (): React.ReactElement => {
   const { Link } = Typography;
@@ -24,7 +21,7 @@ const PreViewEvent = (): React.ReactElement => {
 
   const [description, setDescription] = useState('');
   const [visible, setVisible] = useState(false);
-  const { putScheduleEvent, postScheduleEvent, removeScheduleEvent } = useContext(MainDataContext);
+  const { putScheduleEvent, postScheduleEvent, removeScheduleEvent, putScheduleTypeEvent, postScheduleTypeEvent } = useContext(MainDataContext);
 
   const history = useHistory();
   const search = new URLSearchParams(useLocation().search);
@@ -37,6 +34,7 @@ const PreViewEvent = (): React.ReactElement => {
   const eventState = useSelector((state: RootState) => selectScheduleEventById(state, id));
 
   const event = isDraft ? eventDraft : eventState;
+  const typeEvent = useSelector((state: RootState) => selectScheduleTypeEventByName(state, (event ? event?.type :  'New')));
 
   const markDown = async (url: string) => {
     try {
@@ -54,9 +52,18 @@ const PreViewEvent = (): React.ReactElement => {
       console.log(error);
     }
   };
-  const postAndPutEvent = (idEvent, data) => idEvent ?
-    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: putScheduleEvent(idEvent), data , dispatch}) :
+  const postAndPutEvent = (data) => data.id ?
+    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: putScheduleEvent(data.id), data , dispatch}) :
     dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: postScheduleEvent, data , dispatch});
+
+  const postAndPutTypeEvent = (data:ScheduleMockTypesEvents, color: string, type) => data.name === "New" ?
+    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_TYPE_EVENT_CURRENT, fetchFn: postScheduleTypeEvent, data:{...data, name: type} , dispatch}) :
+    (data.color !== color 
+      && dispatchEntityHelper({
+        currentEntity: ReduxStateEntities.SCHEDULE_TYPE_EVENT_CURRENT, 
+        fetchFn: putScheduleTypeEvent(data.id), data:{...data, color} , dispatch}));
+    
+
   const removeEvent = (idEvent) => 
     dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: removeScheduleEvent(idEvent), dispatch});
   
@@ -75,7 +82,7 @@ const PreViewEvent = (): React.ReactElement => {
             ghost={false}
             onBack={() => history.push({
               pathname: "/formForMentor",
-              search: `?id=${event.id}&draft=${!!isDraft}`,
+              // search: `?id=${event.id}&draft=${!!isDraft}`,
             })}
             title={event.name}
             subTitle={<Tag color="blue">{event.type}</Tag>}
@@ -90,7 +97,10 @@ const PreViewEvent = (): React.ReactElement => {
               <Button
                 type="primary"
                 key="3"
-                onClick={()=> postAndPutEvent(event.id, event)}
+                onClick={()=> {
+                  postAndPutEvent(event);
+                  postAndPutTypeEvent(typeEvent, event.color, event.type)
+                }}
               >Save
               </Button>,
               <Button

@@ -9,17 +9,11 @@ import InputMy from './Input/Input';
 import Color from './Color/Color'
 import FormHeader from './FormHeader/FormHeader';
 import TimeZone from './TimeZone/TimeZone';
-import typeEvents from '../../data/typeEvents';
+// import typeEvents from '../../data/typeEvents';
 import zone from './utils/zone';
-import { selectUserTimeZone, selectScheduleEventById, selectScheduleEventDraftData } from '../../selectors/selectors';
+import { selectUserTimeZone, selectScheduleEventById, selectScheduleEventDraftData, selectScheduleTypeEventByName } from '../../selectors/selectors';
 import {scheduleEventDraftSlice} from "../../slices/schedule-event-draft-slice/schedule-event-draft-slice";
 import { RootState } from '../../store';
-// interface IdEvent {
-//   id?: string;
-//   type?: string;
-//   setForm: (val: boolean) => void;
-//   setEvent: (val: any) => void;
-// }
 
 const FormMy = (): React.ReactElement => {
   const [form] = Form.useForm();
@@ -30,15 +24,17 @@ const FormMy = (): React.ReactElement => {
 
   const id = search.get("id") || '';
   const type = search.get("type") || 'New';
-  const isDraft = JSON.parse(search.get("draft"));
+  const isDraft =  JSON.parse(search.get("draft"));
 
   const currentTimeZone = useSelector(selectUserTimeZone);
   const eventDraft = useSelector(selectScheduleEventDraftData);
   const eventState = useSelector((state: RootState) => selectScheduleEventById(state, id));
   
   const event = isDraft ? eventDraft : eventState;
- 
-  const typeEvent = typeEvents.find((e) => e.name === (event ? event?.type :  type));
+  const typeEvent = useSelector((state: RootState) => selectScheduleTypeEventByName(state, (event ? event?.type :  type)));
+  // const typeEvent = typeEvents.find((e) => e.name === (event ? event?.type :  type));
+  console.log(typeEvent);
+  
   const initialValues = {
     type: typeEvent?.name,
     name: event?.name,
@@ -106,7 +102,7 @@ const FormMy = (): React.ReactElement => {
     console.log('eventNew', eventNew);
     dispatch(scheduleEventDraftSlice.actions.draftAdd(eventNew));
     history.push({
-      pathname: "/Event",
+      pathname: "/event",
       search: `?id=${event?.id}&draft=true`,
     })
   };
@@ -132,7 +128,7 @@ const FormMy = (): React.ReactElement => {
           <Organizer form={form}/>
           <DateMy type={typeEvent} />
           <TimeZone/>
-          <InputMy type={typeEvent} form={form}/>
+          <InputMy type={typeEvent}/>
           <Form.Item name="place" label="Place">
             <Input/>
           </Form.Item>
@@ -150,8 +146,3 @@ const FormMy = (): React.ReactElement => {
   );
 };
 export default FormMy;
-
-// FormMy.defaultProps = {
-//   id: '',
-//   type: 'New',
-// };

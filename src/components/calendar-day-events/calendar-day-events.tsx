@@ -27,7 +27,7 @@ const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
         style={{backgroundColor: colorMock}}
         key={id}
         onClick={()=>history.push({
-          pathname: "/Event",
+          pathname: "/event",
           search: `?id=${id}`,
         })}
       >

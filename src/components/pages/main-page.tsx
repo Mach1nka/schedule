@@ -16,11 +16,12 @@ const MainPage: React.FC = () => {
   const {
     getUserSettings,
     getScheduleEvents,
+    getScheduleTypesEvents,
   } = React.useContext(MainDataContext);
 
   useGettingEntity({currentEntity: ReduxStateEntities.USER_SETTINGS, fetchFn: getUserSettings, data: userSettingsReducerData.initialState.data});
   useGettingEntity({currentEntity: ReduxStateEntities.SCHEDULE_EVENTS, fetchFn: getScheduleEvents});
-
+  useGettingEntity({currentEntity: ReduxStateEntities.SCHEDULE_TYPES_EVENTS, fetchFn: getScheduleTypesEvents});
   return (
     <Router>
       <Route path='/'>
@@ -33,7 +34,7 @@ const MainPage: React.FC = () => {
           <Route path='/List'>
             <ScheduleList/>
           </Route>
-          <Route path='/Event'>
+          <Route path='/event'>
             <PreViewEvent/>
           </Route>
           <Route path='/formForMentor'>

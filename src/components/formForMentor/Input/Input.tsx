@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Modal, Layout } from 'antd';
+import React from 'react';
+import { Form, Input } from 'antd';
 
-const InputMy = ({ type, form }): React.ReactElement => {
+const InputMy = ({ type }): React.ReactElement => {
   return (
     <>
       <Form.Item label="Description" name="description" rules={[{ required: true }]}>
         <Input.TextArea autoSize={{ minRows: 3, maxRows: 8 }} allowClear/>
       </Form.Item>
-      {type.descriptionUrl ? (
+      {JSON.parse(type.descriptionUrl) ? (
         <Form.Item label="Description Url" name="descriptionUrl" rules={[{ required: true }]}>
           <Input allowClear/>
         </Form.Item>

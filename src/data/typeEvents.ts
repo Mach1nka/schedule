@@ -1,4 +1,13 @@
-const typeEvents = [
+export interface ScheduleMockTypesEvents {
+  id: string;
+  name: string;
+  descriptionUrl: string;
+  crossCheck: string;
+  color: string;
+  type?: string;
+}
+
+export const typeEvents = [
   {
     name: 'Task',
     type: 'task',
@@ -42,4 +51,4 @@ const typeEvents = [
     color: '',
   },
 ];
-export default typeEvents;
+

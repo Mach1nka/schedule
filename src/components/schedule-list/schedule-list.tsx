@@ -74,7 +74,7 @@ const ScheduleList: React.FC = () => {
                           <Link
                             className="link-to-description-page"
                             to={{
-                                pathname: "/Event",
+                                pathname: "/event",
                                 search: `?id=${item.id}`,
                               }}
                           >Link
