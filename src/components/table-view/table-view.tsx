@@ -2,25 +2,21 @@ import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import {Table, Tag} from 'antd';
 import {ColumnsType} from 'antd/es/table';
-
 import {useSelector} from "react-redux";
 import {selectScheduleEventsData} from "../../selectors/selectors";
+import FilterComponent from '../filter-component/filter-component';
 
-
-interface Columns {
-  title: string;
-  key: string;
-  time: string;
-  date: string;
-  status: string[];
-  organizer: string;
+interface ScheduleEvents {
+  settings: string,
+  key: string,
+  startdate: string,
+  duedate: string,
+  title: string,
+  status: string[],
 }
 
-const TableView: React.FC = () => {
-
+const TableView: React.FC<any> = () => {
   const scheduleEvents = useSelector(selectScheduleEventsData) || [];
-  console.log(scheduleEvents);
-
   const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set);
 
   const DateTimeFormat = {
@@ -35,17 +31,15 @@ const TableView: React.FC = () => {
     return new Date(unixDate * 1000).toLocaleDateString('ru', settings);
   };
 
-  const handledFilter = (data: React.ChangeEvent<HTMLInputElement>): void => {
-    const value = data.currentTarget.value;
-    const checked = data.currentTarget.checked;
-
+  const handledFilter = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = event.currentTarget.value;
+    const checked = event.currentTarget.checked;
     if (checked && hiddenColumns.has(value)) {
       setHiddenColumns((prevState) => {
         prevState.delete(value);
         return new Set([...prevState]);
       });
     }
-
     if (!checked && !hiddenColumns.has(value)) {
       setHiddenColumns((prevState) => {
         return new Set([...prevState, value]);
@@ -53,25 +47,13 @@ const TableView: React.FC = () => {
     }
   };
 
-  const filterComponent = () => {
-    return (
-      <div>
-        <button type="button">
-          F
-        </button>
-        <form>
-          <input type="checkbox" onChange={handledFilter} value="Start date" checked={!hiddenColumns.has("Start date")}/>
-          <label>Start date</label>
-          <input type="checkbox" onChange={handledFilter} value="Due date" checked={!hiddenColumns.has("Due date")}/>
-          <label>Due date</label>
-        </form>
-      </div>
-    );
-  };
-
-  const columnsSource: ColumnsType<Columns> = [
+  const columnsSource: ColumnsType<ScheduleEvents> = [
     {
-      title: filterComponent,
+      title:
+        <FilterComponent
+          onChange={handledFilter}
+          hiddenColumns={hiddenColumns}
+        />,
       dataIndex: 'settings',
       key: 'settings',
     },
@@ -124,53 +106,33 @@ const TableView: React.FC = () => {
       dataIndex: 'comment',
       key: 'comment',
     },
-    // {
-    //   title: 'Action',
-    //   key: 'action',
-    //   render: (text, record) => (
-    //     <Space size="middle">
-    //       <a>Invite {record.name}</a>
-    //       <a>Delete</a>
-    //     </Space>
-    //   ),
-    // },
   ];
 
   const columns = columnsSource.filter((it) => it?.title && !hiddenColumns.has(it.title.toString()));
 
   if (scheduleEvents.length > 0) {
-    const dataSource = [];
-
-    for (let i = 0; i < scheduleEvents.length; i += 1) {
-      const temp = {
+    const templayte = scheduleEvents.reduce((acc, it, i) => {
+      const temp: ScheduleEvents = {
         settings: String(i + 1),
         key: String(i),
         startdate: String(formatDateFromUnix(scheduleEvents[i].startDateTime, DateTimeFormat)),
         duedate: String(formatDateFromUnix(scheduleEvents[i].endDateTime, DateTimeFormat)),
         title: String(scheduleEvents[i].name),
         status: [String(scheduleEvents[i].type)],
-
-
-      }
-
-      dataSource.push(temp)
-    }
-
-    console.log('дата')
-    console.log(dataSource);
+      };
+      acc.push(temp);
+      return acc;
+    }, [] as ScheduleEvents[]);
 
     return (
       <>
-        <Table dataSource={dataSource} columns={columns}/>
+        <Table dataSource={templayte} columns={columns}/>
       </>
     );
-
-
-  }
-
+  };
   return (
     <>
-      <h1>загружается таблица</h1>
+      <h1>Loading...</h1>
     </>
   );
 }

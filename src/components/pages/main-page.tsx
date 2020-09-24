@@ -7,6 +7,7 @@ import {ReduxStateEntities} from "../../reducers/reducers-config";
 import { SwitchScheduleView } from '../switch-schedule-view/switch-schedule-view';
 import Header from "../header/header";
 import ScheduleList from "../schedule-list/schedule-list";
+import TableView from '../table-view/table-view';
 import CalendarView from "../calendar-view/calendar-view";
 import SavingSchedule from '../saving-schedule/saving-schedule';
 
@@ -26,10 +27,10 @@ const MainPage: React.FC = () => {
         <main>
           <SwitchScheduleView/>
           <Route path='/List'>
-            <ScheduleList/>
+            {/* <ScheduleList/> */}
           </Route>
           <Route path='/Table'>
-            <ScheduleList/>
+            <TableView />
           </Route>
           <Route path='/Calendar'>
             <CalendarView/>
