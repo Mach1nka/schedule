@@ -26,7 +26,7 @@ const typeEvents = [
     color: '',
   },
   {
-    name: 'Elective/YouTube Stream',
+    name: 'Elective/YouTube',
     id: '4',
     crossCheck: false,
     descriptionUrl: false,

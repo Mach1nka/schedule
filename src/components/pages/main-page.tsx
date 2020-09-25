@@ -41,7 +41,7 @@ const MainPage: React.FC = () => {
             {userRole === 'mentor' && <CreateNewTaskButton/>}
           </Route>
         </main>
-      </Route> 
+      </Route>
     </Router>
   );
 };
