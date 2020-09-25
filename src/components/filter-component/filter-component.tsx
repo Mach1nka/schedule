@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FilterComponentSC as SC } from './sc';
-import { SettingOutlined } from '@ant-design/icons';
+import { SettingOutlined, FontColorsOutlined, BgColorsOutlined } from '@ant-design/icons';
+
+import { CirclePicker } from 'react-color';
+
+
+// import ColorPicker from '../colorpicker/colorpicker';
+
 
 const FilterComponent: React.FC<any> = (props) => {
   const {
@@ -9,12 +15,23 @@ const FilterComponent: React.FC<any> = (props) => {
     // arrColumns
   } = props;
 
+  const [colorHere, setColorHere] = useState(false);
+
+  const needColor = (typeTask, typeColor) => {
+    console.log(typeColor, typeTask)
+    setColorHere(true)
+  }
+
+  const handleChange = (e) => {
+    console.log(e.hex)
+  }
+
   // console.log(arrColumns);
 
   return (
     <div>
       <SC.BUTTON>
-        <SettingOutlined spin/>
+        <SettingOutlined />
       </SC.BUTTON>
       <SC.DIV>
         {/* {arrColumns.map((value) => {
@@ -42,8 +59,14 @@ const FilterComponent: React.FC<any> = (props) => {
             <div>
               <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value="Lecture" checked={!hiddenRowOrColumn.has("Lecture")}/>
               <label>Lecture</label>
+              <BgColorsOutlined onClick={() => needColor("Lecture", 'bg')} /> <FontColorsOutlined  /> 
+              
             </div>
+            
         </SC.INPUT_BLOCK>
+        </div>
+        <div>
+          {colorHere ? <div><CirclePicker onChange={(e) => handleChange(e)}/></div> : null}
         </div>
      </SC.DIV>
     </div>

@@ -6,6 +6,9 @@ import {useSelector} from "react-redux";
 import {selectScheduleEventsData} from "../../selectors/selectors";
 import FilterComponent from '../filter-component/filter-component';
 
+
+
+
 interface ScheduleEvents {
   settings: string,
   key: string,
@@ -87,6 +90,7 @@ const TableView: React.FC<any> = () => {
       render: tags => (
         <>
           {tags.map(tag => {
+            console.log(tag);
             let color = tag.length > 5 ? 'geekblue' : 'green';
             if (tag === 'Task') {
               color = 'tomato';
@@ -132,6 +136,7 @@ const TableView: React.FC<any> = () => {
     return (
       <>
         <Table dataSource={timetable} columns={columns} bordered={true}/>
+        
       </>
     );
   };
