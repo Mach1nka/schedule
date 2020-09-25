@@ -6,13 +6,21 @@ export const FilterComponentSC = {
     border: none;
     cursor: pointer;
 
-    &:hover {
-      background: #f0f0f0;
-    }
-
     &:hover ~ div {
-      display: block;
+      display: flex;
     }
+  `,
+
+  P: styled.p`
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0px;
+  `,
+
+  INPUT_BLOCK: styled.div`
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
   `,
 
   DIV: styled.div`
@@ -20,14 +28,17 @@ export const FilterComponentSC = {
     position: absolute;
     left: 15px;
     z-index: 1;
-    min-width: 200px;
-    padding: 20px;
-    background: #fafafa;
+    border-radius: 3px;
+    min-width: max-content;
+    padding: 5px;
+    background: #ffff;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
 
     &:hover {
-      display: block;
-      background: #f0f0f0;
+      transition: 0.3s;
+      display: flex;
+      flex-direction: row;
+      background: #fafafa;
       cursor: pointer;
     }
   `

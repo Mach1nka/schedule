@@ -14,7 +14,7 @@ const FilterComponent: React.FC<any> = (props) => {
   return (
     <div>
       <SC.BUTTON>
-        <SettingOutlined/>
+        <SettingOutlined spin/>
       </SC.BUTTON>
       <SC.DIV>
         {/* {arrColumns.map((value) => {
@@ -23,14 +23,29 @@ const FilterComponent: React.FC<any> = (props) => {
             <label>{value}</label>
           </>
         })} */}
-        <input type="checkbox" onChange={onChange} value="Start date" checked={!hiddenRowOrColumn.has("Start date")}/>
-        <label>Start date</label>
-        <input type="checkbox" onChange={onChange} value="Due date" checked={!hiddenRowOrColumn.has("Due date")}/>
-        <label>Due date</label>
-
-        <input type="checkbox" onChange={onChange} value="Task" checked={!hiddenRowOrColumn.has("Task")}/>
-        <label>Task</label>
-      </SC.DIV>
+        <div>
+          <SC.P><strong>Schedule</strong></SC.P>
+          <SC.INPUT_BLOCK>
+            <div>
+              <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value="Start date" checked={!hiddenRowOrColumn.has("Start date")}/>
+              <label>Start date</label>
+            </div>
+            <div>
+              <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value="Due date" checked={!hiddenRowOrColumn.has("Due date")}/>
+              <label>Due date</label>
+            </div>
+          </SC.INPUT_BLOCK>
+        </div>
+        <div>
+          <SC.P><strong>Event</strong></SC.P>
+          <SC.INPUT_BLOCK>
+            <div>
+              <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value="Lecture" checked={!hiddenRowOrColumn.has("Lecture")}/>
+              <label>Lecture</label>
+            </div>
+        </SC.INPUT_BLOCK>
+        </div>
+     </SC.DIV>
     </div>
   );
 };
