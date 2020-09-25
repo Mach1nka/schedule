@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FilterComponentSC as SC } from './sc';
 import { SettingOutlined, FontColorsOutlined, BgColorsOutlined } from '@ant-design/icons';
 
-import { CirclePicker } from 'react-color';
+import { BlockPicker } from 'react-color';
 
 
 // import ColorPicker from '../colorpicker/colorpicker';
@@ -15,15 +15,33 @@ const FilterComponent: React.FC<any> = (props) => {
     // arrColumns
   } = props;
 
+
+
   const [colorHere, setColorHere] = useState(false);
 
+  const [needColorForTask, setNeedColorForTask] = useState(false);
+  const [needColorFor, setNeedColorFor] = useState(false);
+
   const needColor = (typeTask, typeColor) => {
-    console.log(typeColor, typeTask)
-    setColorHere(true)
+    setNeedColorForTask(typeTask);
+    setNeedColorFor(typeColor);
+    if (!needColorForTask || !needColorFor || needColorFor !== typeColor || needColorForTask !== typeTask) {
+      console.log(typeColor, typeTask)
+      setColorHere(true);
+
+    } else {
+      
+      setColorHere(false);
+      setNeedColorForTask(false);
+      setNeedColorFor(false);
+    }
   }
 
   const handleChange = (e) => {
-    console.log(e.hex)
+    if (needColorFor && needColorForTask) {
+      localStorage.setItem(needColorForTask + needColorFor, e.hex);
+    }
+    
   }
 
   // console.log(arrColumns);
@@ -59,14 +77,14 @@ const FilterComponent: React.FC<any> = (props) => {
             <div>
               <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value="Lecture" checked={!hiddenRowOrColumn.has("Lecture")}/>
               <label>Lecture</label>
-              <BgColorsOutlined onClick={() => needColor("Lecture", 'bg')} /> <FontColorsOutlined  /> 
+              <BgColorsOutlined onClick={() => needColor("Lecture", 'bg')} /> <FontColorsOutlined onClick={() => needColor("Lecture", 'text')} /> 
               
             </div>
             
         </SC.INPUT_BLOCK>
         </div>
         <div>
-          {colorHere ? <div><CirclePicker onChange={(e) => handleChange(e)}/></div> : null}
+          {colorHere ? <div><BlockPicker onChange={(e) => handleChange(e)}/></div> : null}
         </div>
      </SC.DIV>
     </div>
