@@ -1,7 +1,7 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
 
-import {ScheduleButtonSC as SC} from './sc'
+import {ScheduleButtonSC as SC} from './sc';
 
 interface ScheduleButtonProps {
   name: string
