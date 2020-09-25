@@ -3,30 +3,19 @@ import {List, Button, Skeleton, Collapse, Col, } from 'antd';
 import { Link } from 'react-router-dom';
 import {useSelector} from "react-redux";
 import {ScheduleMockEvents} from '../../data/schedule';
-import {selectScheduleEventsData} from "../../selectors/selectors";
+import {selectScheduleEventsData, selectUserTimeZone} from "../../selectors/selectors";
 import {scheduleListSC as SC} from "./sc";
-
+import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
+import formatTime from '../../utils/get-time/format-time';
 
 const ScheduleList: React.FC = () => {
   const { Panel } = Collapse;
   const defaultCountItemsInList = 2;
   const amountNewAdditionListItems = 2;
+  const currentTimeZone = useSelector(selectUserTimeZone);
   const scheduleEvents = useSelector(selectScheduleEventsData) || [];
   const [initLoading, setInitLoading] = useState<boolean>(true);
   const [amountItemsInList, setCountItemsInList] = useState(defaultCountItemsInList);
-
-  const DateTimeFormat = {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric"
-  };
-
-  const formatDateFromUnix = (unixDate, settings) => {
-    return new Date(unixDate * 1000).toLocaleDateString('ru', settings);
-  };
 
   const getCurrentList = useCallback((data, amountElements:number) => {
     return data.slice(0, amountElements);
@@ -62,8 +51,8 @@ const ScheduleList: React.FC = () => {
                   <SC.LIST_ITEM_CONTAINER>
                     <h2>{item.name}</h2>
                     <SC.DATE_TIME_CONTAINER>
-                      <span className="start">{`Start: ${formatDateFromUnix(item.startDateTime, DateTimeFormat)}`}</span>
-                      <span className="deadline">{`Deadline: ${formatDateFromUnix(item.endDateTime, DateTimeFormat)}`}</span>
+                      <span className="start">{`Start: ${formatTime(getTimeWithCorrectTimeZone(item.startDateTime, currentTimeZone), 'YYYY-MM-DD HH:mm')}`}</span>
+                      <span className="deadline">{`Deadline: ${formatTime(getTimeWithCorrectTimeZone(item.endDateTime, currentTimeZone), 'YYYY-MM-DD HH:mm')}`}</span>
                     </SC.DATE_TIME_CONTAINER>
                     <Collapse>
                       <Panel header="More information" key={item.id}>

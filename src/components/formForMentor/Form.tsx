@@ -10,7 +10,8 @@ import Color from './Color/Color'
 import FormHeader from './FormHeader/FormHeader';
 import TimeZone from './TimeZone/TimeZone';
 // import typeEvents from '../../data/typeEvents';
-import zone from './utils/zone';
+import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
+import sortTimezones from '../../utils/sort-timezones/sort-timezones'
 import { selectUserTimeZone, selectScheduleEventById, selectScheduleEventDraftData, selectScheduleTypeEventByName } from '../../selectors/selectors';
 import {scheduleEventDraftSlice} from "../../slices/schedule-event-draft-slice/schedule-event-draft-slice";
 import { RootState } from '../../store';
@@ -40,14 +41,14 @@ const FormMy = (): React.ReactElement => {
     name: event?.name,
     organizers: event?.organizers ? [''].concat(JSON.parse(event?.organizers)) : [''],
     date: event?.startDateTime && [
-      moment(event?.startDateTime, 'X').utcOffset(zone(currentTimeZone), false),
-      moment(event?.endDateTime, 'X').utcOffset(zone(currentTimeZone), false),
+      getTimeWithCorrectTimeZone(event?.startDateTime, currentTimeZone),
+      getTimeWithCorrectTimeZone(event?.endDateTime, currentTimeZone),
     ],
     crossCheck: event?.startDateCrossCheck
       ? [
           [
-            moment(event?.startDateCrossCheck, 'X').utcOffset(zone(currentTimeZone), false),
-            moment(event?.endDateCrossCheck, 'X').utcOffset(zone(currentTimeZone), false),
+            getTimeWithCorrectTimeZone(event?.startDateCrossCheck, currentTimeZone),
+            getTimeWithCorrectTimeZone(event?.endDateCrossCheck, currentTimeZone),
           ],
         ]
       : [],
@@ -70,11 +71,11 @@ const FormMy = (): React.ReactElement => {
       type: values.type,
       timeZone: values.timeZone,
       startDateTime: values.date[0]
-        .utcOffset(zone(values.timeZone), true)
+        .utcOffset(sortTimezones(values.timeZone), true)
         .utcOffset(0, false)
         .format('X'),
       endDateTime: values.date[1]
-        .utcOffset(zone(values.timeZone), true)
+        .utcOffset(sortTimezones(values.timeZone), true)
         .utcOffset(0, false)
         .format('X'),
       place: values.place,
@@ -83,14 +84,14 @@ const FormMy = (): React.ReactElement => {
         values.crossCheck &&
         values.crossCheck[0] &&
         values.crossCheck[0][0]
-          .utcOffset(zone(values.timeZone), true)
+          .utcOffset(sortTimezones(values.timeZone), true)
           .utcOffset(0, false)
           .format('X'),
       endDateCrossCheck:
         values.crossCheck &&
         values.crossCheck[0] &&
         values.crossCheck[0][1]
-          .utcOffset(zone(values.timeZone), true)
+          .utcOffset(sortTimezones(values.timeZone), true)
           .utcOffset(0, false)
           .format('X'),
       organizers: JSON.stringify(values.organizers.filter((e) => e !== '')),

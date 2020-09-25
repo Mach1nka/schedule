@@ -2,54 +2,9 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {Menu, Dropdown, Button} from "antd";
 import { PlusOutlined } from '@ant-design/icons';
-
-const typeEvents = [
-  {
-    name: 'Task',
-    id: '1',
-    crossCheck: true,
-    descriptionUrl: true,
-    color: '',
-  },
-  {
-    name: 'Self Education',
-    id: '2',
-    crossCheck: false,
-    descriptionUrl: false,
-    color: '',
-  },
-  {
-    name: 'YouTube Stream',
-    id: '3',
-    crossCheck: false,
-    descriptionUrl: false,
-    color: '',
-  },
-  {
-    name: 'Elective/YouTube',
-    id: '4',
-    crossCheck: false,
-    descriptionUrl: false,
-    color: '',
-  },
-  {
-    name: 'Test',
-    id: '5',
-    crossCheck: false,
-    descriptionUrl: false,
-    color: '',
-  },
-  {
-    name: 'New',
-    id: '6',
-    crossCheck: true,
-    descriptionUrl: true,
-    color: '',
-  },
-];
+import {typeEvents} from '../../../data/typeEvents';
 
 const CreateNewTask: React.FC = () => {
-
     const menu = (
       <Menu>
         {
@@ -58,8 +13,8 @@ const CreateNewTask: React.FC = () => {
              <Menu.Item key={el.id}>
                <Link 
                  to={{
-                  pathname: "/event",
-                  search: `?id=${el.name}`,
+                  pathname: "/formForMentor",
+                  search: `?type=${el.name}`,
               }}
                >
                  {el.name}

@@ -7,7 +7,9 @@ import screenUrl from '../formForMentor/utils/screenUrl';
 import {MainDataContext} from "../../context/main-data-context";
 import {dispatchEntityHelper} from "../../helpers/dispatch-entity-helper/dispatch-entity-helper";
 import { selectUserTimeZone, selectScheduleEventById, selectScheduleEventDraftData, selectScheduleTypeEventByName } from '../../selectors/selectors';
-import zone from '../formForMentor/utils/zone';
+import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
+import formatTime from '../../utils/get-time/format-time';
+// import zone from '../formForMentor/utils/zone';
 import Feedback from './Feedback/Feedback';
 import SC from './sc';
 import colorSC from '../formForMentor/Color/sc';
@@ -152,9 +154,7 @@ const PreViewEvent = (): React.ReactElement => {
             </Descriptions>
             <Descriptions size="small" column={1}>
               <Descriptions.Item label={<Tag color="blue">Start Event</Tag>}>
-                {moment(event.startDateTime, 'X')
-                  .utcOffset(zone(currentTimeZone), false)
-                  .format('YYYY-MM-DD HH:mm')}
+                {formatTime(getTimeWithCorrectTimeZone(event.startDateTime, currentTimeZone), 'YYYY-MM-DD HH:mm')}
               </Descriptions.Item>
               <Descriptions.Item
                 label={(
@@ -163,21 +163,15 @@ const PreViewEvent = (): React.ReactElement => {
                   </Tag>
                 )}
               >
-                {moment(event.endDateTime, 'X')
-                  .utcOffset(zone(currentTimeZone), false)
-                  .format('YYYY-MM-DD HH:mm')}
+                {formatTime(getTimeWithCorrectTimeZone(event.endDateTime, currentTimeZone), 'YYYY-MM-DD HH:mm')}
               </Descriptions.Item>
               {event.startDateCrossCheck && (
                 <>
                   <Descriptions.Item label={<Tag color="blue">Start CrossCheck</Tag>}>
-                    {moment(event.startDateCrossCheck, 'X')
-                      .utcOffset(zone(currentTimeZone), false)
-                      .format('YYYY-MM-DD HH:mm')}
+                    {formatTime(getTimeWithCorrectTimeZone(event.startDateCrossCheck, currentTimeZone), 'YYYY-MM-DD HH:mm')}
                   </Descriptions.Item>
                   <Descriptions.Item label={<Tag color="red">Deadline CrossCheck</Tag>}>
-                    {moment(event.endDateCrossCheck, 'X')
-                      .utcOffset(zone(currentTimeZone), false)
-                      .format('YYYY-MM-DD HH:mm')}
+                    {formatTime(getTimeWithCorrectTimeZone(event.endDateCrossCheck, currentTimeZone), 'YYYY-MM-DD HH:mm')}
                   </Descriptions.Item>
                 </>
               )}
