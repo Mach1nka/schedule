@@ -1,10 +1,12 @@
 import React from 'react';
-import { Form, Modal, Input, Button, Space } from 'antd';
+import { Form, Modal, Input, Button} from 'antd';
 
 import { PlusCircleOutlined } from '@ant-design/icons';
+import FeedbackBlockQuestion from './FeedbackBlockQuestion/FeedbackBlockQuestion';
 
 const Feedback = ({ visible, setVisible }): React.ReactElement => {
   const [form] = Form.useForm();
+  
   const onFinish = (values) => {
     console.log('Received values of form:', values);
   };
@@ -14,6 +16,7 @@ const Feedback = ({ visible, setVisible }): React.ReactElement => {
         centered
         title="Feedback"
         visible={visible}
+        width="90%"
         onOk={() => {
           setVisible(!visible);
         }}
@@ -22,9 +25,10 @@ const Feedback = ({ visible, setVisible }): React.ReactElement => {
         <Form
           name="my"
           onFinish={onFinish}
+          layout="vertical"
           form={form}
           initialValues={{
-            feedback: ['', { 1: ['jjknjjh'] }, { 2: ['jjknjjh'] }],
+            feedback: ['', { 'Question: 1': ['jjknjjh'] }, { 'Question: 2': ['jjknjjh'] }],
           }}
         >
           <Form.List name="feedback">
@@ -33,59 +37,10 @@ const Feedback = ({ visible, setVisible }): React.ReactElement => {
                 <div>
                   {fields.reverse().map((field) =>
                     typeof form.getFieldValue('feedback')[field.name] === 'object' ? (
-                      <Form.Item label="Question" key={field.name}>
-                        <Form.List name={[field.name, field.name]} key={field.name}>
-                          {(answers, { add }) => {
-                            return (
-                              <div>
-                                {console.log(form.getFieldValue('feedback')[field.name])}
-                                {answers.reverse().map((answer) => (
-                                  <Form.Item label="answer" key={answer.name}>
-                                    <Space>
-                                      <Form.Item
-                                        fieldKey={[answer.name]}
-                                        isListField
-                                        name={[answer.name]}
-                                        noStyle
-                                      >
-                                        <span>ghjtjfgjgfjfgj</span>
-                                      </Form.Item>
-                                    </Space>
-                                  </Form.Item>
-                                ))}
-                                <Form.Item label="answer">
-                                  <PlusCircleOutlined
-                                    className="dynamic-delete-button"
-                                    style={{ margin: '0 8px' }}
-                                    onClick={() => {
-                                      add();
-                                    }}
-                                  />
-                                </Form.Item>
-                              </div>
-                            );
-                          }}
-                        </Form.List>
+                      <Form.Item key={field.key} noStyle>
+                        <FeedbackBlockQuestion name={field.name} form={form}/>
                       </Form.Item>
                     ) : (
-                      // <Form.Item label="Question" key={field.name}>
-                      //   {console.log(form.getFieldValue('feedback'))}
-                      //   <Space>
-                      //     <Form.Item
-                      //       fieldKey={[field.name]}
-                      //       isListField
-                      //       name={[field.name]}
-                      //       noStyle
-                      //     >
-                      //       <span>{form.getFieldValue('feedback')[field.name]}</span>
-                      //     </Form.Item>
-                      //     <MinusCircleOutlined
-                      //       onClick={() => {
-                      //         remove(field.name);
-                      //       }}
-                      //     />
-                      //   </Space>
-                      // </Form.Item>
                       <Form.Item key={0} label="Question">
                         {console.log(form.getFieldValue('feedback'))}
                         <Form.Item
@@ -93,13 +48,6 @@ const Feedback = ({ visible, setVisible }): React.ReactElement => {
                           validateTrigger={['onChange', 'onBlur']}
                           isListField
                           name={[0]}
-                          rules={[
-                            {
-                              required: fields.length <= 1,
-                              whitespace: true,
-                              message: "Please input passenger's name or delete this field.",
-                            },
-                          ]}
                           noStyle
                         >
                           <Input placeholder="passenger name" style={{ width: '60%' }} />
@@ -114,7 +62,7 @@ const Feedback = ({ visible, setVisible }): React.ReactElement => {
                                 '',
                                 ...form.getFieldValue('feedback').filter((e, i) => i !== 0),
                                 {
-                                  [form.getFieldValue('feedback').length]: [
+                                  [`Question: ${form.getFieldValue('feedback').length}`]: [
                                     form.getFieldValue('feedback')[0],
                                   ],
                                 },

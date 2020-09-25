@@ -32,7 +32,7 @@ const FormMy = (): React.ReactElement => {
   
   const event = isDraft ? eventDraft : eventState;
   const typeEvent = useSelector((state: RootState) => selectScheduleTypeEventByName(state, (event ? event?.type :  type)));
-  // const typeEvent = typeEvents.find((e) => e.name === (event ? event?.type :  type));
+  
   console.log(typeEvent);
   
   const initialValues = {
