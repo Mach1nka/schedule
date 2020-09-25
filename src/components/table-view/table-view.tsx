@@ -17,7 +17,10 @@ interface ScheduleEvents {
 
 const TableView: React.FC<any> = () => {
   const scheduleEvents = useSelector(selectScheduleEventsData) || [];
-  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set);
+  const [hiddenRowOrColumn, setHiddenRowOrColumn] = useState<Set<string>>(new Set);
+  // const [arrColums] = useState(columnsSource.forEach(element) => {
+  //   arrColums.push(element.title);
+  // });
 
   const DateTimeFormat = {
     year: "numeric",
@@ -34,14 +37,14 @@ const TableView: React.FC<any> = () => {
   const handledFilter = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = event.currentTarget.value;
     const checked = event.currentTarget.checked;
-    if (checked && hiddenColumns.has(value)) {
-      setHiddenColumns((prevState) => {
+    if (checked && hiddenRowOrColumn.has(value)) {
+      setHiddenRowOrColumn((prevState) => {
         prevState.delete(value);
         return new Set([...prevState]);
       });
     }
-    if (!checked && !hiddenColumns.has(value)) {
-      setHiddenColumns((prevState) => {
+    if (!checked && !hiddenRowOrColumn.has(value)) {
+      setHiddenRowOrColumn((prevState) => {
         return new Set([...prevState, value]);
       });
     }
@@ -52,7 +55,8 @@ const TableView: React.FC<any> = () => {
       title:
         <FilterComponent
           onChange={handledFilter}
-          hiddenColumns={hiddenColumns}
+          hiddenRowOrColumn={hiddenRowOrColumn}
+          arrColumns={() => {}}
         />,
       dataIndex: 'settings',
       key: 'settings',
@@ -108,17 +112,18 @@ const TableView: React.FC<any> = () => {
     },
   ];
 
-  const columns = columnsSource.filter((it) => it?.title && !hiddenColumns.has(it.title.toString()));
+  const columns = columnsSource.filter((element) => element?.title && !hiddenRowOrColumn.has(element.title.toString()));
+  const listTasks = scheduleEvents.filter((element) => element?.type && !hiddenRowOrColumn.has(element.type.toString()));
 
-  if (scheduleEvents.length > 0) {
-    const templayte = scheduleEvents.reduce((acc, it, i) => {
+  if (listTasks.length > 0) {
+    const timetable = listTasks.reduce((acc, it, i) => {
       const temp: ScheduleEvents = {
         settings: String(i + 1),
         key: String(i),
-        startdate: String(formatDateFromUnix(scheduleEvents[i].startDateTime, DateTimeFormat)),
-        duedate: String(formatDateFromUnix(scheduleEvents[i].endDateTime, DateTimeFormat)),
-        title: String(scheduleEvents[i].name),
-        status: [String(scheduleEvents[i].type)],
+        startdate: String(formatDateFromUnix(listTasks[i].startDateTime, DateTimeFormat)),
+        duedate: String(formatDateFromUnix(listTasks[i].endDateTime, DateTimeFormat)),
+        title: String(listTasks[i].name),
+        status: [String(listTasks[i].type)],
       };
       acc.push(temp);
       return acc;
@@ -126,10 +131,11 @@ const TableView: React.FC<any> = () => {
 
     return (
       <>
-        <Table dataSource={templayte} columns={columns}/>
+        <Table dataSource={timetable} columns={columns} bordered={true}/>
       </>
     );
   };
+
   return (
     <>
       <h1>Loading...</h1>

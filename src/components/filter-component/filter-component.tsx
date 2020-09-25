@@ -5,8 +5,11 @@ import { SettingOutlined } from '@ant-design/icons';
 const FilterComponent: React.FC<any> = (props) => {
   const {
     onChange,
-    hiddenColumns
+    hiddenRowOrColumn,
+    // arrColumns
   } = props;
+
+  // console.log(arrColumns);
 
   return (
     <div>
@@ -14,13 +17,25 @@ const FilterComponent: React.FC<any> = (props) => {
         <SettingOutlined/>
       </SC.BUTTON>
       <SC.DIV>
-        <input type="checkbox" onChange={onChange} value="Start date" checked={!hiddenColumns.has("Start date")}/>
+        {/* {arrColumns.map((value) => {
+          <>
+            <input type="checkbox" onChange={onChange} value={value} checked={!hiddenColumns.has(value)}/>
+            <label>{value}</label>
+          </>
+        })} */}
+        <input type="checkbox" onChange={onChange} value="Start date" checked={!hiddenRowOrColumn.has("Start date")}/>
         <label>Start date</label>
-        <input type="checkbox" onChange={onChange} value="Due date" checked={!hiddenColumns.has("Due date")}/>
+        <input type="checkbox" onChange={onChange} value="Due date" checked={!hiddenRowOrColumn.has("Due date")}/>
         <label>Due date</label>
+
+        <input type="checkbox" onChange={onChange} value="Task" checked={!hiddenRowOrColumn.has("Task")}/>
+        <label>Task</label>
       </SC.DIV>
     </div>
   );
 };
 
 export default FilterComponent;
+
+
+
