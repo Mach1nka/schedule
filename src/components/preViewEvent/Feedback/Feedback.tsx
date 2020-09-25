@@ -1,14 +1,22 @@
-import React from 'react';
+import React,{ useContext } from 'react';
 import { Form, Modal, Input, Button} from 'antd';
-
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { useSelector, useDispatch  } from 'react-redux';
+import { PlusOutlined } from '@ant-design/icons';
 import FeedbackBlockQuestion from './FeedbackBlockQuestion/FeedbackBlockQuestion';
+import { selectUserRole } from '../../../selectors/selectors';
+import {ReduxStateEntities} from "../../../reducers/reducers-config";
+import {MainDataContext} from "../../../context/main-data-context";
+import {dispatchEntityHelper} from "../../../helpers/dispatch-entity-helper/dispatch-entity-helper";
 
-const Feedback = ({ visible, setVisible }): React.ReactElement => {
+
+const Feedback = ({ visible, setVisible, event }): React.ReactElement => {
   const [form] = Form.useForm();
-  
-  const onFinish = (values) => {
+  const { putScheduleEvent} = useContext(MainDataContext);
+  const dispatch = useDispatch();
+  const role = useSelector(selectUserRole);
+  const onFinish = (values, data) => {
     console.log('Received values of form:', values);
+    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: putScheduleEvent(data.id), data:{...data, feedbackComment: JSON.stringify(values.feedback)} , dispatch});
   };
   return (
     <>
@@ -24,11 +32,12 @@ const Feedback = ({ visible, setVisible }): React.ReactElement => {
       >
         <Form
           name="my"
-          onFinish={onFinish}
+          onFinish={(value)=>onFinish(value, event)}
           layout="vertical"
           form={form}
           initialValues={{
-            feedback: ['', { 'Question: 1': ['jjknjjh'] }, { 'Question: 2': ['jjknjjh'] }],
+            feedback: event.feedbackComment ? JSON.parse(event.feedbackComment) : [''] 
+            // ['', { 'Question: 1': ['jjknjjh'] }, { 'Question: 2': ['jjknjjh'] }],
           }}
         >
           <Form.List name="feedback">
@@ -41,45 +50,49 @@ const Feedback = ({ visible, setVisible }): React.ReactElement => {
                         <FeedbackBlockQuestion name={field.name} form={form}/>
                       </Form.Item>
                     ) : (
-                      <Form.Item key={0} label="Question">
-                        {console.log(form.getFieldValue('feedback'))}
+                      role === 'student' && (
+                      <Form.Item key={0} noStyle>
                         <Form.Item
+                          label="Question"
                           fieldKey={[0]}
                           validateTrigger={['onChange', 'onBlur']}
                           isListField
                           name={[0]}
-                          noStyle
+                          
                         >
-                          <Input placeholder="passenger name" style={{ width: '60%' }} />
+                          <Input.TextArea placeholder="passenger name" style={{ width: '60%' }} autoSize={{ minRows: 1, maxRows: 6 }} allowClear/>
                         </Form.Item>
-                        <PlusCircleOutlined
-                          className="dynamic-delete-button"
-                          style={{ margin: '0 8px' }}
-                          onClick={() => {
-                            console.log(form.getFieldValue('feedback')[0]);
-                            form.setFieldsValue({
-                              feedback: [
-                                '',
-                                ...form.getFieldValue('feedback').filter((e, i) => i !== 0),
-                                {
-                                  [`Question: ${form.getFieldValue('feedback').length}`]: [
-                                    form.getFieldValue('feedback')[0],
-                                  ],
-                                },
-                              ],
-                            });
-                          }}
-                        />
+                        <Form.Item >
+                          <Button 
+                            type="primary" 
+                            icon={<PlusOutlined/>}
+                            onClick={() => {
+                              form.setFieldsValue({
+                                feedback: [
+                                  '',
+                                  ...form.getFieldValue('feedback').filter((e, i) => i !== 0),
+                                  {
+                                    [`Question: ${form.getFieldValue('feedback').length}`]: [
+                                      form.getFieldValue('feedback')[0],
+                                    ],
+                                  },
+                                ],
+                              });
+                            }}
+                          >
+                            Question
+                          </Button>
+                        </Form.Item>
                       </Form.Item>
+                    )
                     ),
                   )}
                 </div>
               );
             }}
           </Form.List>
-
           <Form.Item>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" >
               Submit
             </Button>
           </Form.Item>

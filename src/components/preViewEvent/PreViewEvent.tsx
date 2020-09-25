@@ -196,11 +196,11 @@ const PreViewEvent = (): React.ReactElement => {
           {event.descriptionUrl && (
             <Layout className="layout">
               <Content style={{ padding: '0 50px' }}>
-                <SC.TITLE source={description} escapeHtml={false}/> 
+                <SC.MARKDOWN source={description} escapeHtml={false}/> 
               </Content>
             </Layout>
           )}
-          <Feedback visible={visible} setVisible={setVisible}/>
+          <Feedback visible={visible} setVisible={setVisible} event={event}/>
         </>
       )}
     </>

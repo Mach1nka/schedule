@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 
-const headerSC = {
-  TITLE: styled(ReactMarkdown)`
+const ReactMarkdownSC = {
+  MARKDOWN: styled(ReactMarkdown)`
     a {
       color: red;
     }
   `,
 };
-export default headerSC;
+export default ReactMarkdownSC;

@@ -15,6 +15,7 @@ export interface ScheduleMockEvents {
   link?: string;
   color: string;
   feedback?: string;
+  feedbackComment?: string;
   linkComment?: string
 }
 
