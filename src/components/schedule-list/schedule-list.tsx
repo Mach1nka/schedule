@@ -1,9 +1,11 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {List, Button, Skeleton, Collapse, Col, } from 'antd';
+import { Link } from 'react-router-dom';
 import {useSelector} from "react-redux";
 import {ScheduleMockEvents} from '../../data/schedule';
 import {selectScheduleEventsData} from "../../selectors/selectors";
 import {scheduleListSC as SC} from "./sc";
+
 
 const ScheduleList: React.FC = () => {
   const { Panel } = Collapse;
@@ -70,7 +72,14 @@ const ScheduleList: React.FC = () => {
                           {item.place && <span className="collapse-content__event-place">{`Place: ${item?.place.toUpperCase()}`}</span>}
                           <span className="collapse-content__description-title">Description</span>
                           <p>{item.description}</p>
-                          <a className="link-to-description-page" href={item.descriptionUrl}>Link</a>
+                          <Link
+                            className="link-to-description-page"
+                            to={{
+                                pathname: "/event",
+                                search: `?id=${item.id}`,
+                              }}
+                          >Link
+                          </Link>
                         </SC.COLLAPSE_CONTENT>
                       </Panel>
                     </Collapse>

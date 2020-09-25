@@ -10,6 +10,10 @@ export enum ReduxStateEntities {
   SYSTEM = "system",
   USER_SETTINGS = "userSettings",
   SCHEDULE_EVENTS = "scheduleEvents",
+  SCHEDULE_TYPES_EVENTS = "scheduleTypesEvents",
+  SCHEDULE_EVENT_CURRENT = "scheduleEventCurrent",
+  SCHEDULE_TYPE_EVENT_CURRENT = "scheduleTypeEventCurrent",
+  SCHEDULE_EVENT_DRAFT = "scheduleEventDraft",
 }
 
 export type CreateAsyncThunkProps = {
@@ -30,6 +34,7 @@ export const getAsyncThunk = (getAsyncThunkProps: GetAsyncThunkProps) => {
     async (fetchProps, thunkAPI) => {
       const {fetchFn, data} = fetchProps;
       const response = await fetchFn(data);
+      console.log(response);
 
       if (response.status !== 200) {
         thunkAPI.dispatch({type: rtkSlices.system.actions.errorsAdd.toString(), payload: response})

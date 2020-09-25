@@ -1,15 +1,21 @@
 export interface ScheduleMockEvents {
   id: string;
   name: string;
-  description: string,
-  descriptionUrl: string,
-  type: string,
-  timeZone: string,
-  startDateTime: string,
-  endDateTime: string,
-  place: string,
-  comment: string,
-  color?: string,
+  description: string;
+  descriptionUrl: string;
+  type: string;
+  timeZone: string;
+  startDateTime: string;
+  endDateTime: string;
+  place: string;
+  comment: string;
+  startDateCrossCheck?: string;
+  endDateCrossCheck?: string;
+  organizers?: string;
+  link?: string;
+  color: string;
+  feedback?: string;
+  linkComment?: string
 }
 
 interface ScheduleMock {
