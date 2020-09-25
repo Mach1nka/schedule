@@ -25,6 +25,8 @@ const TableView: React.FC<any> = () => {
   //   arrColums.push(element.title);
   // });
 
+  
+
   const DateTimeFormat = {
     year: "numeric",
     month: "numeric",
@@ -90,13 +92,20 @@ const TableView: React.FC<any> = () => {
       render: tags => (
         <>
           {tags.map(tag => {
-            console.log(tag);
+
             let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'Task') {
-              color = 'tomato';
+            let textColor = '#000';
+            
+            if (localStorage.getItem(tag + 'bg')) {
+              color = localStorage.getItem(tag + 'bg');
             }
+
+            if (localStorage.getItem(tag + 'text')) {
+              textColor = localStorage.getItem(tag + 'text');
+            }
+
             return (
-              <Tag color={color} key={tag}>
+              <Tag color={color} key={tag} style={{color: textColor}}>
                 {tag.toUpperCase()}
               </Tag>
             );

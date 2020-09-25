@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FilterComponentSC as SC } from './sc';
 import { SettingOutlined, FontColorsOutlined, BgColorsOutlined } from '@ant-design/icons';
 
-import { BlockPicker } from 'react-color';
+import { GithubPicker } from 'react-color';
 
 
 // import ColorPicker from '../colorpicker/colorpicker';
@@ -14,7 +14,6 @@ const FilterComponent: React.FC<any> = (props) => {
     hiddenRowOrColumn,
     // arrColumns
   } = props;
-
 
 
   const [colorHere, setColorHere] = useState(false);
@@ -41,7 +40,6 @@ const FilterComponent: React.FC<any> = (props) => {
     if (needColorFor && needColorForTask) {
       localStorage.setItem(needColorForTask + needColorFor, e.hex);
     }
-    
   }
 
   // console.log(arrColumns);
@@ -84,7 +82,7 @@ const FilterComponent: React.FC<any> = (props) => {
         </SC.INPUT_BLOCK>
         </div>
         <div>
-          {colorHere ? <div><BlockPicker onChange={(e) => handleChange(e)}/></div> : null}
+          {colorHere ? <div><GithubPicker onChange={(e) => handleChange(e)}/></div> : null}
         </div>
      </SC.DIV>
     </div>
