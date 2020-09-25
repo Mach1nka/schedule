@@ -2,9 +2,11 @@ import * as React from "react"
 import { Modal, Button } from 'antd';
 import { jsPDF } from "jspdf";
 import html2canvas from 'html2canvas';
+import { DownloadOutlined } from '@ant-design/icons';
+import { textAlign } from "html2canvas/dist/types/css/property-descriptors/text-align";
 
-function printDocument(type: string): void {
-  const elem= document.querySelector('.ant-picker-calendar-full');
+function printDocument(type: string, name: string): void {
+  const elem= document.querySelector(name);
   elem.style.padding = '0 20px 0 20px';
   html2canvas(elem)
     .then((canvas) => {
@@ -27,8 +29,16 @@ function printDocument(type: string): void {
   ;
 }
 
-const SavingSchedule: React.FC = () => {
+interface SavingScheduleProps {
+  name: string;
+}
+
+const SavingSchedule: React.FC<SavingScheduleProps> = (props) => {
   const [visible, setVisible] = React.useState(false);
+
+  const {
+    name,
+  } = props;
 
   const handleModalBtnClick = ()=> {
     setVisible(false);
@@ -39,22 +49,22 @@ const SavingSchedule: React.FC = () => {
   }
 
   const handlePdfBtnClick = ()=> {
-    printDocument('pdf')
+    printDocument('pdf', name)
     setVisible(false);
   }
 
   const handlePngBtnClick = ()=> {
-    printDocument('png')
+    printDocument('png', name)
     setVisible(false);
   }
 
   return (
     <>
-      <Button type="primary" onClick={handleDownloadBtnClick}>
+      <Button type="default" onClick={handleDownloadBtnClick} icon={<DownloadOutlined/>} style={{margin: '10px 0 15px 0'}}>
         Download
       </Button>
       <Modal
-        title="Basic Modal"
+        title="Save as..."
         visible={visible}
         onOk={handleModalBtnClick}
         onCancel={handleModalBtnClick}
@@ -74,7 +84,7 @@ const SavingSchedule: React.FC = () => {
         ]}
       >
         <p>You can download schedule</p>
-        <p>Choose best format for you...</p>
+        <p>Choose best format for you</p>
       </Modal>
     </>
   );
