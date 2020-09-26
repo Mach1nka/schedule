@@ -7,6 +7,7 @@ import {selectScheduleEventsData, selectUserTimeZone} from "../../selectors/sele
 import {scheduleListSC as SC} from "./sc";
 import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
 import formatTime from '../../utils/get-time/format-time';
+import {DATE_FORMAT} from '../../data/typeEvents';
 
 const ScheduleList: React.FC = () => {
   const { Panel } = Collapse;
@@ -51,8 +52,17 @@ const ScheduleList: React.FC = () => {
                   <SC.LIST_ITEM_CONTAINER>
                     <h2>{item.name}</h2>
                     <SC.DATE_TIME_CONTAINER>
-                      <span className="start">{`Start: ${formatTime(getTimeWithCorrectTimeZone(item.startDateTime, currentTimeZone), 'YYYY-MM-DD HH:mm')}`}</span>
-                      <span className="deadline">{`Deadline: ${formatTime(getTimeWithCorrectTimeZone(item.endDateTime, currentTimeZone), 'YYYY-MM-DD HH:mm')}`}</span>
+                      <div>
+                        <p className="start">{`Start: ${formatTime(getTimeWithCorrectTimeZone(item.startDateTime, currentTimeZone), DATE_FORMAT)}`}</p>
+                        <p className="deadline">{`Deadline: ${formatTime(getTimeWithCorrectTimeZone(item.endDateTime, currentTimeZone), DATE_FORMAT)}`}</p>
+                        
+                      </div>
+                      {item.startDateCrossCheck && item.endDateCrossCheck ? (
+                        <div>
+                          <p className="start">{`Start Cross-Check: ${formatTime(getTimeWithCorrectTimeZone(item.startDateCrossCheck, currentTimeZone), DATE_FORMAT)}`}</p>
+                          <p className="deadline">{`Deadline Cross-Check: ${formatTime(getTimeWithCorrectTimeZone(item.endDateCrossCheck, currentTimeZone), DATE_FORMAT)}`}</p>
+                        </div>
+                     ) : undefined}
                     </SC.DATE_TIME_CONTAINER>
                     <Collapse>
                       <Panel header="More information" key={item.id}>

@@ -12,6 +12,7 @@ const Organizer = ({ form }): React.ReactElement => {
               {fields.map((field) =>
                 form.getFieldValue('organizers')[field.name].length >= 1 ? (
                   <Form.Item label="Organizer" key={field.name}>
+                    {console.log(field)}
                     <Form.Item fieldKey={[field.name]} isListField name={[field.name]} noStyle>
                       <Space>
                         <Avatar

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form, Button, Row, Col, Switch, Input } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import moment from 'moment';
 import { useLocation, useHistory } from 'react-router-dom';
 import DateMy from './Date/Date';
 import Organizer from './Organizer/Organizer';
@@ -62,16 +61,16 @@ const FormMy = (): React.ReactElement => {
     feedback: event?.feedback && JSON.parse(event?.feedback),
     linkComment: event?.linkComment,
   };
-  const onFinish = (values) => {
+  const onFinish = (values, eventId) => { // вынести в отдельный файл
     const eventNew = {
-      id: event?.id,
+      id: eventId,
       name: values.name,
       description: values.description,
       descriptionUrl: values.descriptionUrl,
       type: values.type,
       timeZone: values.timeZone,
       startDateTime: values.date[0]
-        .utcOffset(sortTimezones(values.timeZone), true)
+        .utcOffset(sortTimezones(values.timeZone), true)  // создать функцию
         .utcOffset(0, false)
         .format('X'),
       endDateTime: values.date[1]
@@ -121,7 +120,7 @@ const FormMy = (): React.ReactElement => {
             xs: { span: 24, offset: 0 },
             sm: { span: 20, offset: 2 },
           }}
-          onFinish={onFinish}
+          onFinish={(value) => onFinish(value, event?.id)}
           initialValues={initialValues}
         >
           <FormHeader form={form}/>

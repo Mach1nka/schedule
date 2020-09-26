@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Layout, PageHeader, Button, Descriptions, Tag, Space, Avatar, Typography} from 'antd';
-import moment from 'moment';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import screenUrl from '../formForMentor/utils/screenUrl';
@@ -9,13 +8,13 @@ import {dispatchEntityHelper} from "../../helpers/dispatch-entity-helper/dispatc
 import { selectUserTimeZone, selectScheduleEventById, selectScheduleEventDraftData, selectScheduleTypeEventByName } from '../../selectors/selectors';
 import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
 import formatTime from '../../utils/get-time/format-time';
-// import zone from '../formForMentor/utils/zone';
 import Feedback from './Feedback/Feedback';
 import SC from './sc';
 import colorSC from '../formForMentor/Color/sc';
 import { RootState } from '../../store';
 import {ReduxStateEntities} from "../../reducers/reducers-config";
 import {ScheduleMockTypesEvents} from "../../data/typeEvents";
+import {DATE_FORMAT} from '../../data/typeEvents';
 
 const PreViewEvent = (): React.ReactElement => {
   const { Link } = Typography;
@@ -154,7 +153,7 @@ const PreViewEvent = (): React.ReactElement => {
             </Descriptions>
             <Descriptions size="small" column={1}>
               <Descriptions.Item label={<Tag color="blue">Start Event</Tag>}>
-                {formatTime(getTimeWithCorrectTimeZone(event.startDateTime, currentTimeZone), 'YYYY-MM-DD HH:mm')}
+                {formatTime(getTimeWithCorrectTimeZone(event.startDateTime, currentTimeZone), DATE_FORMAT)}
               </Descriptions.Item>
               <Descriptions.Item
                 label={(
@@ -163,15 +162,15 @@ const PreViewEvent = (): React.ReactElement => {
                   </Tag>
                 )}
               >
-                {formatTime(getTimeWithCorrectTimeZone(event.endDateTime, currentTimeZone), 'YYYY-MM-DD HH:mm')}
+                {formatTime(getTimeWithCorrectTimeZone(event.endDateTime, currentTimeZone), DATE_FORMAT)}
               </Descriptions.Item>
               {event.startDateCrossCheck && (
                 <>
                   <Descriptions.Item label={<Tag color="blue">Start CrossCheck</Tag>}>
-                    {formatTime(getTimeWithCorrectTimeZone(event.startDateCrossCheck, currentTimeZone), 'YYYY-MM-DD HH:mm')}
+                    {formatTime(getTimeWithCorrectTimeZone(event.startDateCrossCheck, currentTimeZone), DATE_FORMAT)}
                   </Descriptions.Item>
                   <Descriptions.Item label={<Tag color="red">Deadline CrossCheck</Tag>}>
-                    {formatTime(getTimeWithCorrectTimeZone(event.endDateCrossCheck, currentTimeZone), 'YYYY-MM-DD HH:mm')}
+                    {formatTime(getTimeWithCorrectTimeZone(event.endDateCrossCheck, currentTimeZone), DATE_FORMAT)}
                   </Descriptions.Item>
                 </>
               )}
