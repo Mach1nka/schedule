@@ -1,5 +1,6 @@
 import * as React from "react";
-import {Calendar} from "antd";
+// import {Calendar} from "antd";
+import { Calendar, Select, Radio, Col, Row } from 'antd';
 import moment from "moment";
 import {useSelector} from "react-redux";
 import CalendarDayEvents from "../calendar-day-events/calendar-day-events";
@@ -12,6 +13,7 @@ interface CalendarViewProps {
 
 const CalendarView: React.FC<CalendarViewProps> = (props) => {
   const scheduleEvents = useSelector(selectScheduleEventsData);
+  const [typeOfDate, setTypeOfDay] = React.useState('month');
 
   const getListData = (events, value): any[] => {
     return events?.filter((it) => {
@@ -30,9 +32,23 @@ const CalendarView: React.FC<CalendarViewProps> = (props) => {
     );
   };
 
+  const monthCellRender = () => (
+    <div
+      onClickCapture={() => setTypeOfDay('month')}
+      style={{width: '100%', height: '100%'}}
+    />
+  )
+
   return (
     <Calendar
       dateFullCellRender={getDateCellRender}
+      mode={typeOfDate}
+      onPanelChange={(e, type)=>{
+        if(typeOfDate !== type) {
+          typeOfDate === 'month' ? setTypeOfDay('year') : setTypeOfDay('month')
+        }
+      }}
+      monthCellRender={monthCellRender}
     />
   );
 };
