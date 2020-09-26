@@ -1,13 +1,14 @@
 import React from 'react';
 import { DatePicker, Form, Space, Button } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import {DATE_FORMAT} from '../../../data/typeEvents';
 
 const DateMy = ({ type }): React.ReactElement => {
   const { RangePicker } = DatePicker;
   return (
     <>
       <Form.Item label="Date Task" name="date" rules={[{ required: true }]}>
-        <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" />
+        <RangePicker showTime={{ format: 'HH:mm' }} format={DATE_FORMAT} />
       </Form.Item>
       {JSON.parse(type.crossCheck) && (
         <Form.List name="crossCheck">
@@ -23,7 +24,7 @@ const DateMy = ({ type }): React.ReactElement => {
                         fieldKey={[field.fieldKey]}
                         noStyle
                       >
-                        <RangePicker showTime={{ format: 'HH:mm' }} format="YYYY-MM-DD HH:mm" />
+                        <RangePicker showTime={{ format: 'HH:mm' }} format={DATE_FORMAT} />
                       </Form.Item>
                       <MinusCircleOutlined
                         className="dynamic-delete-button"

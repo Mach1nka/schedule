@@ -49,7 +49,7 @@ const ScheduleList: React.FC = () => {
             loadMore={loadMore}
             dataSource={getCurrentList(scheduleEvents, amountItemsInList)}
             renderItem={(item:ScheduleMockEvents) => (
-              <SC.LIST_ITEM>
+              <SC.LIST_ITEM color={item.color}>
                 <Skeleton loading={initLoading} active>
                   <SC.LIST_ITEM_CONTAINER>
                     <h2>{item.name}</h2>
@@ -57,7 +57,6 @@ const ScheduleList: React.FC = () => {
                       <div>
                         <p className="start">{`Start: ${formatTime(getTimeWithCorrectTimeZone(item.startDateTime, currentTimeZone), DATE_FORMAT)}`}</p>
                         <p className="deadline">{`Deadline: ${formatTime(getTimeWithCorrectTimeZone(item.endDateTime, currentTimeZone), DATE_FORMAT)}`}</p>
-                        
                       </div>
                       {item.startDateCrossCheck && item.endDateCrossCheck ? (
                         <div>

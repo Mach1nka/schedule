@@ -10,7 +10,7 @@ interface CalendarViewProps {
 
 }
 
-const CalendarView: React.FC<CalendarViewProps> = (props) => {
+const CalendarView: React.FC<CalendarViewProps> = () => {
   const scheduleEvents = useSelector(selectScheduleEventsData);
 
   const getListData = (events, value): any[] => {
@@ -22,6 +22,7 @@ const CalendarView: React.FC<CalendarViewProps> = (props) => {
   const getDateCellRender = (value) => {
     const currentDay = moment(value).format("D");
     const listData = scheduleEvents && getListData(scheduleEvents, value);
+    
     return (
       <SC.DAY_CONTAINER>
         {currentDay}
