@@ -12,7 +12,7 @@ export const ScheduleButton: React.FC<ScheduleButtonProps> = (props) => {
   const history = useHistory();
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>): void => {
-    history.push(evt.currentTarget.value);
+    history.push(evt.currentTarget.value.toLowerCase());
   }
 
   return (

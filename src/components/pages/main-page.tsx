@@ -7,6 +7,7 @@ import useGettingEntity from '../../hooks/use-getting-entity/use-getting-entity'
 import {ReduxStateEntities} from '../../reducers/reducers-config';
 import {selectUserRole} from '../../selectors/selectors';
 
+import {ROUTE_PATHS as PATHS} from '../../data/paths';
 import { SwitchScheduleView } from '../switch-schedule-view/switch-schedule-view';
 import Header from '../header/header';
 import ScheduleList from '../schedule-list/schedule-list';
@@ -34,19 +35,19 @@ const MainPage: React.FC = () => {
         <Header/>
         <main>
           <SwitchScheduleView/>
-          <Route path='/Calendar'>
+          <Route path={`/${PATHS.calendar}`}>
             <CalendarView/>
           </Route>
-          <Route path='/List'>
+          <Route path={`/${PATHS.list}`}>
             <ScheduleList/>
           </Route>
-          <Route path='/Table'>
+          <Route path={`/${PATHS.table}`}>
             {userRole === 'mentor' && <CreateNewTask/>}
           </Route>  
-          <Route path='/event'>
+          <Route path={`/${PATHS.event}`}>
             <PreViewEvent/>
           </Route>
-          <Route path='/formForMentor'>
+          <Route path={`/${PATHS.formForMentor}`}>
             <Form/>
           </Route>
         </main>

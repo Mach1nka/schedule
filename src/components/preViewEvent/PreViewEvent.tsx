@@ -20,6 +20,7 @@ import { RootState } from '../../store';
 import {ReduxStateEntities} from "../../reducers/reducers-config";
 import {ScheduleMockTypesEvents, DATE_FORMAT} from "../../data/typeEvents";
 import {ScheduleMockEvents} from "../../data/schedule";
+import {ROUTE_PATHS as PATHS} from '../../data/paths';
 
 const PreViewEvent = (): React.ReactElement => {
   const { Link } = Typography;
@@ -125,7 +126,7 @@ const PreViewEvent = (): React.ReactElement => {
           <PageHeader
             ghost={false}
             onBack={() => history.push({
-              pathname: role === 'mentor' ? "/formForMentor" : "/List",
+              pathname: role === 'mentor' ? `/${PATHS.formForMentor}` : `/${PATHS.list}`,
               search: role === 'mentor' ? `?id=${event.id}&draft=${!!isDraft}` : '',
             })}
             title={event.name}
@@ -147,7 +148,7 @@ const PreViewEvent = (): React.ReactElement => {
               <Button
                 key="2"
                 onClick={()=>history.push({
-                pathname: "/formForMentor",
+                pathname: `/${PATHS.formForMentor}`, 
                 search: `?id=${event.id}&draft=${!!isDraft}`,
               })}
               >Edit

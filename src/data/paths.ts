@@ -1,10 +1,10 @@
 import {teamId, teamIdForTypesEvent} from "../config";
 
-export const paths = {
-  calendar: '/Calendar',
-  list: '/List',
-  table: '/Table',
-  event: '/event',
+export const ROUTE_PATHS = {
+  calendar: 'calendar',
+  list: 'list',
+  table: 'table',
+  event: 'event',
   formForMentor: 'formForMentor',
 };
 

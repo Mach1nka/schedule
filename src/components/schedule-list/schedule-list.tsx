@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import {useSelector} from "react-redux";
 import {ScheduleMockEvents} from '../../data/schedule';
 import {selectScheduleEventsData, selectUserTimeZone} from "../../selectors/selectors";
+
+import {ROUTE_PATHS as PATHS} from '../../data/paths';
 import {scheduleListSC as SC} from "./sc";
 import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
 import formatTime from '../../utils/get-time/format-time';
@@ -74,7 +76,7 @@ const ScheduleList: React.FC = () => {
                           <Link
                             className="link-to-description-page"
                             to={{
-                                pathname: "/event",
+                                pathname: `/${PATHS.event}`,
                                 search: `?id=${item.id}`,
                               }}
                           >Link
