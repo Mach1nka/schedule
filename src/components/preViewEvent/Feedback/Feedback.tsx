@@ -11,12 +11,12 @@ import {dispatchEntityHelper} from "../../../helpers/dispatch-entity-helper/disp
 
 const Feedback = ({ visible, setVisible, event }): React.ReactElement => {
   const [form] = Form.useForm();
-  const { putScheduleEvent} = useContext(MainDataContext);
+  const { putScheduleEvent, getScheduleEvents} = useContext(MainDataContext);
   const dispatch = useDispatch();
   const role = useSelector(selectUserRole);
-  const onFinish = (values, data) => {
-    console.log('Received values of form:', values);
-    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: putScheduleEvent(data.id), data:{...data, feedbackComment: JSON.stringify(values.feedback)} , dispatch});
+  const onFinish = async(values, data) => {
+    await dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: putScheduleEvent(data.id), data:{...data, feedbackComment: JSON.stringify(values.feedback)} , dispatch});
+    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENTS, fetchFn: getScheduleEvents , dispatch});
   };
   return (
     <>
@@ -37,7 +37,6 @@ const Feedback = ({ visible, setVisible, event }): React.ReactElement => {
           form={form}
           initialValues={{
             feedback: event.feedbackComment ? JSON.parse(event.feedbackComment) : [''] 
-            // ['', { 'Question: 1': ['jjknjjh'] }, { 'Question: 2': ['jjknjjh'] }],
           }}
         >
           <Form.List name="feedback">

@@ -96,6 +96,7 @@ const FormMy = (): React.ReactElement => {
       organizers: JSON.stringify(values.organizers.filter((e) => e !== '')),
       link: values.link,
       color: values.color,
+      feedbackComment: event?.feedbackComment,
       feedback: JSON.stringify(values.feedback),
       linkComment: values.linkComment,
     };
