@@ -144,7 +144,10 @@ const TableView: React.FC<any> = () => {
 
     return (
       <>
-        <Table dataSource={timetable} columns={columns} bordered={true}/>
+        <div className="table">
+          <Table dataSource={timetable} columns={columns} bordered={true}/>
+        </div>
+        
         
       </>
     );
