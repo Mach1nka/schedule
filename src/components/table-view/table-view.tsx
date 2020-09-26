@@ -55,6 +55,8 @@ const TableView: React.FC<any> = () => {
     }
   };
 
+  
+
   const columnsSource: ColumnsType<ScheduleEvents> = [
     {
       title:
@@ -83,7 +85,7 @@ const TableView: React.FC<any> = () => {
       key: 'title',
       // вот здесь нужна помощь,
       // не могу айдишник передать в ссылку
-      render: (name, id) => <a href={String(id)}>{name}</a>
+      render: (name) => <a href={'/'}>{name}</a>
     },
     {
       title: 'Type',
