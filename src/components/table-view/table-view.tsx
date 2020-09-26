@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import 'antd/dist/antd.css';
+import { Link } from 'react-router-dom';
 import {Table, Tag} from 'antd';
 import {ColumnsType} from 'antd/es/table';
 import {useSelector} from "react-redux";
 import {selectScheduleEventsData} from "../../selectors/selectors";
 import FilterComponent from '../filter-component/filter-component';
-
-
+import Item from 'antd/lib/list/Item';
 
 
 interface ScheduleEvents {
@@ -24,8 +24,6 @@ const TableView: React.FC<any> = () => {
   // const [arrColums] = useState(columnsSource.forEach(element) => {
   //   arrColums.push(element.title);
   // });
-
-  
 
   const DateTimeFormat = {
     year: "numeric",
@@ -55,8 +53,6 @@ const TableView: React.FC<any> = () => {
     }
   };
 
-  
-
   const columnsSource: ColumnsType<ScheduleEvents> = [
     {
       title:
@@ -83,9 +79,6 @@ const TableView: React.FC<any> = () => {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
-      // вот здесь нужна помощь,
-      // не могу айдишник передать в ссылку
-      render: (name) => <a href={'/'}>{name}</a>
     },
     {
       title: 'Type',
@@ -132,13 +125,22 @@ const TableView: React.FC<any> = () => {
 
   if (listTasks.length > 0) {
     const timetable = listTasks.reduce((acc, it, i) => {
+
       const temp: ScheduleEvents = {
         settings: String(i + 1),
         key: String(i),
         startdate: String(formatDateFromUnix(listTasks[i].startDateTime, DateTimeFormat)),
         duedate: String(formatDateFromUnix(listTasks[i].endDateTime, DateTimeFormat)),
-        title: String(listTasks[i].name),
+        title: <Link
+                className="link-to-description-page"
+                to={{
+                pathname: "/event",
+                search: `?id=${it.id}`,
+          }}
+      >{it.name}
+      </Link>,
         status: [String(listTasks[i].type)],
+
       };
       acc.push(temp);
       return acc;

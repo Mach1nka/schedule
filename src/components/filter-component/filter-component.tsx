@@ -42,8 +42,6 @@ const FilterComponent: React.FC<any> = (props) => {
     }
   }
 
-  // console.log(arrColumns);
-
   return (
     <div>
       <SC.BUTTON>
