@@ -1,5 +1,5 @@
-const formatTime = (funcThatReturnTime, format) => {
-    return funcThatReturnTime.format(format);
+const formatTime = (time, format: string) => {
+    return time.format(format);
 }
 
 export default formatTime;

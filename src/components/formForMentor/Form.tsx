@@ -8,9 +8,8 @@ import InputMy from './Input/Input';
 import Color from './Color/Color'
 import FormHeader from './FormHeader/FormHeader';
 import TimeZone from './TimeZone/TimeZone';
-// import typeEvents from '../../data/typeEvents';
 import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
-import sortTimezones from '../../utils/sort-timezones/sort-timezones'
+import prepareDateForBackend from '../../utils/get-time/prepare-date-for-backend';
 import { selectUserTimeZone, selectScheduleEventById, selectScheduleEventDraftData, selectScheduleTypeEventByName } from '../../selectors/selectors';
 import {scheduleEventDraftSlice} from "../../slices/schedule-event-draft-slice/schedule-event-draft-slice";
 import { RootState } from '../../store';
@@ -33,8 +32,6 @@ const FormMy = (): React.ReactElement => {
   const event = isDraft ? eventDraft : eventState;
   const typeEvent = useSelector((state: RootState) => selectScheduleTypeEventByName(state, (event ? event?.type :  type)));
   
-  console.log(typeEvent);
-  
   const initialValues = {
     type: typeEvent?.name,
     name: event?.name,
@@ -53,7 +50,7 @@ const FormMy = (): React.ReactElement => {
       : [],
     place: event?.place ? event?.place : 'online',
     comment: event?.comment,
-    color: event?.color,
+    color: typeEvent?.color,
     descriptionUrl: event?.descriptionUrl,
     link: event?.link,
     description: event?.description,
@@ -61,7 +58,7 @@ const FormMy = (): React.ReactElement => {
     feedback: event?.feedback && JSON.parse(event?.feedback),
     linkComment: event?.linkComment,
   };
-  const onFinish = (values, eventId) => { // вынести в отдельный файл
+  const onFinish = (values, eventId) => { 
     const eventNew = {
       id: eventId,
       name: values.name,
@@ -69,37 +66,25 @@ const FormMy = (): React.ReactElement => {
       descriptionUrl: values.descriptionUrl,
       type: values.type,
       timeZone: values.timeZone,
-      startDateTime: values.date[0]
-        .utcOffset(sortTimezones(values.timeZone), true)  // создать функцию
-        .utcOffset(0, false)
-        .format('X'),
-      endDateTime: values.date[1]
-        .utcOffset(sortTimezones(values.timeZone), true)
-        .utcOffset(0, false)
-        .format('X'),
+      startDateTime: prepareDateForBackend(values.date[0], values.timeZone),
+      endDateTime: prepareDateForBackend(values.date[1], values.timeZone),
       place: values.place,
       comment: values.comment,
       startDateCrossCheck:
         values.crossCheck &&
         values.crossCheck[0] &&
-        values.crossCheck[0][0]
-          .utcOffset(sortTimezones(values.timeZone), true)
-          .utcOffset(0, false)
-          .format('X'),
+        prepareDateForBackend(values.crossCheck[0][0], values.timeZone),
       endDateCrossCheck:
         values.crossCheck &&
         values.crossCheck[0] &&
-        values.crossCheck[0][1]
-          .utcOffset(sortTimezones(values.timeZone), true)
-          .utcOffset(0, false)
-          .format('X'),
+        prepareDateForBackend(values.crossCheck[0][1], values.timeZone),
       organizers: JSON.stringify(values.organizers.filter((e) => e !== '')),
       link: values.link,
       color: values.color,
+      feedbackComment: event?.feedbackComment,
       feedback: JSON.stringify(values.feedback),
       linkComment: values.linkComment,
     };
-    console.log('eventNew', eventNew);
     dispatch(scheduleEventDraftSlice.actions.draftAdd(eventNew));
     history.push({
       pathname: "/event",
@@ -109,7 +94,6 @@ const FormMy = (): React.ReactElement => {
 
   return (
     <Row justify="center">
-      {console.log(event?.organizers)}
       <Col span={20}>
         <Form
           form={form}

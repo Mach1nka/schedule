@@ -5,16 +5,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import screenUrl from '../formForMentor/utils/screenUrl';
 import {MainDataContext} from "../../context/main-data-context";
 import {dispatchEntityHelper} from "../../helpers/dispatch-entity-helper/dispatch-entity-helper";
-import { selectUserTimeZone, selectScheduleEventById, selectScheduleEventDraftData, selectScheduleTypeEventByName } from '../../selectors/selectors';
-import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
-import formatTime from '../../utils/get-time/format-time';
+import { selectUserTimeZone, 
+  selectScheduleEventById, 
+  selectScheduleEventDraftData, 
+  selectScheduleTypeEventByName,
+  selectUserRole
+ } from '../../selectors/selectors';
+ import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
+ import formatTime from '../../utils/get-time/format-time';
 import Feedback from './Feedback/Feedback';
 import SC from './sc';
 import colorSC from '../formForMentor/Color/sc';
 import { RootState } from '../../store';
 import {ReduxStateEntities} from "../../reducers/reducers-config";
-import {ScheduleMockTypesEvents} from "../../data/typeEvents";
-import {DATE_FORMAT} from '../../data/typeEvents';
+import {ScheduleMockTypesEvents, DATE_FORMAT} from "../../data/typeEvents";
+import {ScheduleMockEvents} from "../../data/schedule";
 
 const PreViewEvent = (): React.ReactElement => {
   const { Link } = Typography;
@@ -22,7 +27,15 @@ const PreViewEvent = (): React.ReactElement => {
 
   const [description, setDescription] = useState('');
   const [visible, setVisible] = useState(false);
-  const { putScheduleEvent, postScheduleEvent, removeScheduleEvent, putScheduleTypeEvent, postScheduleTypeEvent } = useContext(MainDataContext);
+  const {
+    getScheduleEvents, 
+    putScheduleEvent, 
+    postScheduleEvent, 
+    removeScheduleEvent, 
+    putScheduleTypeEvent, 
+    postScheduleTypeEvent,
+    getScheduleTypesEvents 
+  } = useContext(MainDataContext);
 
   const history = useHistory();
   const search = new URLSearchParams(useLocation().search);
@@ -33,10 +46,11 @@ const PreViewEvent = (): React.ReactElement => {
   const currentTimeZone = useSelector(selectUserTimeZone);
   const eventDraft = useSelector(selectScheduleEventDraftData);
   const eventState = useSelector((state: RootState) => selectScheduleEventById(state, id));
-
+  const role = useSelector(selectUserRole);
   const event = isDraft ? eventDraft : eventState;
-  const typeEvent = useSelector((state: RootState) => selectScheduleTypeEventByName(state, (event ? event?.type :  'New')));
-
+  const type = useSelector((state: RootState) => selectScheduleTypeEventByName(state, (event ? event?.type : '')));
+  const typeNew = useSelector((state: RootState) => selectScheduleTypeEventByName(state, 'New'));
+  const typeEvent = type ||  typeNew;
   const markDown = async (url: string) => {
     try {
       const response = await fetch(
@@ -53,21 +67,50 @@ const PreViewEvent = (): React.ReactElement => {
       console.log(error);
     }
   };
-  const postAndPutEvent = (data) => data.id ?
-    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: putScheduleEvent(data.id), data , dispatch}) :
+  const postAndPutEvent = (data:ScheduleMockEvents, color: string) => data.id ?
+    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: putScheduleEvent(data.id), data:{...data, color} , dispatch}) :
     dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: postScheduleEvent, data , dispatch});
 
-  const postAndPutTypeEvent = (data:ScheduleMockTypesEvents, color: string, type) => data.name === "New" ?
-    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_TYPE_EVENT_CURRENT, fetchFn: postScheduleTypeEvent, data:{...data, name: type} , dispatch}) :
-    (data.color !== color 
+  const updateSchedule = () => {
+    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENTS, fetchFn: getScheduleEvents, dispatch});
+    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_TYPES_EVENTS, fetchFn: getScheduleTypesEvents, dispatch});
+  };
+  const postAndPutTypeEvent = (data:ScheduleMockTypesEvents, eventData:ScheduleMockEvents) => data.name === "New" ?
+    dispatchEntityHelper({
+      currentEntity: ReduxStateEntities.SCHEDULE_TYPE_EVENT_CURRENT, 
+      fetchFn: postScheduleTypeEvent, 
+      data:{
+        name: eventData.type,
+        crossCheck: JSON.stringify(!!eventData.startDateCrossCheck),
+        descriptionUrl: JSON.stringify(!!eventData.descriptionUrl),
+        link: JSON.stringify(!!eventData.link),
+        color: eventData.color,
+      } , 
+      dispatch
+    }) :
+    (data.color !== eventData.color 
       && dispatchEntityHelper({
         currentEntity: ReduxStateEntities.SCHEDULE_TYPE_EVENT_CURRENT, 
-        fetchFn: putScheduleTypeEvent(data.id), data:{...data, color} , dispatch}));
-    
+        fetchFn: putScheduleTypeEvent(data.id), 
+        data:{
+          name: eventData.type,
+          crossCheck: JSON.stringify(!!eventData.startDateCrossCheck),
+          descriptionUrl: JSON.stringify(!!eventData.descriptionUrl),
+          link: JSON.stringify(!!eventData.link),
+          color: eventData.color,
+        }, 
+        dispatch}));
+
+  const saveButton = async(typeSave:ScheduleMockTypesEvents, eventSave:ScheduleMockEvents) => {
+    await postAndPutEvent(eventSave, typeSave.color);
+    if(typeSave) {
+      await postAndPutTypeEvent(typeSave, eventSave);
+    }
+    updateSchedule();
+  }
 
   const removeEvent = (idEvent) => 
     dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: removeScheduleEvent(idEvent), dispatch});
-  
     useEffect(() => {
     if (event?.descriptionUrl) {
       markDown(event.descriptionUrl);
@@ -82,8 +125,8 @@ const PreViewEvent = (): React.ReactElement => {
           <PageHeader
             ghost={false}
             onBack={() => history.push({
-              pathname: "/formForMentor",
-              // search: `?id=${event.id}&draft=${!!isDraft}`,
+              pathname: role === 'mentor' ? "/formForMentor" : "/List",
+              search: role === 'mentor' ? `?id=${event.id}&draft=${!!isDraft}` : '',
             })}
             title={event.name}
             subTitle={<Tag color="blue">{event.type}</Tag>}
@@ -94,14 +137,11 @@ const PreViewEvent = (): React.ReactElement => {
               </Button>
               )
             ]}
-            extra={[
+            extra={role === 'mentor' && [
               <Button
                 type="primary"
                 key="3"
-                onClick={()=> {
-                  postAndPutEvent(event);
-                  postAndPutTypeEvent(typeEvent, event.color, event.type)
-                }}
+                onClick={()=> saveButton(typeEvent, event)}
               >Save
               </Button>,
               <Button
@@ -147,7 +187,7 @@ const PreViewEvent = (): React.ReactElement => {
               )}
               <Descriptions.Item label="Color">
                 <colorSC.DIV>
-                  <colorSC.COLOR colorSet={event.color}/>
+                  <colorSC.COLOR colorSet={isDraft ? event.color : typeEvent?.color}/>
                 </colorSC.DIV>
               </Descriptions.Item>
             </Descriptions>
@@ -189,11 +229,11 @@ const PreViewEvent = (): React.ReactElement => {
           {event.descriptionUrl && (
             <Layout className="layout">
               <Content style={{ padding: '0 50px' }}>
-                <SC.TITLE source={description} escapeHtml={false}/> 
+                <SC.MARKDOWN source={description} escapeHtml={false}/> 
               </Content>
             </Layout>
           )}
-          <Feedback visible={visible} setVisible={setVisible}/>
+          <Feedback visible={visible} setVisible={setVisible} event={event}/>
         </>
       )}
     </>

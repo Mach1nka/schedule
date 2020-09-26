@@ -2,19 +2,18 @@ import React from 'react';
 import { Form, Input, Button, Tag, Layout, Space  } from 'antd';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
+import ReactMarkdown from 'react-markdown';
 import { selectUserRole } from '../../../../selectors/selectors';
+
 
 const FeedbackBlockQuestion = ({name, form}): React.ReactElement => {
   const role = useSelector(selectUserRole);
-  const { Content } = Layout;
-  console.log(role);
-  
+  const { Content } = Layout;  
   return (
     <Form.List name={[name, `Question: ${name}`]} key={name}>
       {(fields, { add, remove }) => {
           return (
             <div>
-              {fields.length > 0 && (
               <Layout style={{ padding: '12px 12px', marginBottom: '12px' }}>
                 <Content>
                   {fields.map((field) => (
@@ -29,19 +28,25 @@ const FeedbackBlockQuestion = ({name, form}): React.ReactElement => {
                           name={[field.name]}
                           noStyle
                         >
-                          <span>{form.getFieldValue('feedback')[name][`Question: ${name}`][field.name]}</span>
+                          <ReactMarkdown 
+                            source={field.name === 0 ? 
+                            form.getFieldValue('feedback')[name][`Question: ${name}`][field.name] :
+                            form.getFieldValue('feedback')[name][`Question: ${name}`][field.name][0]} 
+                            escapeHtml={false}
+                          />
                         </Form.Item>
+                        {field.name !== 0 && (
                         <MinusCircleOutlined
                           onClick={() => {
-                      remove(field.name);
-                      }}
+                            remove(field.name);
+                          }}
                         />
+                        )}
                       </Space>
                     </Form.Item>
                 ))}
                 </Content>
               </Layout>
-            )}
               { fields.length > 0 && role === 'mentor' && (
               <>
                 <Form.Item
