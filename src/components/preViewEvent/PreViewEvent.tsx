@@ -67,8 +67,8 @@ const PreViewEvent = (): React.ReactElement => {
       console.log(error);
     }
   };
-  const postAndPutEvent = (data) => data.id ?
-    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: putScheduleEvent(data.id), data , dispatch}) :
+  const postAndPutEvent = (data:ScheduleMockEvents, color: string) => data.id ?
+    dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: putScheduleEvent(data.id), data:{...data, color} , dispatch}) :
     dispatchEntityHelper({currentEntity: ReduxStateEntities.SCHEDULE_EVENT_CURRENT, fetchFn: postScheduleEvent, data , dispatch});
 
   const updateSchedule = () => {
@@ -101,8 +101,8 @@ const PreViewEvent = (): React.ReactElement => {
         }, 
         dispatch}));
 
-  const saveButton = async(typeSave, eventSave) => {
-    await postAndPutEvent(eventSave);
+  const saveButton = async(typeSave:ScheduleMockTypesEvents, eventSave:ScheduleMockEvents) => {
+    await postAndPutEvent(eventSave, typeSave.color);
     if(typeSave) {
       await postAndPutTypeEvent(typeSave, eventSave);
     }
@@ -187,7 +187,7 @@ const PreViewEvent = (): React.ReactElement => {
               )}
               <Descriptions.Item label="Color">
                 <colorSC.DIV>
-                  <colorSC.COLOR colorSet={event.color}/>
+                  <colorSC.COLOR colorSet={isDraft ? event.color : typeEvent?.color}/>
                 </colorSC.DIV>
               </Descriptions.Item>
             </Descriptions>

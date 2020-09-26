@@ -33,8 +33,6 @@ const FormMy = (): React.ReactElement => {
   const event = isDraft ? eventDraft : eventState;
   const typeEvent = useSelector((state: RootState) => selectScheduleTypeEventByName(state, (event ? event?.type :  type)));
   
-  console.log(typeEvent);
-  
   const initialValues = {
     type: typeEvent?.name,
     name: event?.name,
@@ -53,7 +51,7 @@ const FormMy = (): React.ReactElement => {
       : [],
     place: event?.place ? event?.place : 'online',
     comment: event?.comment,
-    color: event?.color,
+    color: typeEvent?.color,
     descriptionUrl: event?.descriptionUrl,
     link: event?.link,
     description: event?.description,
