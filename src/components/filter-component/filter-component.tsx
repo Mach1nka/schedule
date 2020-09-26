@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FilterComponentSC as SC } from './sc';
-import { SettingOutlined } from '@ant-design/icons';
+import { SettingOutlined, FontColorsOutlined, BgColorsOutlined } from '@ant-design/icons';
+
+import { GithubPicker } from 'react-color';
+
+
+// import ColorPicker from '../colorpicker/colorpicker';
+
 
 const FilterComponent: React.FC<any> = (props) => {
   const {
@@ -9,12 +15,37 @@ const FilterComponent: React.FC<any> = (props) => {
     // arrColumns
   } = props;
 
-  // console.log(arrColumns);
+
+  const [colorHere, setColorHere] = useState(false);
+
+  const [needColorForTask, setNeedColorForTask] = useState(false);
+  const [needColorFor, setNeedColorFor] = useState(false);
+
+  const needColor = (typeTask, typeColor) => {
+    setNeedColorForTask(typeTask);
+    setNeedColorFor(typeColor);
+    if (!needColorForTask || !needColorFor || needColorFor !== typeColor || needColorForTask !== typeTask) {
+      console.log(typeColor, typeTask)
+      setColorHere(true);
+
+    } else {
+      
+      setColorHere(false);
+      setNeedColorForTask(false);
+      setNeedColorFor(false);
+    }
+  }
+
+  const handleChange = (e) => {
+    if (needColorFor && needColorForTask) {
+      localStorage.setItem(needColorForTask + needColorFor, e.hex);
+    }
+  }
 
   return (
     <div>
       <SC.BUTTON>
-        <SettingOutlined spin/>
+        <SettingOutlined />
       </SC.BUTTON>
       <SC.DIV>
         {/* {arrColumns.map((value) => {
@@ -42,8 +73,14 @@ const FilterComponent: React.FC<any> = (props) => {
             <div>
               <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value="Lecture" checked={!hiddenRowOrColumn.has("Lecture")}/>
               <label>Lecture</label>
+              <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor("Lecture", 'bg')} /> <FontColorsOutlined onClick={() => needColor("Lecture", 'text')} /> 
+              
             </div>
+            
         </SC.INPUT_BLOCK>
+        </div>
+        <div>
+          {colorHere ? <div><GithubPicker onChange={(e) => handleChange(e)}/></div> : null}
         </div>
      </SC.DIV>
     </div>

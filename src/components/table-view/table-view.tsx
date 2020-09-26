@@ -1,10 +1,13 @@
 import React, {useState} from 'react';
 import 'antd/dist/antd.css';
+import { Link } from 'react-router-dom';
 import {Table, Tag} from 'antd';
 import {ColumnsType} from 'antd/es/table';
 import {useSelector} from "react-redux";
 import {selectScheduleEventsData} from "../../selectors/selectors";
 import FilterComponent from '../filter-component/filter-component';
+import Item from 'antd/lib/list/Item';
+
 
 interface ScheduleEvents {
   settings: string,
@@ -76,9 +79,6 @@ const TableView: React.FC<any> = () => {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
-      // вот здесь нужна помощь,
-      // не могу айдишник передать в ссылку
-      render: (name, id) => <a href={String(id)}>{name}</a>
     },
     {
       title: 'Type',
@@ -87,12 +87,20 @@ const TableView: React.FC<any> = () => {
       render: tags => (
         <>
           {tags.map(tag => {
+
             let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'Task') {
-              color = 'tomato';
+            let textColor = '#000';
+            
+            if (localStorage.getItem(tag + 'bg')) {
+              color = localStorage.getItem(tag + 'bg');
             }
+
+            if (localStorage.getItem(tag + 'text')) {
+              textColor = localStorage.getItem(tag + 'text');
+            }
+
             return (
-              <Tag color={color} key={tag}>
+              <Tag color={color} key={tag} style={{color: textColor}}>
                 {tag.toUpperCase()}
               </Tag>
             );
@@ -117,13 +125,22 @@ const TableView: React.FC<any> = () => {
 
   if (listTasks.length > 0) {
     const timetable = listTasks.reduce((acc, it, i) => {
+
       const temp: ScheduleEvents = {
         settings: String(i + 1),
         key: String(i),
         startdate: String(formatDateFromUnix(listTasks[i].startDateTime, DateTimeFormat)),
         duedate: String(formatDateFromUnix(listTasks[i].endDateTime, DateTimeFormat)),
-        title: String(listTasks[i].name),
+        title: <Link
+                className="link-to-description-page"
+                to={{
+                pathname: "/event",
+                search: `?id=${it.id}`,
+          }}
+      >{it.name}
+      </Link>,
         status: [String(listTasks[i].type)],
+
       };
       acc.push(temp);
       return acc;
@@ -131,7 +148,11 @@ const TableView: React.FC<any> = () => {
 
     return (
       <>
-        <Table dataSource={timetable} columns={columns} bordered={true}/>
+        <div className="table">
+          <Table dataSource={timetable} columns={columns} bordered={true}/>
+        </div>
+        
+        
       </>
     );
   };
