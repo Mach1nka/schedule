@@ -107,41 +107,24 @@ const FilterComponent: React.FC<any> = (props) => {
               <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor("Test", 'bg')}/> <FontColorsOutlined onClick={() => needColor("Test", 'text')}/> 
               
             </div>
-
-
-
             {
-    typeTaskArr.map(item => {
-
-      return (
-<div>
-<input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value={item} checked={!hiddenRowOrColumn.has({item})} />
-<label>{item}</label>
-
-<BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor({type}, 'bg')} /> 
-
-<FontColorsOutlined onClick={() => needColor({item}, 'text')} />
-</div>
-      )
-    }
-  
-
-}
-            
-
-            
-              
-              
-              
-           
-
-
+              typeTaskArr.map(item => {
+                return (
+                  <div>
+                    <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value={item} checked={!hiddenRowOrColumn.has({item})}/>
+                    <label>{item}</label>
+                    <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor({type}, 'bg')}/> 
+                    <FontColorsOutlined onClick={() => needColor({item}, 'text')}/>
+                  </div>
+                );
+              })
+            }
           </SC.INPUT_BLOCK>
         </div>
         <div>
           {colorHere ? <div><GithubPicker onChange={(e) => handleChange(e)}/></div> : null}
         </div>
-     </SC.DIV>
+      </SC.DIV>
     </div>
   );
 };
