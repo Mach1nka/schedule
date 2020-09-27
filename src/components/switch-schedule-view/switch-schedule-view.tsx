@@ -1,24 +1,29 @@
 import React from 'react'
-import { ScheduleButton } from '../schedule-button/schedule-button'
-
-import { SwitchScheduleViewSC as SC} from "./sc";
+import { Tabs } from 'antd';
+import { useHistory } from 'react-router-dom'
 
 export const SwitchScheduleView: React.FC = () => {
+  const { TabPane } = Tabs;
+  const history = useHistory();
+
   const buttons = [
     {name:'List'},{name:'Table'},{name:'Calendar'}
   ];
 
+  const handleChange = (evt: string): void => {
+    history.push(evt);
+  }
+
   return (
-    <SC.UL>
-      {
-        buttons.map((button) => (
-          <SC.LI
-            key={button.name}
-          >
-            <ScheduleButton {...button}/>
-          </SC.LI>
-        ))
-      }
-    </SC.UL>
-  )
-}
+    <Tabs defaultActiveKey="1" onChange={handleChange}>
+    {buttons.map((button) => (
+        <TabPane
+          tab={button.name}
+          key={button.name}
+          ></TabPane>
+        ))}
+      )
+    </Tabs>
+  );
+};
+
