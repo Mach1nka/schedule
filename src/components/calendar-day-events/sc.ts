@@ -14,7 +14,7 @@ export const calendarDayEventsSC = {
     white-space: nowrap;
     outline: none;
     border: none;
-    width: 100%;
+    width: auto;
     cursor:pointer;
   `,
 }
