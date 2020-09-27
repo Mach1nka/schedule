@@ -31,11 +31,7 @@ const CalendarView: React.FC<CalendarViewProps> = () => {
     );
   };
 
-  return (
-    <Calendar
-      dateFullCellRender={getDateCellRender}
-    />
-  );
+  return <Calendar dateFullCellRender={getDateCellRender}/>
 };
 
 export default CalendarView;

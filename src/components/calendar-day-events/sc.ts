@@ -8,12 +8,13 @@ export const calendarDayEventsSC = {
   `,
   ITEM: styled.button`
     background-color: ${props => props.color};
-    color: ${cssColors.LIGHT()};
+    font-weight: 500;
     text-align: center;
     font-size: 0.9rem;
     white-space: nowrap;
     outline: none;
     border: none;
     width: 100%;
+    cursor:pointer;
   `,
 }

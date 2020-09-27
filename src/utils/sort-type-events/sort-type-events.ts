@@ -1,5 +1,5 @@
-import { typeEvents } from '../../data/typeEvents';
+import {ScheduleMockTypesEvents} from '../../data/typeEvents';
 
-const sortEventTypes = (value: string): string => typeEvents.find((el) => el.name === value)?.color;
+const sortEventTypes = (value: string, typeEvents:Array<ScheduleMockTypesEvents>): string | undefined => typeEvents.find((el) => el.name === value)?.color;
 
 export default sortEventTypes;

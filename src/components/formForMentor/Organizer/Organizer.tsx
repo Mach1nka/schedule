@@ -50,12 +50,12 @@ const Organizer = ({ form }): React.ReactElement => {
                         {
                           required: fields.length <= 1,
                           whitespace: true,
-                          message: "Please input passenger's name or delete this field.",
+                          message: "Please input passenger's name.",
                         },
                       ]}
                       noStyle
                     >
-                      <Input placeholder="passenger name" style={{ width: '60%' }}/>
+                      <Input placeholder="Organizer name" style={{ width: '60%' }}/>
                     </Form.Item>
                     <PlusCircleOutlined
                       className="dynamic-delete-button"

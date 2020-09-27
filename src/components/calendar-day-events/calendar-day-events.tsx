@@ -1,8 +1,10 @@
 import * as React from "react";
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 import {calendarDayEventsSC as SC} from "./sc";
 import {ScheduleMockEvents} from "../../data/schedule";
 import {ROUTE_PATHS as PATHS} from '../../data/paths';
+import {selectScheduleTypesEvents} from "../../selectors/selectors";
 import sortEventTypes from '../../utils/sort-type-events/sort-type-events';
 
 interface CalendarDayEventsProps {
@@ -10,6 +12,7 @@ interface CalendarDayEventsProps {
 }
 
 const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
+  const typeEvents = useSelector(selectScheduleTypesEvents) || [];
   const history = useHistory();
   const {
     events,
@@ -26,7 +29,7 @@ const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
     return (
       <SC.ITEM
         key={id}
-        color={sortEventTypes(type)}
+        color={sortEventTypes(type, typeEvents)}
         onClick={() => history.push({
           pathname: `/${PATHS.event}`,
           search: `?id=${id}`,

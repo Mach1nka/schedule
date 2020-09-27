@@ -31,27 +31,25 @@ const MainPage: React.FC = () => {
   useGettingEntity({currentEntity: ReduxStateEntities.SCHEDULE_TYPES_EVENTS, fetchFn: getScheduleTypesEvents});
   return (
     <Router>
-      <Route path='/'>
-        <Header/>
-        <main>
-          <SwitchScheduleView/>
-          <Route path={`/${PATHS.calendar}`}>
-            <CalendarView/>
-          </Route>
-          <Route path={`/${PATHS.list}`}>
-            <ScheduleList/>
-          </Route>
-          <Route path={`/${PATHS.table}`}>
-            {userRole === 'mentor' && <CreateNewTask/>}
-          </Route>  
-          <Route path={`/${PATHS.event}`}>
-            <PreViewEvent/>
-          </Route>
-          <Route path={`/${PATHS.formForMentor}`}>
-            <Form/>
-          </Route>
-        </main>
-      </Route>
+      <Header/>
+      <main>
+        <SwitchScheduleView/>
+        <Route path={`/${PATHS.calendar}`}>
+          <CalendarView/>
+        </Route>
+        <Route path={`/${PATHS.list}`}>
+          <ScheduleList/>
+        </Route>
+        <Route exact path={['/', `/${PATHS.table}`]}>
+          {userRole === 'mentor' && <CreateNewTask/>}
+        </Route>  
+        <Route path={`/${PATHS.event}`}>
+          <PreViewEvent/>
+        </Route>
+        <Route path={`/${PATHS.formForMentor}`}>
+          <Form/>
+        </Route>
+      </main>
     </Router>
   );
 };

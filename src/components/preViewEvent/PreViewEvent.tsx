@@ -107,6 +107,7 @@ const PreViewEvent = (): React.ReactElement => {
       await postAndPutTypeEvent(typeSave, eventSave);
     }
     updateSchedule();
+    history.push(`/${PATHS.calendar}`)
   }
 
   const removeEvent = (idEvent) => 
