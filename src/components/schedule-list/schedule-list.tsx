@@ -10,6 +10,7 @@ import {scheduleListSC as SC} from "./sc";
 import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
 import formatTime from '../../utils/get-time/format-time';
 import {DATE_FORMAT} from '../../data/typeEvents';
+import sortEventTypes from '../../utils/sort-type-events/sort-type-events';
 
 const ScheduleList: React.FC = () => {
   const { Panel } = Collapse;
@@ -39,7 +40,6 @@ const ScheduleList: React.FC = () => {
       <Button>Loading More</Button>
     </SC.BUTTON_CONTAINER>
     ) : null;
-
     return (
       <SC.ROW>
         <Col xs={24} lg={14}>
@@ -49,7 +49,7 @@ const ScheduleList: React.FC = () => {
             loadMore={loadMore}
             dataSource={getCurrentList(scheduleEvents, amountItemsInList)}
             renderItem={(item:ScheduleMockEvents) => (
-              <SC.LIST_ITEM color={item.color}>
+              <SC.LIST_ITEM color={sortEventTypes(item.type)}>
                 <Skeleton loading={initLoading} active>
                   <SC.LIST_ITEM_CONTAINER>
                     <h2>{item.name}</h2>

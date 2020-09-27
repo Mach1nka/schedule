@@ -24,7 +24,6 @@ import {ROUTE_PATHS as PATHS} from '../../data/paths';
 
 const PreViewEvent = (): React.ReactElement => {
   const { Link } = Typography;
-  const { Content } = Layout;
 
   const [description, setDescription] = useState('');
   const [visible, setVisible] = useState(false);
@@ -229,9 +228,9 @@ const PreViewEvent = (): React.ReactElement => {
           </PageHeader>
           {event.descriptionUrl && (
             <Layout className="layout">
-              <Content style={{ padding: '0 50px' }}>
+              <SC.CONTENT style={{ padding: '0 50px' }}>
                 <SC.MARKDOWN source={description} escapeHtml={false}/> 
-              </Content>
+              </SC.CONTENT>
             </Layout>
           )}
           <Feedback visible={visible} setVisible={setVisible} event={event}/>

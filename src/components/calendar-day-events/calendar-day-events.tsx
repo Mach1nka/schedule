@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import {calendarDayEventsSC as SC} from "./sc";
 import {ScheduleMockEvents} from "../../data/schedule";
 import {ROUTE_PATHS as PATHS} from '../../data/paths';
+import sortEventTypes from '../../utils/sort-type-events/sort-type-events';
 
 interface CalendarDayEventsProps {
   events: ScheduleMockEvents[];
@@ -18,13 +19,14 @@ const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
     const {
       id,
       name,
+      type,
       color,
     } = data;
 
     return (
       <SC.ITEM
         key={id}
-        color={color}
+        color={sortEventTypes(type)}
         onClick={() => history.push({
           pathname: `/${PATHS.event}`,
           search: `?id=${id}`,
