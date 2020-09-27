@@ -1,9 +1,9 @@
 import React from 'react'
-import { Tabs } from 'antd';
 import { useHistory } from 'react-router-dom'
+import { SwitchScheduleViewSC as SC } from './sc';
 
 export const SwitchScheduleView: React.FC = () => {
-  const { TabPane } = Tabs;
+  const { TabPane } = SC.TABS;
   const history = useHistory();
 
   const buttons = [
@@ -15,7 +15,7 @@ export const SwitchScheduleView: React.FC = () => {
   }
 
   return (
-    <Tabs defaultActiveKey="1" onChange={handleChange}>
+    <SC.TABS defaultActiveKey="1" onChange={handleChange}>
     {buttons.map((button) => (
         <TabPane
           tab={button.name}
@@ -23,7 +23,7 @@ export const SwitchScheduleView: React.FC = () => {
           ></TabPane>
         ))}
       )
-    </Tabs>
+    </SC.TABS>
   );
 };
 
