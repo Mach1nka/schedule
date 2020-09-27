@@ -6,12 +6,12 @@ import {MainDataContext} from '../../context/main-data-context';
 import useGettingEntity from '../../hooks/use-getting-entity/use-getting-entity';
 import {ReduxStateEntities} from '../../reducers/reducers-config';
 import {selectUserRole} from '../../selectors/selectors';
-
 import {ROUTE_PATHS as PATHS} from '../../data/paths';
 import { SwitchScheduleView } from '../switch-schedule-view/switch-schedule-view';
-import Header from '../header/header';
-import ScheduleList from '../schedule-list/schedule-list';
-import CalendarView from '../calendar-view/calendar-view';
+import Header from "../header/header";
+import ScheduleList from "../schedule-list/schedule-list";
+import TableView from '../table-view/table-view';
+import CalendarView from "../calendar-view/calendar-view";
 import SavingSchedule from '../saving-schedule/saving-schedule';
 import CreateNewTask from '../schedule-button/create-new-task-button/create-new-task-button';
 import PreViewEvent from '../preViewEvent/PreViewEvent';
@@ -42,6 +42,7 @@ const MainPage: React.FC = () => {
         </Route>
         <Route exact path={['/', `/${PATHS.table}`]}>
           {userRole === 'mentor' && <CreateNewTask/>}
+          <TableView />
         </Route>  
         <Route path={`/${PATHS.event}`}>
           <PreViewEvent/>

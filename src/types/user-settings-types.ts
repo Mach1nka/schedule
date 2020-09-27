@@ -10,4 +10,6 @@ export interface UserSettings {
   name?: string;
   timeZone?: number;
   role?: string;
+  colorsForIventType?: Record<string, {color?: string; backgroundColor?: string}>;
 }
+

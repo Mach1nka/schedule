@@ -29,7 +29,7 @@ const ScheduleList: React.FC = () => {
     const events = data.slice(0, amountElements);
     return events.sort(sortDateEvents);
   }, []);
-  
+
   const onLoadMore = () => {
     setCountItemsInList((prev) => prev + amountNewAdditionListItems);
   };
