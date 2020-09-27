@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 import {Table, Tag} from 'antd';
 import {ColumnsType} from 'antd/es/table';
 import {useSelector} from "react-redux";
-import {selectScheduleEventsData, selectUserTimeZone, selectScheduleTypesEvents } from "../../selectors/selectors";
+import {selectScheduleEventsData, selectUserTimeZone, selectScheduleTypesEvents, selectUserSet} from "../../selectors/selectors";
 import FilterComponent from '../filter-component/filter-component';
 import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone'
 import {DATE_FORMAT} from '../../data/typeEvents';
-import {MainDataContext} from "../../context/main-data-context";
+
 
 interface ScheduleEvents {
   settings: string,
@@ -24,10 +24,7 @@ const TableView: React.FC<any> = () => {
   const currentTimeZone = useSelector(selectUserTimeZone);
   const [hiddenRowOrColumn, setHiddenRowOrColumn] = useState<Set<string>>(new Set);
   const currentTypes = useSelector(selectScheduleTypesEvents);
-  const {
-    getUserSettings,
-    setUserSettings,
-  } = React.useContext(MainDataContext);
+  const setting = useSelector(selectUserSet);
   const handledFilter = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const {value} = event.currentTarget;
     const {checked} = event.currentTarget;
@@ -75,12 +72,12 @@ const TableView: React.FC<any> = () => {
       key: 'status',
       dataIndex: 'status',
       render: (tag) => { 
-        console.log(currentTypes);
+        // console.log(setting.[tag[0]].color);
         console.log(tag);
-        const textColor = 'black'
-        const { color } = currentTypes.find((type) => type.name === tag[0])
+        const textColor = setting.[tag[0]] ? setting.[tag[0]].backgroundColor : currentTypes.find((type) => type.name === tag[0]).color
+        const color = setting.[tag[0]] ? setting.[tag[0]].color : 'black'
         return (
-          <Tag color={color} key={tag} style={{color: textColor}}>
+          <Tag color={textColor} key={tag} style={{color: color}}>
             {tag}
           </Tag>
         );

@@ -46,3 +46,7 @@ export const selectUserRole = createSelector(
   selectUserSettingsState,
   (userSettingsState) => userSettingsState?.data?.userRole
 );
+export const selectUserSet = createSelector(
+  selectUserSettingsState,
+  (userSettingsState) => userSettingsState?.data?.colorsForIventType
+);

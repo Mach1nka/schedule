@@ -45,6 +45,7 @@ export const userSettingsReducerData = {
     data: {
       timeZone: "Europe/Minsk",
       userRole: "student",
+      colorsForIventType: '',
     },
   }
 };
