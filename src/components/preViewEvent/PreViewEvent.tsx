@@ -93,10 +93,7 @@ const PreViewEvent = (): React.ReactElement => {
         currentEntity: ReduxStateEntities.SCHEDULE_TYPE_EVENT_CURRENT, 
         fetchFn: putScheduleTypeEvent(data.id), 
         data:{
-          name: eventData.type,
-          crossCheck: JSON.stringify(!!eventData.startDateCrossCheck),
-          descriptionUrl: JSON.stringify(!!eventData.descriptionUrl),
-          link: JSON.stringify(!!eventData.link),
+          ...data,
           color: eventData.color,
         }, 
         dispatch}));
