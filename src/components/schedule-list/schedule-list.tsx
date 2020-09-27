@@ -3,7 +3,7 @@ import {List, Button, Skeleton, Collapse, Col, } from 'antd';
 import { Link } from 'react-router-dom';
 import {useSelector} from "react-redux";
 import {ScheduleMockEvents} from '../../data/schedule';
-import {selectScheduleEventsData, selectUserTimeZone, selectScheduleTypesEvents} from "../../selectors/selectors";
+import {selectScheduleEventsData, selectUserTimeZone, selectScheduleTypesEvents, selectUserSet} from "../../selectors/selectors";
 
 import {ROUTE_PATHS as PATHS} from '../../data/paths';
 import {scheduleListSC as SC} from "./sc";
@@ -21,6 +21,7 @@ const ScheduleList: React.FC = () => {
   const typeEvents = useSelector(selectScheduleTypesEvents) || [];
   const [initLoading, setInitLoading] = useState<boolean>(true);
   const [amountItemsInList, setCountItemsInList] = useState(defaultCountItemsInList);
+  const setting = useSelector(selectUserSet);
 
   const getCurrentList = useCallback((data, amountElements:number) => {
     function sortDateEvents(a, b) {
@@ -54,7 +55,7 @@ const ScheduleList: React.FC = () => {
             loadMore={loadMore}
             dataSource={getCurrentList(scheduleEvents, amountItemsInList)}
             renderItem={(item:ScheduleMockEvents) => (
-              <SC.LIST_ITEM color={sortEventTypes(item.type, typeEvents)}>
+              <SC.LIST_ITEM color={setting.[item.type] ? setting.[item.type].backgroundColor : sortEventTypes(item.type, typeEvents)}>
                 <Skeleton loading={initLoading} active>
                   <SC.LIST_ITEM_CONTAINER>
                     <h2>{item.name}</h2>

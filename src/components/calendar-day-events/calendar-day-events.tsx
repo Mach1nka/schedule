@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import {calendarDayEventsSC as SC} from "./sc";
 import {ScheduleMockEvents} from "../../data/schedule";
 import {ROUTE_PATHS as PATHS} from '../../data/paths';
-import {selectScheduleTypesEvents} from "../../selectors/selectors";
+import {selectScheduleTypesEvents, selectUserSet} from "../../selectors/selectors";
 import sortEventTypes from '../../utils/sort-type-events/sort-type-events';
 
 interface CalendarDayEventsProps {
@@ -13,6 +13,7 @@ interface CalendarDayEventsProps {
 
 const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
   const typeEvents = useSelector(selectScheduleTypesEvents) || [];
+  const setting = useSelector(selectUserSet);
   const history = useHistory();
   const {
     events,
@@ -23,13 +24,12 @@ const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
       id,
       name,
       type,
-      color,
     } = data;
 
     return (
       <SC.ITEM
         key={id}
-        color={sortEventTypes(type, typeEvents)}
+        color={setting.[type] ? setting.[type].backgroundColor : sortEventTypes(type, typeEvents)}
         onClick={() => history.push({
           pathname: `/${PATHS.event}`,
           search: `?id=${id}`,
