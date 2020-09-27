@@ -5,16 +5,20 @@ import { SettingOutlined, FontColorsOutlined, BgColorsOutlined } from '@ant-desi
 import {ReduxStateEntities} from "../../reducers/reducers-config";
 import {dispatchEntityHelper} from "../../helpers/dispatch-entity-helper/dispatch-entity-helper";
 
+import {selectUserSettingsState} from "../../selectors/selectors";
+
 import {useDispatch, useSelector} from "react-redux";
 
 import { GithubPicker } from 'react-color';
 
-import {selectScheduleEventsData} from "../../selectors/selectors";
+import {selectScheduleEventsData, selectUserRole} from "../../selectors/selectors";
 
 import {MainDataContext} from "../../context/main-data-context";
 
 const FilterComponent: React.FC<any> = (props) => {
   const dispatch = useDispatch();
+
+  const userSettingsStateData = useSelector(selectUserSettingsState)?.data;
 
   const scheduleEvents = useSelector(selectScheduleEventsData) || [];
 
@@ -29,39 +33,36 @@ const FilterComponent: React.FC<any> = (props) => {
 
   const typeTaskArr = Array.from(typeTaskSet);
 
-
   const {
     onChange,
     hiddenRowOrColumn,
     // arrColumns
   } = props;
 
-
   const [colorHere, setColorHere] = useState(false);
 
-  const [needColorForTask, setNeedColorForTask] = useState(false);
+  const [needColorForTypeTask, setNeedColorForTypeTask] = useState(false);
   const [needColorFor, setNeedColorFor] = useState(false);
 
   const needColor = (typeTask, typeColor) => {
     
-    console.log('typeTask это ' + typeTask + ' а цвет это ' + typeColor)
-    setNeedColorForTask(typeTask);
+    setNeedColorForTypeTask(typeTask);
     setNeedColorFor(typeColor);
-    if (!needColorForTask || !needColorFor || needColorFor !== typeColor || needColorForTask !== typeTask) {
+    if (!needColorForTypeTask || !needColorFor || needColorFor !== typeColor || needColorForTypeTask !== typeTask) {
       
       setColorHere(true);
 
     } else {
       
       setColorHere(false);
-      setNeedColorForTask(false);
+      setNeedColorForTypeTask(false);
       setNeedColorFor(false);
     }
   }
 
   // const handleChange = (e) => {
-  //   if (needColorFor && needColorForTask) {
-  //     localStorage.setItem(needColorForTask + needColorFor, e.hex);
+  //   if (needColorFor && needColorForTypeTask) {
+  //     localStorage.setItem(needColorForTypeTask + needColorFor, e.hex);
   //   }
   // }
 
@@ -71,21 +72,41 @@ const FilterComponent: React.FC<any> = (props) => {
   } = React.useContext(MainDataContext);
 
   const handleChange = (evt: SelectValue) => {
-    if (needColorFor && needColorForTask) {
+    
+    if (needColorFor === 'text') {
+      
       const temp = {
+        ...userSettingsStateData,
         colorsForIventType: {
-          [needColorForTask]: {
-            color: evt.hex, 
+          ...userSettingsStateData?.colorsForIventType,
+          [needColorForTypeTask]: {
+            ...(userSettingsStateData?.colorsForIventType && needColorForTypeTask in userSettingsStateData?.colorsForIventType ? userSettingsStateData?.colorsForIventType[needColorForTypeTask] : {}),
+            color: evt.hex
+          }
+        }
+      };
+      console.log(temp);
+      setUserSettings({...temp})
+      .then(() => dispatchEntityHelper({currentEntity: ReduxStateEntities.USER_SETTINGS, fetchFn: getUserSettings, dispatch}));
+    }
+
+
+    if (needColorFor === 'bg') {
+      
+      const temp = {
+        ...userSettingsStateData,
+        colorsForIventType: {
+          ...userSettingsStateData?.colorsForIventType,
+          [needColorForTypeTask]: {
+            ...(userSettingsStateData?.colorsForIventType && needColorForTypeTask in userSettingsStateData?.colorsForIventType ? userSettingsStateData?.colorsForIventType[needColorForTypeTask] : {}),
             backgroundColor: evt.hex
           }
         }
-      }
-      console.log(temp);
-      setUserSettings({temp})
+      };
+      setUserSettings({...temp})
       .then(() => dispatchEntityHelper({currentEntity: ReduxStateEntities.USER_SETTINGS, fetchFn: getUserSettings, dispatch}));
     }
   };
-
 
 
   return (
@@ -122,7 +143,9 @@ const FilterComponent: React.FC<any> = (props) => {
                   <div key={item}>
                     <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value={item} checked={!hiddenRowOrColumn.has({item})}/>
                     <label>{item}</label>
-                    <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor(item, 'bg')}/> 
+
+                    <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor(item, 'bg')}/>
+
                     <FontColorsOutlined onClick={() => needColor(item, 'text')}/>
                   </div>
                 );
