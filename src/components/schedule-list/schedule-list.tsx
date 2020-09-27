@@ -23,7 +23,11 @@ const ScheduleList: React.FC = () => {
   const [amountItemsInList, setCountItemsInList] = useState(defaultCountItemsInList);
 
   const getCurrentList = useCallback((data, amountElements:number) => {
-    return data.slice(0, amountElements);
+    function sortDateEvents(a, b) {
+      return Number(a.startDateTime - b.startDateTime);
+    }
+    const events = data.slice(0, amountElements);
+    return events.sort(sortDateEvents);
   }, []);
   
   const onLoadMore = () => {
