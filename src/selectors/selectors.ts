@@ -6,7 +6,7 @@ const getId = (_state: RootState, id: string | number) => id;
 const getName = (_state: RootState, name: string | number) => name;
 
 const selectScheduleEventsState = (state: RootState) => state?.scheduleEventsState;
-const selectUserSettingsState = (state: RootState) => state?.userSettingsState;
+export const selectUserSettingsState = (state: RootState) => state?.userSettingsState;
 const selectScheduleEventDraftState = (state: RootState) => state?.scheduleEventDraftState;
 const selectScheduleTypeEventState = (state: RootState) => state?.scheduleTypesEventsState;
 
