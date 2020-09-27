@@ -5,7 +5,7 @@ import {RootState} from "../store";
 const getId = (_state: RootState, id: string | number) => id;
 
 const selectScheduleEventsState = (state: RootState) => state?.scheduleEventsState;
-const selectUserSettingsState = (state: RootState) => state?.userSettingsState;
+export const selectUserSettingsState = (state: RootState) => state?.userSettingsState;
 
 export const selectScheduleEventsData = createSelector(
   selectScheduleEventsState,
