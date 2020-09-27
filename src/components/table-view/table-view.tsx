@@ -72,8 +72,6 @@ const TableView: React.FC<any> = () => {
       key: 'status',
       dataIndex: 'status',
       render: (tag) => { 
-        // console.log(setting.[tag[0]].color);
-        console.log(tag);
         const textColor = setting.[tag[0]] ? setting.[tag[0]].backgroundColor : currentTypes.find((type) => type.name === tag[0]).color
         const color = setting.[tag[0]] ? setting.[tag[0]].color : 'black'
         return (

@@ -36,13 +36,16 @@ const MainPage: React.FC = () => {
         <SwitchScheduleView/>
         <Route path={`/${PATHS.calendar}`}>
           <CalendarView/>
+          <SavingSchedule name='.ant-picker-calendar'/>
         </Route>
         <Route path={`/${PATHS.list}`}>
           <ScheduleList/>
+          <SavingSchedule name='.sc__ROW-gBRphs'/>
         </Route>
         <Route exact path={['/', `/${PATHS.table}`]}>
           {userRole === 'mentor' && <CreateNewTask/>}
           <TableView />
+          <SavingSchedule name='.ant-table'/>
         </Route>  
         <Route path={`/${PATHS.event}`}>
           <PreViewEvent/>
