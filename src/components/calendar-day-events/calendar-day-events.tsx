@@ -1,33 +1,37 @@
 import * as React from "react";
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 import {calendarDayEventsSC as SC} from "./sc";
 import {ScheduleMockEvents} from "../../data/schedule";
+import {ROUTE_PATHS as PATHS} from '../../data/paths';
+import {selectScheduleTypesEvents} from "../../selectors/selectors";
+import sortEventTypes from '../../utils/sort-type-events/sort-type-events';
 
 interface CalendarDayEventsProps {
   events: ScheduleMockEvents[];
 }
 
 const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
+  const typeEvents = useSelector(selectScheduleTypesEvents) || [];
   const history = useHistory();
   const {
     events,
-  } = props;
+  } = props
 
   const makeListItem = (data) => {
     const {
       id,
       name,
+      type,
       color,
     } = data;
 
-    const colorMock = 'blue';
-
     return (
       <SC.ITEM
-        style={{backgroundColor: colorMock}}
         key={id}
-        onClick={()=>history.push({
-          pathname: "/event",
+        color={sortEventTypes(type, typeEvents)}
+        onClick={() => history.push({
+          pathname: `/${PATHS.event}`,
           search: `?id=${id}`,
         })}
       >

@@ -3,30 +3,24 @@ import {List, Button, Skeleton, Collapse, Col, } from 'antd';
 import { Link } from 'react-router-dom';
 import {useSelector} from "react-redux";
 import {ScheduleMockEvents} from '../../data/schedule';
-import {selectScheduleEventsData} from "../../selectors/selectors";
-import {scheduleListSC as SC} from "./sc";
+import {selectScheduleEventsData, selectUserTimeZone, selectScheduleTypesEvents} from "../../selectors/selectors";
 
+import {ROUTE_PATHS as PATHS} from '../../data/paths';
+import {scheduleListSC as SC} from "./sc";
+import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
+import formatTime from '../../utils/get-time/format-time';
+import {DATE_FORMAT} from '../../data/typeEvents';
+import sortEventTypes from '../../utils/sort-type-events/sort-type-events';
 
 const ScheduleList: React.FC = () => {
   const { Panel } = Collapse;
-  const defaultCountItemsInList = 2;
-  const amountNewAdditionListItems = 2;
+  const defaultCountItemsInList = 10;
+  const amountNewAdditionListItems = 10;
+  const currentTimeZone = useSelector(selectUserTimeZone);
   const scheduleEvents = useSelector(selectScheduleEventsData) || [];
+  const typeEvents = useSelector(selectScheduleTypesEvents) || [];
   const [initLoading, setInitLoading] = useState<boolean>(true);
   const [amountItemsInList, setCountItemsInList] = useState(defaultCountItemsInList);
-
-  const DateTimeFormat = {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric"
-  };
-
-  const formatDateFromUnix = (unixDate, settings) => {
-    return new Date(unixDate * 1000).toLocaleDateString('ru', settings);
-  };
 
   const getCurrentList = useCallback((data, amountElements:number) => {
     return data.slice(0, amountElements);
@@ -47,7 +41,6 @@ const ScheduleList: React.FC = () => {
       <Button>Loading More</Button>
     </SC.BUTTON_CONTAINER>
     ) : null;
-
     return (
       <SC.ROW>
         <Col xs={24} lg={14}>
@@ -57,13 +50,21 @@ const ScheduleList: React.FC = () => {
             loadMore={loadMore}
             dataSource={getCurrentList(scheduleEvents, amountItemsInList)}
             renderItem={(item:ScheduleMockEvents) => (
-              <SC.LIST_ITEM>
+              <SC.LIST_ITEM color={sortEventTypes(item.type, typeEvents)}>
                 <Skeleton loading={initLoading} active>
                   <SC.LIST_ITEM_CONTAINER>
                     <h2>{item.name}</h2>
                     <SC.DATE_TIME_CONTAINER>
-                      <span className="start">{`Start: ${formatDateFromUnix(item.startDateTime, DateTimeFormat)}`}</span>
-                      <span className="deadline">{`Deadline: ${formatDateFromUnix(item.endDateTime, DateTimeFormat)}`}</span>
+                      <div>
+                        <p className="start">{`Start: ${formatTime(getTimeWithCorrectTimeZone(item.startDateTime, currentTimeZone), DATE_FORMAT)}`}</p>
+                        <p className="deadline">{`Deadline: ${formatTime(getTimeWithCorrectTimeZone(item.endDateTime, currentTimeZone), DATE_FORMAT)}`}</p>
+                      </div>
+                      {item.startDateCrossCheck && item.endDateCrossCheck ? (
+                        <div>
+                          <p className="start">{`Start Cross-Check: ${formatTime(getTimeWithCorrectTimeZone(item.startDateCrossCheck, currentTimeZone), DATE_FORMAT)}`}</p>
+                          <p className="deadline">{`Deadline Cross-Check: ${formatTime(getTimeWithCorrectTimeZone(item.endDateCrossCheck, currentTimeZone), DATE_FORMAT)}`}</p>
+                        </div>
+                     ) : undefined}
                     </SC.DATE_TIME_CONTAINER>
                     <Collapse>
                       <Panel header="More information" key={item.id}>
@@ -75,7 +76,7 @@ const ScheduleList: React.FC = () => {
                           <Link
                             className="link-to-description-page"
                             to={{
-                                pathname: "/event",
+                                pathname: `/${PATHS.event}`,
                                 search: `?id=${item.id}`,
                               }}
                           >Link

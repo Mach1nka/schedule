@@ -25,7 +25,6 @@ const Color = ({form}): React.ReactElement => {
   return (
     <>
       <Form.Item label="Color">
-        {console.log(form.getFieldValue('color'))        }
         <Space>
           <SC.DIV>
             <Form.Item name="color" noStyle rules={[{ required: true }]}>

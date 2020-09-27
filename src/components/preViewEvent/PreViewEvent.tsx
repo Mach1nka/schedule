@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Layout, PageHeader, Button, Descriptions, Tag, Space, Avatar, Typography} from 'antd';
-import moment from 'moment';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import screenUrl from '../formForMentor/utils/screenUrl';
@@ -12,18 +11,19 @@ import { selectUserTimeZone,
   selectScheduleTypeEventByName,
   selectUserRole
  } from '../../selectors/selectors';
-import zone from '../formForMentor/utils/zone';
+ import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
+ import formatTime from '../../utils/get-time/format-time';
 import Feedback from './Feedback/Feedback';
 import SC from './sc';
 import colorSC from '../formForMentor/Color/sc';
 import { RootState } from '../../store';
 import {ReduxStateEntities} from "../../reducers/reducers-config";
-import {ScheduleMockTypesEvents} from "../../data/typeEvents";
+import {ScheduleMockTypesEvents, DATE_FORMAT} from "../../data/typeEvents";
 import {ScheduleMockEvents} from "../../data/schedule";
+import {ROUTE_PATHS as PATHS} from '../../data/paths';
 
 const PreViewEvent = (): React.ReactElement => {
   const { Link } = Typography;
-  const { Content } = Layout;
 
   const [description, setDescription] = useState('');
   const [visible, setVisible] = useState(false);
@@ -107,6 +107,7 @@ const PreViewEvent = (): React.ReactElement => {
       await postAndPutTypeEvent(typeSave, eventSave);
     }
     updateSchedule();
+    history.push(`/${PATHS.calendar}`)
   }
 
   const removeEvent = (idEvent) => 
@@ -125,7 +126,7 @@ const PreViewEvent = (): React.ReactElement => {
           <PageHeader
             ghost={false}
             onBack={() => history.push({
-              pathname: role === 'mentor' ? "/formForMentor" : "/List",
+              pathname: role === 'mentor' ? `/${PATHS.formForMentor}` : `/${PATHS.list}`,
               search: role === 'mentor' ? `?id=${event.id}&draft=${!!isDraft}` : '',
             })}
             title={event.name}
@@ -147,7 +148,7 @@ const PreViewEvent = (): React.ReactElement => {
               <Button
                 key="2"
                 onClick={()=>history.push({
-                pathname: "/formForMentor",
+                pathname: `/${PATHS.formForMentor}`, 
                 search: `?id=${event.id}&draft=${!!isDraft}`,
               })}
               >Edit
@@ -193,9 +194,7 @@ const PreViewEvent = (): React.ReactElement => {
             </Descriptions>
             <Descriptions size="small" column={1}>
               <Descriptions.Item label={<Tag color="blue">Start Event</Tag>}>
-                {moment(event.startDateTime, 'X')
-                  .utcOffset(zone(currentTimeZone), false)
-                  .format('YYYY-MM-DD HH:mm')}
+                {formatTime(getTimeWithCorrectTimeZone(event.startDateTime, currentTimeZone), DATE_FORMAT)}
               </Descriptions.Item>
               <Descriptions.Item
                 label={(
@@ -204,21 +203,15 @@ const PreViewEvent = (): React.ReactElement => {
                   </Tag>
                 )}
               >
-                {moment(event.endDateTime, 'X')
-                  .utcOffset(zone(currentTimeZone), false)
-                  .format('YYYY-MM-DD HH:mm')}
+                {formatTime(getTimeWithCorrectTimeZone(event.endDateTime, currentTimeZone), DATE_FORMAT)}
               </Descriptions.Item>
               {event.startDateCrossCheck && (
                 <>
                   <Descriptions.Item label={<Tag color="blue">Start CrossCheck</Tag>}>
-                    {moment(event.startDateCrossCheck, 'X')
-                      .utcOffset(zone(currentTimeZone), false)
-                      .format('YYYY-MM-DD HH:mm')}
+                    {formatTime(getTimeWithCorrectTimeZone(event.startDateCrossCheck, currentTimeZone), DATE_FORMAT)}
                   </Descriptions.Item>
                   <Descriptions.Item label={<Tag color="red">Deadline CrossCheck</Tag>}>
-                    {moment(event.endDateCrossCheck, 'X')
-                      .utcOffset(zone(currentTimeZone), false)
-                      .format('YYYY-MM-DD HH:mm')}
+                    {formatTime(getTimeWithCorrectTimeZone(event.endDateCrossCheck, currentTimeZone), DATE_FORMAT)}
                   </Descriptions.Item>
                 </>
               )}
@@ -236,9 +229,9 @@ const PreViewEvent = (): React.ReactElement => {
           </PageHeader>
           {event.descriptionUrl && (
             <Layout className="layout">
-              <Content style={{ padding: '0 50px' }}>
+              <SC.CONTENT style={{ padding: '0 50px' }}>
                 <SC.MARKDOWN source={description} escapeHtml={false}/> 
-              </Content>
+              </SC.CONTENT>
             </Layout>
           )}
           <Feedback visible={visible} setVisible={setVisible} event={event}/>

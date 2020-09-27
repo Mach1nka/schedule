@@ -32,6 +32,11 @@ export const selectScheduleTypeEventByName = createSelector(
   (scheduleTypesEventsState, name) => scheduleTypesEventsState?.data?.find((type) => type.name === name)
 );
 
+export const selectScheduleTypesEvents = createSelector(
+  selectScheduleTypeEventState,
+  (scheduleTypesEventsState) => scheduleTypesEventsState?.data
+);
+
 export const selectUserTimeZone = createSelector(
   selectUserSettingsState,
   (userSettingsState) => userSettingsState?.data?.timeZone

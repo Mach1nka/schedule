@@ -7,6 +7,7 @@ import useGettingEntity from '../../hooks/use-getting-entity/use-getting-entity'
 import {ReduxStateEntities} from '../../reducers/reducers-config';
 import {selectUserRole} from '../../selectors/selectors';
 
+import {ROUTE_PATHS as PATHS} from '../../data/paths';
 import { SwitchScheduleView } from '../switch-schedule-view/switch-schedule-view';
 import Header from '../header/header';
 import ScheduleList from '../schedule-list/schedule-list';
@@ -30,27 +31,25 @@ const MainPage: React.FC = () => {
   useGettingEntity({currentEntity: ReduxStateEntities.SCHEDULE_TYPES_EVENTS, fetchFn: getScheduleTypesEvents});
   return (
     <Router>
-      <Route path='/'>
-        <Header/>
-        <main>
-          <SwitchScheduleView/>
-          <Route path='/Calendar'>
-            <CalendarView/>
-          </Route>
-          <Route path='/List'>
-            <ScheduleList/>
-          </Route>
-          <Route path='/Table'>
-            {userRole === 'mentor' && <CreateNewTask/>}
-          </Route>  
-          <Route path='/event'>
-            <PreViewEvent/>
-          </Route>
-          <Route path='/formForMentor'>
-            <Form/>
-          </Route>
-        </main>
-      </Route>
+      <Header/>
+      <main>
+        <SwitchScheduleView/>
+        <Route path={`/${PATHS.calendar}`}>
+          <CalendarView/>
+        </Route>
+        <Route path={`/${PATHS.list}`}>
+          <ScheduleList/>
+        </Route>
+        <Route exact path={['/', `/${PATHS.table}`]}>
+          {userRole === 'mentor' && <CreateNewTask/>}
+        </Route>  
+        <Route path={`/${PATHS.event}`}>
+          <PreViewEvent/>
+        </Route>
+        <Route path={`/${PATHS.formForMentor}`}>
+          <Form/>
+        </Route>
+      </main>
     </Router>
   );
 };

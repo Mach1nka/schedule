@@ -34,7 +34,6 @@ export const getAsyncThunk = (getAsyncThunkProps: GetAsyncThunkProps) => {
     async (fetchProps, thunkAPI) => {
       const {fetchFn, data} = fetchProps;
       const response = await fetchFn(data);
-      console.log(response);
 
       if (response.status !== 200) {
         thunkAPI.dispatch({type: rtkSlices.system.actions.errorsAdd.toString(), payload: response})
