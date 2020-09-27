@@ -14,8 +14,8 @@ import sortEventTypes from '../../utils/sort-type-events/sort-type-events';
 
 const ScheduleList: React.FC = () => {
   const { Panel } = Collapse;
-  const defaultCountItemsInList = 2;
-  const amountNewAdditionListItems = 2;
+  const defaultCountItemsInList = 10;
+  const amountNewAdditionListItems = 10;
   const currentTimeZone = useSelector(selectUserTimeZone);
   const scheduleEvents = useSelector(selectScheduleEventsData) || [];
   const typeEvents = useSelector(selectScheduleTypesEvents) || [];

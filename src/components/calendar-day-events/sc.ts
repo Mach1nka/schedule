@@ -15,6 +15,7 @@ export const calendarDayEventsSC = {
     outline: none;
     border: none;
     width: auto;
+    min-width: 100%;
     cursor:pointer;
   `,
 }
