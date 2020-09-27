@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "target": "ESNEXT",
+    "module": "ESNext",
+    "lib": ["ESNext", "dom", "dom.iterable"],
+    "allowJs": true,
+    "jsx": "react",
+    "sourceMap": true,
+    "outDir": "./build/dist",
+    "rootDir": "./src",
+    "removeComments": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "pretty": true,
+
+    "strict": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+
+    "noImplicitReturns": true,
+
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+
+    "inlineSourceMap": false,
+    "inlineSources": false
+  },
+  "exclude": [
+    ".idea",
+    "node_modules",
+    "build",
+    "prod",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest",
+    "src/setupTests.ts",
+    "src/**/*.spec.ts",
+    "webpack.config.*"
+  ]
+}
