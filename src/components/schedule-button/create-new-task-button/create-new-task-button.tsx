@@ -31,7 +31,7 @@ const CreateNewTask: React.FC = () => {
     );
 
     return (
-      <Dropdown overlay={menu} trigger={['click']}>
+      <Dropdown overlay={menu} trigger={['click']} style={marginBottom: '5px'}>
         <Button type="primary">
           <PlusOutlined/> New Task 
         </Button>
