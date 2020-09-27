@@ -23,8 +23,6 @@ const FilterComponent: React.FC<any> = (props) => {
 
   const typeTaskArr = Array.from(typeTaskSet);
 
-  console.log(typeTaskArr)
-
 
   const {
     onChange,
@@ -39,10 +37,12 @@ const FilterComponent: React.FC<any> = (props) => {
   const [needColorFor, setNeedColorFor] = useState(false);
 
   const needColor = (typeTask, typeColor) => {
+    
+    console.log('typeTask это ' + typeTask + ' а цвет это ' + typeColor)
     setNeedColorForTask(typeTask);
     setNeedColorFor(typeColor);
     if (!needColorForTask || !needColorFor || needColorFor !== typeColor || needColorForTask !== typeTask) {
-      console.log(typeColor, typeTask)
+      
       setColorHere(true);
 
     } else {
@@ -89,32 +89,14 @@ const FilterComponent: React.FC<any> = (props) => {
         <div>
           <SC.P><strong>Event</strong></SC.P>
           <SC.INPUT_BLOCK>
-            <div>
-              <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value="Lecture" checked={!hiddenRowOrColumn.has("Lecture")}/>
-              <label>Lecture</label>
-              <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor("Lecture", 'bg')} /> <FontColorsOutlined onClick={() => needColor("Lecture", 'text')} /> 
-              
-            </div>
-            <div>
-              <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value="Task" checked={!hiddenRowOrColumn.has("Task")}/>
-              <label>Task</label>
-              <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor("Task", 'bg')}/> <FontColorsOutlined onClick={() => needColor("Task", 'text')}/> 
-              
-            </div>
-            <div>
-              <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value="Test" checked={!hiddenRowOrColumn.has("Test")}/>
-              <label>Test</label>
-              <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor("Test", 'bg')}/> <FontColorsOutlined onClick={() => needColor("Test", 'text')}/> 
-              
-            </div>
             {
               typeTaskArr.map(item => {
                 return (
-                  <div>
+                  <div key={item}>
                     <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value={item} checked={!hiddenRowOrColumn.has({item})}/>
                     <label>{item}</label>
-                    <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor({type}, 'bg')}/> 
-                    <FontColorsOutlined onClick={() => needColor({item}, 'text')}/>
+                    <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor(item, 'bg')}/> 
+                    <FontColorsOutlined onClick={() => needColor(item, 'text')}/>
                   </div>
                 );
               })
