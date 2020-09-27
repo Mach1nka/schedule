@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import { FilterComponentSC as SC } from './sc';
 import { SettingOutlined, FontColorsOutlined, BgColorsOutlined } from '@ant-design/icons';
 
+import {ReduxStateEntities} from "../../reducers/reducers-config";
+import {dispatchEntityHelper} from "../../helpers/dispatch-entity-helper/dispatch-entity-helper";
+
+import {useDispatch, useSelector} from "react-redux";
+
 import { GithubPicker } from 'react-color';
 
-import {useSelector} from "react-redux";
 import {selectScheduleEventsData} from "../../selectors/selectors";
 
+import {MainDataContext} from "../../context/main-data-context";
 
 const FilterComponent: React.FC<any> = (props) => {
+  const dispatch = useDispatch();
 
   const scheduleEvents = useSelector(selectScheduleEventsData) || [];
 
@@ -53,11 +59,32 @@ const FilterComponent: React.FC<any> = (props) => {
     }
   }
 
-  const handleChange = (e) => {
+  // const handleChange = (e) => {
+  //   if (needColorFor && needColorForTask) {
+  //     localStorage.setItem(needColorForTask + needColorFor, e.hex);
+  //   }
+  // }
+
+  const {
+    getUserSettings,
+    setUserSettings,
+  } = React.useContext(MainDataContext);
+
+  const handleChange = (evt: SelectValue) => {
     if (needColorFor && needColorForTask) {
-      localStorage.setItem(needColorForTask + needColorFor, e.hex);
+      const temp = {
+        colorsForIventType: {
+          [needColorForTask]: {
+            color: evt.hex, 
+            backgroundColor: evt.hex
+          }
+        }
+      }
+      console.log(temp);
+      setUserSettings({temp})
+      .then(() => dispatchEntityHelper({currentEntity: ReduxStateEntities.USER_SETTINGS, fetchFn: getUserSettings, dispatch}));
     }
-  }
+  };
 
 
 
@@ -104,7 +131,7 @@ const FilterComponent: React.FC<any> = (props) => {
           </SC.INPUT_BLOCK>
         </div>
         <div>
-          {colorHere ? <div><GithubPicker onChange={(e) => handleChange(e)}/></div> : null}
+          {colorHere ? <div><GithubPicker onChange={handleChange}/></div> : null}
         </div>
       </SC.DIV>
     </div>
@@ -112,6 +139,3 @@ const FilterComponent: React.FC<any> = (props) => {
 };
 
 export default FilterComponent;
-
-
-
