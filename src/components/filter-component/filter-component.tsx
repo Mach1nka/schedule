@@ -4,11 +4,28 @@ import { SettingOutlined, FontColorsOutlined, BgColorsOutlined } from '@ant-desi
 
 import { GithubPicker } from 'react-color';
 
-
-// import ColorPicker from '../colorpicker/colorpicker';
+import {useSelector} from "react-redux";
+import {selectScheduleEventsData} from "../../selectors/selectors";
 
 
 const FilterComponent: React.FC<any> = (props) => {
+
+  const scheduleEvents = useSelector(selectScheduleEventsData) || [];
+
+  const typeTaskSet = new Set();
+
+  for (let i = 0; i < scheduleEvents.length; i+=1) {
+    if (scheduleEvents[i].type !== undefined) {
+      typeTaskSet.add(scheduleEvents[i].type);
+    }
+    
+  }
+
+  const typeTaskArr = Array.from(typeTaskSet);
+
+  console.log(typeTaskArr)
+
+
   const {
     onChange,
     hiddenRowOrColumn,
@@ -41,6 +58,8 @@ const FilterComponent: React.FC<any> = (props) => {
       localStorage.setItem(needColorForTask + needColorFor, e.hex);
     }
   }
+
+
 
   return (
     <div>
@@ -76,8 +95,48 @@ const FilterComponent: React.FC<any> = (props) => {
               <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor("Lecture", 'bg')} /> <FontColorsOutlined onClick={() => needColor("Lecture", 'text')} /> 
               
             </div>
+            <div>
+              <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value="Task" checked={!hiddenRowOrColumn.has("Task")}/>
+              <label>Task</label>
+              <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor("Task", 'bg')}/> <FontColorsOutlined onClick={() => needColor("Task", 'text')}/> 
+              
+            </div>
+            <div>
+              <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value="Test" checked={!hiddenRowOrColumn.has("Test")}/>
+              <label>Test</label>
+              <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor("Test", 'bg')}/> <FontColorsOutlined onClick={() => needColor("Test", 'text')}/> 
+              
+            </div>
+
+
+
+            {
+    typeTaskArr.map(item => {
+
+      return (
+<div>
+<input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value={item} checked={!hiddenRowOrColumn.has({item})} />
+<label>{item}</label>
+
+<BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor({type}, 'bg')} /> 
+
+<FontColorsOutlined onClick={() => needColor({item}, 'text')} />
+</div>
+      )
+    }
+  
+
+}
             
-        </SC.INPUT_BLOCK>
+
+            
+              
+              
+              
+           
+
+
+          </SC.INPUT_BLOCK>
         </div>
         <div>
           {colorHere ? <div><GithubPicker onChange={(e) => handleChange(e)}/></div> : null}
