@@ -91,7 +91,7 @@ const TableView: React.FC<any> = () => {
             let color = tag.length > 5 ? 'geekblue' : 'green';
             let textColor = '#000';
             
-            if (localStorage.getItem(tag + 'bg')) {
+            if (localStorage.getItem(tag + 'bg')) {  
               color = localStorage.getItem(tag + 'bg');
             }
 
