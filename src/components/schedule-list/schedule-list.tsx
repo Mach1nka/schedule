@@ -1,32 +1,34 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {List, Button, Skeleton, Collapse, Col, } from 'antd';
+import { Link } from 'react-router-dom';
 import {useSelector} from "react-redux";
-import {selectScheduleEventsData} from "../../selectors/selectors";
+import {ScheduleMockEvents} from '../../data/schedule';
+import {selectScheduleEventsData, selectUserTimeZone, selectScheduleTypesEvents, selectUserSet} from "../../selectors/selectors";
+
+import {ROUTE_PATHS as PATHS} from '../../data/paths';
 import {scheduleListSC as SC} from "./sc";
+import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone';
+import formatTime from '../../utils/get-time/format-time';
+import {DATE_FORMAT} from '../../data/typeEvents';
+import sortEventTypes from '../../utils/sort-type-events/sort-type-events';
 
 const ScheduleList: React.FC = () => {
   const { Panel } = Collapse;
-  const defaultCountItemsInList = 2;
-  const amountNewAdditionListItems = 2;
+  const defaultCountItemsInList = 10;
+  const amountNewAdditionListItems = 10;
+  const currentTimeZone = useSelector(selectUserTimeZone);
   const scheduleEvents = useSelector(selectScheduleEventsData) || [];
+  const typeEvents = useSelector(selectScheduleTypesEvents) || [];
   const [initLoading, setInitLoading] = useState<boolean>(true);
   const [amountItemsInList, setCountItemsInList] = useState(defaultCountItemsInList);
-
-  const DateTimeFormat = {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric"
-  };
-
-  const formatDateFromUnix = (unixDate, settings) => {
-    return new Date(unixDate * 1000).toLocaleDateString('ru', settings);
-  };
+  const setting = useSelector(selectUserSet);
 
   const getCurrentList = useCallback((data, amountElements:number) => {
-    return data.slice(0, amountElements);
+    function sortDateEvents(a, b) {
+      return Number(a.startDateTime - b.startDateTime);
+    }
+    const events = data.slice(0, amountElements);
+    return events.sort(sortDateEvents);
   }, []);
 
   const onLoadMore = () => {
@@ -40,11 +42,10 @@ const ScheduleList: React.FC = () => {
   }, [scheduleEvents]);
 
   const loadMore = !initLoading ? (
-    <SC.BUTTON_CONTAINER>
-      <Button onClick={onLoadMore}>Loading More</Button>
+    <SC.BUTTON_CONTAINER onClick={onLoadMore}>
+      <Button>Loading More</Button>
     </SC.BUTTON_CONTAINER>
     ) : null;
-
     return (
       <SC.ROW>
         <Col xs={24} lg={14}>
@@ -53,23 +54,38 @@ const ScheduleList: React.FC = () => {
             itemLayout="horizontal"
             loadMore={loadMore}
             dataSource={getCurrentList(scheduleEvents, amountItemsInList)}
-            renderItem={item => (
-              <SC.LIST_ITEM>
+            renderItem={(item:ScheduleMockEvents) => (
+              <SC.LIST_ITEM color={setting.[item.type] ? setting.[item.type].backgroundColor : sortEventTypes(item.type, typeEvents)}>
                 <Skeleton loading={initLoading} active>
                   <SC.LIST_ITEM_CONTAINER>
                     <h2>{item.name}</h2>
                     <SC.DATE_TIME_CONTAINER>
-                      <span className="start">{`Start: ${formatDateFromUnix(item.startDateTime, DateTimeFormat)}`}</span>
-                      <span className="deadline">{`Deadline: ${formatDateFromUnix(item.endDateTime, DateTimeFormat)}`}</span>
+                      <div>
+                        <p className="start">{`Start: ${formatTime(getTimeWithCorrectTimeZone(item.startDateTime, currentTimeZone), DATE_FORMAT)}`}</p>
+                        <p className="deadline">{`Deadline: ${formatTime(getTimeWithCorrectTimeZone(item.endDateTime, currentTimeZone), DATE_FORMAT)}`}</p>
+                      </div>
+                      {item.startDateCrossCheck && item.endDateCrossCheck ? (
+                        <div>
+                          <p className="start">{`Start Cross-Check: ${formatTime(getTimeWithCorrectTimeZone(item.startDateCrossCheck, currentTimeZone), DATE_FORMAT)}`}</p>
+                          <p className="deadline">{`Deadline Cross-Check: ${formatTime(getTimeWithCorrectTimeZone(item.endDateCrossCheck, currentTimeZone), DATE_FORMAT)}`}</p>
+                        </div>
+                     ) : undefined}
                     </SC.DATE_TIME_CONTAINER>
                     <Collapse>
                       <Panel header="More information" key={item.id}>
                         <h3>{`Type: ${item.type.toUpperCase()}`}</h3>
                         <SC.COLLAPSE_CONTENT>
-                          <span className="collapse-content__event-place">{`Place: ${item.place.toUpperCase()}`}</span>
+                          {item.place && <span className="collapse-content__event-place">{`Place: ${item?.place.toUpperCase()}`}</span>}
                           <span className="collapse-content__description-title">Description</span>
                           <p>{item.description}</p>
-                          <a className="link-to-description-page" href={item.descriptionUrl}>Link</a>
+                          <Link
+                            className="link-to-description-page"
+                            to={{
+                                pathname: `/${PATHS.event}`,
+                                search: `?id=${item.id}`,
+                              }}
+                          >Link
+                          </Link>
                         </SC.COLLAPSE_CONTENT>
                       </Panel>
                     </Collapse>

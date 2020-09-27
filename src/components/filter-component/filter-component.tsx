@@ -1,18 +1,11 @@
 import React, { useState } from 'react';
-import { FilterComponentSC as SC } from './sc';
 import { SettingOutlined, FontColorsOutlined, BgColorsOutlined } from '@ant-design/icons';
-
+import {useDispatch, useSelector} from "react-redux";
+import { GithubPicker } from 'react-color';
+import { FilterComponentSC as SC } from './sc';
 import {ReduxStateEntities} from "../../reducers/reducers-config";
 import {dispatchEntityHelper} from "../../helpers/dispatch-entity-helper/dispatch-entity-helper";
-
-import {selectUserSettingsState} from "../../selectors/selectors";
-
-import {useDispatch, useSelector} from "react-redux";
-
-import { GithubPicker } from 'react-color';
-
-import {selectScheduleEventsData, selectUserRole} from "../../selectors/selectors";
-
+import {selectUserSettingsState, selectScheduleEventsData} from "../../selectors/selectors";
 import {MainDataContext} from "../../context/main-data-context";
 
 const FilterComponent: React.FC<any> = (props) => {
@@ -28,7 +21,6 @@ const FilterComponent: React.FC<any> = (props) => {
     if (scheduleEvents[i].type !== undefined) {
       typeTaskSet.add(scheduleEvents[i].type);
     }
-    
   }
 
   const typeTaskArr = Array.from(typeTaskSet);
@@ -40,20 +32,15 @@ const FilterComponent: React.FC<any> = (props) => {
   } = props;
 
   const [colorHere, setColorHere] = useState(false);
-
   const [needColorForTypeTask, setNeedColorForTypeTask] = useState(false);
   const [needColorFor, setNeedColorFor] = useState(false);
 
   const needColor = (typeTask, typeColor) => {
-    
     setNeedColorForTypeTask(typeTask);
     setNeedColorFor(typeColor);
     if (!needColorForTypeTask || !needColorFor || needColorFor !== typeColor || needColorForTypeTask !== typeTask) {
-      
       setColorHere(true);
-
     } else {
-      
       setColorHere(false);
       setNeedColorForTypeTask(false);
       setNeedColorFor(false);
@@ -112,7 +99,7 @@ const FilterComponent: React.FC<any> = (props) => {
   return (
     <div>
       <SC.BUTTON>
-        <SettingOutlined />
+        <SettingOutlined/>
       </SC.BUTTON>
       <SC.DIV>
         {/* {arrColumns.map((value) => {
@@ -141,7 +128,8 @@ const FilterComponent: React.FC<any> = (props) => {
               typeTaskArr.map(item => {
                 return (
                   <div key={item}>
-                    <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value={item} checked={!hiddenRowOrColumn.has({item})}/>
+                    <input style={{margin: "0 5px"}} type="checkbox" onChange={onChange} value={item} checked={!hiddenRowOrColumn.has(item)}/>
+                    
                     <label>{item}</label>
 
                     <BgColorsOutlined style={{margin: '0 10px'}} onClick={() => needColor(item, 'bg')}/>

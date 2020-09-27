@@ -7,12 +7,15 @@ export const calendarDayEventsSC = {
     ${cssMixins.listReset};
   `,
   ITEM: styled.button`
-    color: ${cssColors.LIGHT()};
+    background-color: ${props => props.color};
+    font-weight: 500;
     text-align: center;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     white-space: nowrap;
     outline: none;
     border: none;
-    width: 100%;
+    width: auto;
+    min-width: 100%;
+    cursor:pointer;
   `,
 }

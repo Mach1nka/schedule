@@ -34,8 +34,7 @@ export const scheduleListSC = {
     `,
     LIST_ITEM: styled(List.Item)`
       border-radius: 5px;
-      border: 1px solid #ffe58f;
-      background-color: #fffbe6;
+      background-color: ${props => props.color};
       padding: 15px;
       margin-bottom: 5px;
     `,

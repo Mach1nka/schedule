@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import {Table, Tag} from 'antd';
 import {ColumnsType} from 'antd/es/table';
 import {useSelector} from "react-redux";
-import {selectScheduleEventsData} from "../../selectors/selectors";
+import {selectScheduleEventsData, selectUserTimeZone, selectScheduleTypesEvents, selectUserSet} from "../../selectors/selectors";
 import FilterComponent from '../filter-component/filter-component';
-import Item from 'antd/lib/list/Item';
+import getTimeWithCorrectTimeZone from '../../utils/get-time/get-time-with-correct-timezone'
+import {DATE_FORMAT} from '../../data/typeEvents';
 
 
 interface ScheduleEvents {
@@ -20,26 +21,13 @@ interface ScheduleEvents {
 
 const TableView: React.FC<any> = () => {
   const scheduleEvents = useSelector(selectScheduleEventsData) || [];
+  const currentTimeZone = useSelector(selectUserTimeZone);
   const [hiddenRowOrColumn, setHiddenRowOrColumn] = useState<Set<string>>(new Set);
-  // const [arrColums] = useState(columnsSource.forEach(element) => {
-  //   arrColums.push(element.title);
-  // });
-
-  const DateTimeFormat = {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    hour: "numeric",
-    minute: "numeric"
-  };
-
-  const formatDateFromUnix = (unixDate, settings) => {
-    return new Date(unixDate * 1000).toLocaleDateString('ru', settings);
-  };
-
+  const currentTypes = useSelector(selectScheduleTypesEvents);
+  const setting = useSelector(selectUserSet);
   const handledFilter = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const value = event.currentTarget.value;
-    const checked = event.currentTarget.checked;
+    const {value} = event.currentTarget;
+    const {checked} = event.currentTarget;
     if (checked && hiddenRowOrColumn.has(value)) {
       setHiddenRowOrColumn((prevState) => {
         prevState.delete(value);
@@ -56,11 +44,11 @@ const TableView: React.FC<any> = () => {
   const columnsSource: ColumnsType<ScheduleEvents> = [
     {
       title:
-        <FilterComponent
-          onChange={handledFilter}
-          hiddenRowOrColumn={hiddenRowOrColumn}
-          arrColumns={() => {}}
-        />,
+  <FilterComponent
+    onChange={handledFilter}
+    hiddenRowOrColumn={hiddenRowOrColumn}
+    arrColumns={() => {}}
+  />,
       dataIndex: 'settings',
       key: 'settings',
     },
@@ -74,7 +62,6 @@ const TableView: React.FC<any> = () => {
       dataIndex: 'duedate',
       key: 'duedate',
     },
-
     {
       title: 'Title',
       dataIndex: 'title',
@@ -84,29 +71,15 @@ const TableView: React.FC<any> = () => {
       title: 'Type',
       key: 'status',
       dataIndex: 'status',
-      render: tags => (
-        <>
-          {tags.map(tag => {
-
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            let textColor = '#000';
-            
-            if (localStorage.getItem(tag + 'bg')) {  
-              color = localStorage.getItem(tag + 'bg');
-            }
-
-            if (localStorage.getItem(tag + 'text')) {
-              textColor = localStorage.getItem(tag + 'text');
-            }
-
-            return (
-              <Tag color={color} key={tag} style={{color: textColor}}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
+      render: (tag) => { 
+        const textColor = setting.[tag[0]] ? setting.[tag[0]].backgroundColor : currentTypes.find((type) => type.name === tag[0]).color
+        const color = setting.[tag[0]] ? setting.[tag[0]].color : 'black'
+        return (
+          <Tag color={textColor} key={tag} style={{color: color}}>
+            {tag}
+          </Tag>
+        );
+      }
     },
     {
       title: 'Organizer',
@@ -120,25 +93,27 @@ const TableView: React.FC<any> = () => {
     },
   ];
 
+  function sortDateEvents(a, b) {
+    return Number(a.startDateTime - b.startDateTime);
+  }
+
   const columns = columnsSource.filter((element) => element?.title && !hiddenRowOrColumn.has(element.title.toString()));
   const listTasks = scheduleEvents.filter((element) => element?.type && !hiddenRowOrColumn.has(element.type.toString()));
 
-  if (listTasks.length > 0) {
-    const timetable = listTasks.reduce((acc, it, i) => {
 
+  if (listTasks.sort(sortDateEvents).length > 0) {
+    const timetable = listTasks.reduce((acc, it, i) => {
       const temp: ScheduleEvents = {
         settings: String(i + 1),
         key: String(i),
-        startdate: String(formatDateFromUnix(listTasks[i].startDateTime, DateTimeFormat)),
-        duedate: String(formatDateFromUnix(listTasks[i].endDateTime, DateTimeFormat)),
-        title: <Link
+        startdate: getTimeWithCorrectTimeZone(listTasks[i].startDateTime, currentTimeZone).format(DATE_FORMAT),
+        duedate: getTimeWithCorrectTimeZone(listTasks[i].endDateTime, currentTimeZone).format(DATE_FORMAT),
+        title:<Link
                 className="link-to-description-page"
-                to={{
-                pathname: "/event",
-                search: `?id=${it.id}`,
-          }}
-      >{it.name}
-      </Link>,
+                to={{ pathname: "/event", search: `?id=${it.id}`}}
+              >
+                {it.name}
+              </Link>,
         status: [String(listTasks[i].type)],
 
       };
@@ -147,16 +122,11 @@ const TableView: React.FC<any> = () => {
     }, [] as ScheduleEvents[]);
 
     return (
-      <>
-        <div className="table">
-          <Table dataSource={timetable} columns={columns} bordered={true}/>
-        </div>
-        
-        
-      </>
+      <div className="table">
+        <Table dataSource={timetable} columns={columns} bordered/>
+      </div>
     );
-  };
-
+  }
   return (
     <>
       <h1>Loading...</h1>
