@@ -18,9 +18,12 @@ const CalendarView: React.FC<CalendarViewProps> = () => {
 
   const getListData = (events, value): any[] => {
     return events?.filter((it) => {
-      return value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT) >= moment(it.startDateTime, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT) 
+      return value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT) >= moment(it.startDateTime, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT)
       && value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT) <= moment(it.endDateTime, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT)
-    });
+
+    }).concat(events?.filter((it) => {
+      return value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT) >= moment(it.startDateCrossCheck, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT)
+       && value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT) <= moment(it.endDateCrossCheck, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT)})) 
   };
 
   const getDateCellRender = (value) => {
