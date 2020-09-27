@@ -6,7 +6,7 @@ import CalendarDayEvents from "../calendar-day-events/calendar-day-events";
 import {selectScheduleEventsData, selectUserTimeZone} from "../../selectors/selectors";
 import {calendarViewSC as SC} from "./sc";
 import sortTimezones from '../../utils/sort-timezones/sort-timezones';
-import {DATE_FORMAT} from '../../data/typeEvents';
+import {DATE_FORMAT_CALENDAR} from '../../data/typeEvents';
 
 interface CalendarViewProps {
 
@@ -19,17 +19,17 @@ const CalendarView: React.FC<CalendarViewProps> = () => {
 
   const getListData = (events, value): any[] => {
     return events?.filter((it) => {
-      return value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT) >= moment(it.startDateTime, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT)
-      && value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT) <= moment(it.endDateTime, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT)
+      return value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT_CALENDAR) >= moment(it.startDateTime, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT_CALENDAR)
+      && value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT_CALENDAR) <= moment(it.endDateTime, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT_CALENDAR)
     }).concat(events?.filter((it) => {
-      return value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT) >= moment(it.startDateCrossCheck, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT)
-       && value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT) <= moment(it.endDateCrossCheck, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT)})) 
+      return value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT_CALENDAR) >= moment(it.startDateCrossCheck, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT_CALENDAR)
+       && value.utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT_CALENDAR) <= moment(it.endDateCrossCheck, 'X').utcOffset(sortTimezones(currentTimeZone), false).format(DATE_FORMAT_CALENDAR)})) 
   };
 
   const getDateCellRender = (value) => {
     const currentDay = value.utcOffset(sortTimezones(currentTimeZone), false).format("D");
     const listData = scheduleEvents && getListData(scheduleEvents, value);
-    
+  
     return (
       <SC.DAY_CONTAINER>
         {currentDay}

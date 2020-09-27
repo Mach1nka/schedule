@@ -7,6 +7,7 @@ export interface ScheduleMockTypesEvents {
   type?: string;
 }
 export const DATE_FORMAT = 'YYYY-MM-DD HH:mm';
+export const DATE_FORMAT_CALENDAR = 'YYYY-MM-DD';
 
 export const typeEvents = [
   {
