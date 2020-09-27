@@ -95,10 +95,15 @@ const TableView: React.FC<any> = () => {
     },
   ];
 
+  function sortDateEvents(a, b) {
+    return Number(a.startDateTime - b.startDateTime);
+  }
+
   const columns = columnsSource.filter((element) => element?.title && !hiddenRowOrColumn.has(element.title.toString()));
   const listTasks = scheduleEvents.filter((element) => element?.type && !hiddenRowOrColumn.has(element.type.toString()));
 
-  if (listTasks.length > 0) {
+
+  if (listTasks.sort(sortDateEvents).length > 0) {
     const timetable = listTasks.reduce((acc, it, i) => {
       const temp: ScheduleEvents = {
         settings: String(i + 1),
