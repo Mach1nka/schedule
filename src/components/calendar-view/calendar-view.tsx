@@ -33,7 +33,7 @@ const CalendarView: React.FC<CalendarViewProps> = () => {
     return (
       <SC.DAY_CONTAINER>
         {currentDay}
-        {(listData && listData?.length > 0) && <CalendarDayEvents events={listData}/>}
+        {(listData && listData?.length > 0) && <CalendarDayEvents events={listData} dayNow={value}/>}
       </SC.DAY_CONTAINER>
     );
   };

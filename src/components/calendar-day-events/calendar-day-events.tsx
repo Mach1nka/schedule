@@ -1,6 +1,7 @@
 import * as React from "react";
 import {useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
+import moment from "moment";
 import {calendarDayEventsSC as SC} from "./sc";
 import {ScheduleMockEvents} from "../../data/schedule";
 import {ROUTE_PATHS as PATHS} from '../../data/paths';
@@ -9,6 +10,7 @@ import sortEventTypes from '../../utils/sort-type-events/sort-type-events';
 
 interface CalendarDayEventsProps {
   events: ScheduleMockEvents[];
+  dayNow: moment.Moment
 }
 
 const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
@@ -17,6 +19,7 @@ const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
   const history = useHistory();
   const {
     events,
+    dayNow
   } = props
 
   const makeListItem = (data) => {
@@ -24,6 +27,8 @@ const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
       id,
       name,
       type,
+      startDateTime,
+      endDateTime,
     } = data;
 
     return (
@@ -34,8 +39,13 @@ const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
           pathname: `/${PATHS.event}`,
           search: `?id=${id}`,
         })}
+        
       >
-        {name}
+        {dayNow.utcOffset(0, false).format('YYYY-MM-DD') >=  moment(startDateTime, 'X').format('YYYY-MM-DD') 
+        &&  dayNow.utcOffset(0, false).format('YYYY-MM-DD') <=  moment(endDateTime, 'X').format('YYYY-MM-DD')
+        ? `${name}` : `CrossCheck ${name}`}
+      
+
       </SC.ITEM>
       );
   }
