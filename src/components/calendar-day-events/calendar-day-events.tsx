@@ -29,7 +29,7 @@ const CalendarDayEvents: React.FC<CalendarDayEventsProps> = (props) => {
     return (
       <SC.ITEM
         key={id}
-        color={setting.[type] ? setting.[type].backgroundColor : sortEventTypes(type, typeEvents)}
+        color={setting && setting.[type] ? setting.[type].backgroundColor : sortEventTypes(type, typeEvents)}
         onClick={() => history.push({
           pathname: `/${PATHS.event}`,
           search: `?id=${id}`,

@@ -3,7 +3,7 @@ import {UserSettings} from "../types/user-settings-types";
 interface MainDataServiceStorageProps {
   storage: Storage | null;
   baseKey: string;
-  userDataKey: string;
+  userDataKey?: string;
 }
 
 export default class MainDataServiceStorage {
