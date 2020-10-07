@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
-import {Table, Tag} from 'antd';
+import {Table, Tag, Typography, Space, Avatar} from 'antd';
 import {ColumnsType} from 'antd/es/table';
 import {useSelector} from "react-redux";
 import {selectScheduleEventsData, selectUserTimeZone, selectScheduleTypesEvents, selectUserSet} from "../../selectors/selectors";
@@ -115,6 +115,17 @@ const TableView: React.FC<any> = () => {
                 {it.name}
               </Link>,
         status: [String(listTasks[i].type)],
+        organizer: it.organizers &&
+        JSON.parse(it.organizers).map((e) => {
+          return (
+              <Space key={Math.random()}>
+                <Avatar size="small" src={`https://github.com/${e}.png`}/>
+                <Typography.Link href={`https://github.com/${e}`} target="_blank" rel="noreferrer">
+                  {e}
+                </Typography.Link>
+              </Space>
+          );
+        })
 
       };
       acc.push(temp);

@@ -122,10 +122,10 @@ const PreViewEvent = (): React.ReactElement => {
         <>
           <PageHeader
             ghost={false}
-            onBack={() => history.push({
-              pathname: role === 'mentor' ? `/${PATHS.formForMentor}` : `/${PATHS.list}`,
-              search: role === 'mentor' ? `?id=${event.id}&draft=${!!isDraft}` : '',
-            })}
+            onBack={() => role === 'mentor' ?  history.push({
+              pathname:`/${PATHS.formForMentor}`,
+              search:`?id=${event.id}&draft=${!!isDraft}`,
+            }) : window.history.back()}
             title={event.name}
             subTitle={<Tag color="blue">{event.type}</Tag>}
             tags={[
